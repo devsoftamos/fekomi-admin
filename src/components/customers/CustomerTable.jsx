@@ -99,6 +99,82 @@ export default function CustomerTable() {
                       </div>
                     </td>
                   </tr>
+                  <tr
+                    //onClick={() => navigate("/userdetails")}
+                    class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
+                  >
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <img src="/boy.svg" />
+                    </td>
+                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                      Mark
+                    </td>
+                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                      Otto@gmail.com
+                    </td>
+                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                      7/7/2021
+                    </td>
+                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                      7/7/2022
+                    </td>
+                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                      Male
+                    </td>
+                    <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
+                      <div className="bg-gray-200 text-center py-2 px-1 rounded-lg">
+                        Edit
+                      </div>
+                    </td>
+                    <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                      <div className="bg-[#f3e3d5] font-bold  text-[#E4750D] text-center py-2 px-1 rounded-lg">
+                        Reject
+                      </div>
+                    </td>
+                    <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                      <div className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg">
+                        Block
+                      </div>
+                    </td>
+                  </tr>
+                  <tr
+                    //onClick={() => navigate("/userdetails")}
+                    class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
+                  >
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <img src="/boy.svg" />
+                    </td>
+                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                      Mark
+                    </td>
+                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                      Otto@gmail.com
+                    </td>
+                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                      7/7/2021
+                    </td>
+                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                      7/7/2022
+                    </td>
+                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                      Male
+                    </td>
+                    <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
+                      <div className="bg-gray-200 text-center py-2 px-1 rounded-lg">
+                        Edit
+                      </div>
+                    </td>
+                    <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                      <div className="bg-[#f3e3d5] font-bold  text-[#E4750D] text-center py-2 px-1 rounded-lg">
+                        Reject
+                      </div>
+                    </td>
+                    <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                      <div className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg">
+                        Block
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
