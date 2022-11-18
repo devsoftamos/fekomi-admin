@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import ForgetPassword from "./pages/ForgetPassword";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import UsersRole from "./pages/UsersRole";
 
 const RoutesFile = () => {
   return (
@@ -14,6 +15,7 @@ const RoutesFile = () => {
       <Route exact path="/forget-password" element={<ForgetPassword />} />
       <Route exact path="/dashboard" element={<Dashboard />} />
       <Route exact path="/customers" element={<Customers />} />
+      <Route exact path="/users-roles" element={<UsersRole />} />
     </Routes>
   );
 };

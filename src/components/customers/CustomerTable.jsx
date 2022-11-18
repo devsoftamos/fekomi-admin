@@ -1,5 +1,5 @@
 import React from "react";
-
+import { COLUMNS } from "../../column";
 export default function CustomerTable() {
   return (
     <div>
