@@ -8,6 +8,7 @@ import CreateUserModal from "../components/users/usermodals/CreateUserModal";
 export default function UsersRole() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState();
+  const [openRoleModal, setOpenRoleModal] = useState();
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -22,6 +23,7 @@ export default function UsersRole() {
                 <div className="flex">
                   <div>
                     <label
+                      onClick={() => setOpenRoleModal("modal-open")}
                       //htmlFor="my-modal-3"
                       className="border border-[#2F93F6] px-4 text-[#2F93F6] rounded-lg py-4"
                     >

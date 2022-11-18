@@ -12,7 +12,10 @@ export default function CreateUserModal({ modalOpen, setModalOpen }) {
         <div className="modal-box bg-[#FAFAFA]    max-w-[820px]">
           <div className="flex justify-between rounded-md items-center bg-white py-3 px-2 border-b">
             <div className="text-lg font-bold">Create users</div>
-            <div className="bg-[#C2C2C2] rounded-full px-2 py-1 text-white">
+            <div
+              onClick={() => setModalOpen("")}
+              className="bg-[#C2C2C2] rounded-full px-2 py-1 cursor-pointer text-white"
+            >
               ✕
             </div>
           </div>
