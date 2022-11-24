@@ -4,6 +4,7 @@ import Header from "../components/header/Header";
 
 import UsersTable from "../components/users/UsersTable";
 import CreateUserModal from "../components/users/usermodals/CreateUserModal";
+import CreateRoleModal from "../components/users/usermodals/CreateRoleModal";
 
 export default function UsersRole() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -16,6 +17,10 @@ export default function UsersRole() {
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
           <CreateUserModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
+          <CreateRoleModal
+            modalOpen={openRoleModal}
+            setModalOpen={setOpenRoleModal}
+          />
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <div className="flex justify-between">
               <div className="font-black text-lg">Users & Roles Management</div>
