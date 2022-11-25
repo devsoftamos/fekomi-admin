@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import ForgetPassword from "./pages/ForgetPassword";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Stock from "./pages/Stock";
 import UsersRole from "./pages/UsersRole";
 
 const RoutesFile = () => {
@@ -16,6 +17,7 @@ const RoutesFile = () => {
       <Route exact path="/dashboard" element={<Dashboard />} />
       <Route exact path="/customers" element={<Customers />} />
       <Route exact path="/users-roles" element={<UsersRole />} />
+      <Route exact path="/stock" element={<Stock />} />
     </Routes>
   );
 };

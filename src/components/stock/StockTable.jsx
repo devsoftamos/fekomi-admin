@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { COLUMNS } from "../../column";
 import TableHeaders from "../utils/TableHeaders";
-import UsersTab from "./UsersTab";
-export default function UsersTable() {
+
+export default function StockTable() {
   return (
     <div className="pt-7">
       <div class="flex flex-col">
@@ -30,31 +30,39 @@ export default function UsersTable() {
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                      Email
+                      Category
                     </th>
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                      Phone Number
+                      No Available
                     </th>
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                      Roles
+                      Number Sold
                     </th>
 
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                      Action
+                      SKU Number
                     </th>
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
-                    ></th>
+                    >
+                      Price (NGN)
+                    </th>
+                    <th
+                      scope="col"
+                      class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
+                    >
+                      Action
+                    </th>
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
@@ -67,35 +75,35 @@ export default function UsersTable() {
                     class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
                   >
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      <img src="/boy.svg" />
+                      <img src="/stock.svg" />
                     </td>
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      Mark
+                      Adeoni Muili Yewande
                     </td>
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      Otto@gmail.com
+                      Herbal Tea
                     </td>
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      09099849934
+                      12
                     </td>
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      Super Admin{" "}
-                      <span className="btn btn-sm text-[10px]">Change</span>
+                      3
                     </td>
 
                     <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
-                      <div className="bg-[#EBFFF3] text-[#61BB84] text-center py-2 px-1 rounded-lg">
+                      FEK122445
+                    </td>
+                    <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
+                      10000
+                    </td>
+                    <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                      <div className="bg-[#cecfe0] font-bold  text-black text-center py-2 px-1 rounded-lg">
                         Edit
                       </div>
                     </td>
                     <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
-                      <div className="bg-[#FFEFDF] font-bold  text-[#E4750D] text-center py-2 px-1 rounded-lg">
-                        Disable
-                      </div>
-                    </td>
-                    <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
                       <div className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg">
-                        Block
+                        Delete
                       </div>
                     </td>
                   </tr>

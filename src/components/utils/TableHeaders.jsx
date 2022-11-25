@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function TableHeaders() {
+export default function TableHeaders(props) {
   return (
     <div className="flex justify-between">
       <div className="">
@@ -32,39 +32,41 @@ export default function TableHeaders() {
           />
         </div>
       </div>
-      <div>
-        <div className="flex items-center">
-          <div className="border flex items-center py-2 border-gray-300 px-3 rounded-2xl">
-            Download
-            <div className="pl-1">
-              <img src="/outline.svg" />
+      {props.showFilter && (
+        <div>
+          <div className="flex items-center">
+            <div className="border flex items-center py-2 border-gray-300 px-3 rounded-2xl">
+              Download
+              <div className="pl-1">
+                <img src="/outline.svg" />
+              </div>
             </div>
-          </div>
 
-          <div className="pl-2">Filter</div>
-          <div className="pl-2">
-            <div className="dropdown dropdown-left dropdown-bottom">
-              <label
-                tabIndex={0}
-                className="border py-2 border-gray-300 px-3 rounded-2xl"
-              >
-                Month
-              </label>
-              <ul
-                tabIndex={0}
-                className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-60"
-              >
-                <li>
-                  <a>Item 1</a>
-                </li>
-                <li>
-                  <a>Item 2</a>
-                </li>
-              </ul>
+            <div className="pl-2">Filter</div>
+            <div className="pl-2">
+              <div className="dropdown dropdown-left dropdown-bottom">
+                <label
+                  tabIndex={0}
+                  className="border py-2 border-gray-300 px-3 rounded-2xl"
+                >
+                  Month
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-60"
+                >
+                  <li>
+                    <a>Item 1</a>
+                  </li>
+                  <li>
+                    <a>Item 2</a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

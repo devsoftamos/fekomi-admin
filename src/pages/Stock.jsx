@@ -7,8 +7,9 @@ import CreateUserModal from "../components/users/usermodals/CreateUserModal";
 import CreateRoleModal from "../components/users/usermodals/CreateRoleModal";
 import UsersTab from "../components/users/UsersTab";
 import RoleTable from "../components/users/RoleTable";
+import StockTable from "../components/stock/StockTable";
 
-export default function UsersRole() {
+export default function Stock() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState();
   const [openRoleModal, setOpenRoleModal] = useState();
@@ -26,44 +27,25 @@ export default function UsersRole() {
           />
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <div className="flex justify-between">
-              <div className="font-black text-lg">Users & Roles Management</div>
+              <div className="font-black text-lg">Stock Inventory</div>
               <div>
                 <div className="flex">
-                  <div>
-                    <label
-                      onClick={() => setOpenRoleModal("modal-open")}
-                      //htmlFor="my-modal-3"
-                      className="border border-[#2F93F6] px-4 text-[#2F93F6] rounded-lg py-4"
-                    >
-                      Create Role
-                    </label>
-                  </div>
                   <div className="pl-2">
                     <label
                       onClick={() => setModalOpen("modal-open")}
                       //htmlFor="my-modal-3"
                       className="bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer"
                     >
-                      Create User
+                      New Stock
                     </label>
                   </div>
                 </div>
               </div>
             </div>
-            <div>
-              <UsersTab active={active} setActiveTab={setActiveTab} />
-            </div>
 
-            {active == 0 && (
-              <div>
-                <UsersTable />
-              </div>
-            )}
-            {active == 1 && (
-              <div>
-                <RoleTable />
-              </div>
-            )}
+            <div>
+              <StockTable />
+            </div>
           </div>
         </main>
       </div>
