@@ -6,6 +6,7 @@ import ForgetPassword from "./pages/ForgetPassword";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Stock from "./pages/Stock";
+import Transaction from "./pages/Transaction";
 import UsersRole from "./pages/UsersRole";
 
 const RoutesFile = () => {
@@ -18,6 +19,7 @@ const RoutesFile = () => {
       <Route exact path="/customers" element={<Customers />} />
       <Route exact path="/users-roles" element={<UsersRole />} />
       <Route exact path="/stock" element={<Stock />} />
+      <Route exact path="/transaction" element={<Transaction />} />
     </Routes>
   );
 };
