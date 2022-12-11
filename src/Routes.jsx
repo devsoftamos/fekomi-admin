@@ -10,6 +10,7 @@ import Transaction from "./pages/Transaction";
 import UsersRole from "./pages/UsersRole";
 import Revenue from "./pages/Revenue";
 import Orders from "./pages/Orders";
+import Dating from "./pages/Dating";
 
 const RoutesFile = () => {
   return (
@@ -24,6 +25,7 @@ const RoutesFile = () => {
       <Route exact path="/transaction" element={<Transaction />} />
       <Route exact path="/revenue" element={<Revenue />} />
       <Route exact path="/orders" element={<Orders />} />
+      <Route exact path="/dating" element={<Dating />} />
     </Routes>
   );
 };
