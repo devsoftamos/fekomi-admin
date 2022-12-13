@@ -6,6 +6,7 @@ import OrderTable from "../components/order/OrderTable";
 import DatingTable from "../components/dating/DatingTable";
 import axios from "axios";
 import InterestModal from "../components/dating/modal/InterestModal";
+import DatingUsers from "../components/dating/DatingUsers";
 
 export default function Dating() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -53,20 +54,27 @@ export default function Dating() {
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            <div className="flex justify-between">
-              <div className="font-black text-lg"> Dating Management</div>
-              <div>
-                <button
-                  onClick={() => setModalOpen("modal-open")}
-                  className="border border-[#2F93F6] rounded-xl px-3 py-3 text-[#2F93F6] font-bold"
-                >
-                  All Interests
-                </button>
-              </div>
-            </div>
+            <div className="flex items-start gap-4">
+              <div className="w-4/5">
+                <div className="flex justify-between">
+                  <div className="font-black text-lg"> Dating Management</div>
+                  <div>
+                    <button
+                      onClick={() => setModalOpen("modal-open")}
+                      className="border border-[#2F93F6] rounded-xl px-3 py-3 text-[#2F93F6] font-bold"
+                    >
+                      All Interests
+                    </button>
+                  </div>
+                </div>
 
-            <div>
-              <DatingTable datingData={datingData} />
+                <div>
+                  <DatingTable datingData={datingData} />
+                </div>
+              </div>
+              <div>
+                <DatingUsers />
+              </div>
             </div>
           </div>
         </main>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../components/sidebar/Sidebar";
 import Header from "../components/header/Header";
 
@@ -9,12 +9,48 @@ import UsersTab from "../components/users/UsersTab";
 import RoleTable from "../components/users/RoleTable";
 import StockTable from "../components/stock/StockTable";
 import StoreModal from "../components/stock/modal/StockModal";
+import axios from "axios";
 
 export default function Stock() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState();
+  const [loading, setLoading] = useState();
   const [openRoleModal, setOpenRoleModal] = useState();
+  const [productsData, setProductsData] = useState();
   const [active, setActiveTab] = useState(0);
+  const getProductsData = async () => {
+    console.log(process.env.REACT_APP_DATING);
+    setLoading(true);
+    const token = localStorage.getItem("fekomi-token");
+    const headers = {
+      "content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    };
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_ECOMMERCE}/products/all`,
+        {
+          headers: headers,
+        }
+      );
+      console.log(response?.data?.data);
+      setProductsData(response?.data?.data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+
+      //setMessage(error?.response?.data?.message);
+      //   if (error?.response?.data?.message == "Unauthenticated.") {
+      //     navigate("/");
+      //   }
+    }
+  };
+
+  useEffect(() => {
+    getProductsData();
+  }, []);
+
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -42,7 +78,7 @@ export default function Stock() {
             </div>
 
             <div>
-              <StockTable />
+              <StockTable productsData={productsData} />
             </div>
           </div>
         </main>

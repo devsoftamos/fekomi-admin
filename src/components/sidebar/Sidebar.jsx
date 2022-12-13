@@ -310,6 +310,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   </div>
                 </NavLink>
               </li>
+
               <li
                 className={`px-3 py-4 rounded-lg mb-0.5 last:mb-0 ${
                   pathname.includes("orders") && "bg-lightblue"
@@ -344,6 +345,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   </div>
                 </NavLink>
               </li>
+              <div className="pt-6">
+                <div className="py-2 text-gray-400">MENU</div>
+              </div>
               <li
                 className={`px-3 py-4 rounded-lg mb-0.5 last:mb-0 ${
                   pathname.includes("dating") && "bg-lightblue"
