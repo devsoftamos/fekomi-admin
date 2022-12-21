@@ -51,7 +51,10 @@ export default function TableHeaders(props) {
           </div>
           <div className="pl-4">
             <button
-              onClick={props.reset}
+              onClick={() => {
+                props.setFilterTriggered(false);
+                props.reset();
+              }}
               className="bg-deepBlue text-white px-3 py-2 rounded-md"
             >
               Reset
@@ -61,7 +64,7 @@ export default function TableHeaders(props) {
       </div>
       {props.showFilter && (
         <div>
-          <div className="flex items-center">
+          <div className="flex  items-center">
             <div className="border flex items-center py-2 border-gray-300 px-3 rounded-2xl">
               Download
               <div className="pl-1">
@@ -69,15 +72,20 @@ export default function TableHeaders(props) {
               </div>
             </div>
 
-            <div className="pl-2">Filter</div>
-            <div className="pl-2">
+            <div className="pl-7">Filter</div>
+            <div className="pl-7">
               <div className="dropdown dropdown-left dropdown-bottom">
                 <label
                   tabIndex={0}
                   onClick={() => setShowDropDown(true)}
                   className="border py-2 border-gray-300 px-3 rounded-2xl"
                 >
-                  {chooseData || "Month"} {">"}
+                  <div className="inline-flex items-center">
+                    {chooseData || "Month"}
+                    <span className="pl-1">
+                      <img src="/down.svg" />
+                    </span>
+                  </div>
                 </label>
                 {showDropDown && (
                   <ul
@@ -90,6 +98,7 @@ export default function TableHeaders(props) {
                           props.setMonthIndex(i);
                           setChooseData(data);
                           setShowDropDown(false);
+                          props.setFilterTriggered(true);
                         }}
                       >
                         <a>{data}</a>

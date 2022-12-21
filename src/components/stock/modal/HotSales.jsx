@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ImageUploader from "../../draganddrop/ImageUploader";
 
-export default function StoreModal(props) {
+export default function HotSales(props) {
   const {
     register,
     handleSubmit,
@@ -21,8 +21,6 @@ export default function StoreModal(props) {
   const [catData, setCatData] = useState();
   const [images, setImages] = React.useState([]);
   const [formData, setFormData] = useState();
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
   const createProduct = (e) => {
     e.preventDefault();
     setLoading("loading");
@@ -44,17 +42,7 @@ export default function StoreModal(props) {
         main_product_image: images[0]?.data_url,
         secondary_product_image_1: images[1]?.data_url,
         secondary_product_image_2: images[2]?.data_url,
-        type: props.modalType ? "HOTSALE" : "REGULAR",
-        [startDate]: props.modalType
-          ? new Date(formData?.start_date)
-              .toLocaleDateString()
-              .replaceAll("/", "-")
-          : "",
-        [endDate]: props.modalType
-          ? new Date(formData?.end_date)
-              .toLocaleDateString()
-              .replaceAll("/", "-")
-          : "",
+        type: "REGULAR",
       },
     };
 
@@ -178,19 +166,9 @@ export default function StoreModal(props) {
     getCategory();
   }, []);
   const handleProduct = (e) => {
-    if (e.target.name == "start_date" && e.target.name == "end_date") {
-      setStartDate(e.target.name);
-      setEndDate(e.target.name);
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    } else {
-      setStartDate("");
-      setEndDate("");
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  console.log(
-    new Date(formData?.start_date).toLocaleDateString().replaceAll("/", "-")
-  );
+
   return (
     <div>
       {/* Put this part before </body> tag */}
@@ -323,46 +301,6 @@ export default function StoreModal(props) {
                 editData={props.editData}
               />
             </div>
-            {props.modalType && (
-              <div>
-                <div className="flex items-center justify-center">
-                  <div className="w-1/3">
-                    <hr className="border border-gray-700 w-full" />
-                  </div>
-                  <div className="p-2">Duration</div>
-                  <div className="w-1/3 pl-2">
-                    <hr className="border border-gray-700" />
-                  </div>
-                </div>
-                <div className="py-2 flex justify-center ">
-                  <div className="w-1/2">
-                    <label className="font-black text-sm">From</label>
-                    <input
-                      type="date"
-                      placeholder="Enter Quantity"
-                      name="start_date"
-                      className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
-                      onChange={handleProduct}
-                      //defaultValue="02/20/2002"
-                      //defaultValue={props.editData?.quantity}
-                      // required
-                    />
-                  </div>
-                  <div className="pl-4 w-1/2">
-                    <label className="font-black text-sm">To</label>
-                    <input
-                      type="date"
-                      placeholder="Enter Quantity"
-                      name="end_date"
-                      className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
-                      onChange={handleProduct}
-                      //defaultValue={props.editData?.quantity}
-                      // required
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
             {/* <div className="flex py-7">
               <div>
                 <input

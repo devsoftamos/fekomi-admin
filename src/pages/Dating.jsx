@@ -13,8 +13,11 @@ export default function Dating() {
   const [loading, setLoading] = useState();
   const [datingData, setDatingData] = useState();
   const [modalOpen, setModalOpen] = useState();
+  const [chooseData, setChooseData] = useState(5);
+  const [pageNumber, setpageNumber] = useState(1);
+  const [filterDating, setFilterDating] = useState();
+  const [filterTriggered, setFilterTriggered] = useState(false);
   const getDatingList = async () => {
-    console.log(process.env.REACT_APP_DATING);
     setLoading(true);
     const token = localStorage.getItem("fekomi-token");
     const headers = {
@@ -24,15 +27,16 @@ export default function Dating() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_DATING}/admin/profiles`,
+        `${process.env.REACT_APP_DATING}/admin/profiles?page=${pageNumber}&limit=${chooseData}`,
         {
           headers: headers,
         }
       );
-      console.log(response?.data?.data);
-      setDatingData(response?.data?.data);
 
+      setDatingData(response?.data?.data);
+      setFilterDating();
       setLoading(false);
+      setFilterTriggered(false);
     } catch (error) {
       setLoading(false);
 
@@ -44,8 +48,15 @@ export default function Dating() {
   };
   useEffect(() => {
     getDatingList();
-  }, []);
-
+  }, [chooseData, pageNumber]);
+  const nextPage = () => {
+    setpageNumber(pageNumber + 1);
+  };
+  const prevPage = () => {
+    if (pageNumber > 1) {
+      setpageNumber(pageNumber - 1);
+    }
+  };
   return (
     <div className="flex h-screen overflow-hidden">
       <InterestModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
@@ -58,7 +69,7 @@ export default function Dating() {
               <div className="w-4/5">
                 <div className="flex justify-between">
                   <div className="font-black text-lg"> Dating Management</div>
-                  <div>
+                  <div className="py-2">
                     <button
                       onClick={() => setModalOpen("modal-open")}
                       className="border border-[#2F93F6] rounded-xl px-3 py-3 text-[#2F93F6] font-bold"
@@ -69,7 +80,18 @@ export default function Dating() {
                 </div>
 
                 <div>
-                  <DatingTable datingData={datingData} />
+                  <DatingTable
+                    datingData={datingData}
+                    chooseData={chooseData}
+                    setChooseData={setChooseData}
+                    nextPage={nextPage}
+                    prevPage={prevPage}
+                    getDatingList={getDatingList}
+                    filterDating={filterDating}
+                    setFilterDating={setFilterDating}
+                    filterTriggered={filterTriggered}
+                    setFilterTriggered={setFilterTriggered}
+                  />
                 </div>
               </div>
               <div>

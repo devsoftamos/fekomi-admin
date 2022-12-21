@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Skeleton from "react-loading-skeleton";
+import Pagination from "../utils/Pagination";
 
 export default function DatingUsers() {
   const [activeUsers, setActiveUsers] = useState();
@@ -71,10 +73,24 @@ export default function DatingUsers() {
     <div>
       <div className="bg-white  rounded-md px-14">
         <div className="py-3 font-bold">Top Active Users</div>
+        {!activeUsers &&
+          [...new Array(3)].map((d) => (
+            <div className="flex items-center border-b border-b-gray-200 py-5 -px-3 ">
+              <Skeleton height={30} width={200} />
+              <div className="pl-2 px-2">
+                <div className="font-medium">
+                  <Skeleton height={15} />
+                </div>
+                <div className="text-gray-500">
+                  <Skeleton height={15} />
+                </div>
+              </div>
+            </div>
+          ))}
         {activeUsers?.map((data, i) => (
           <div
             key={i}
-            className="flex items-center border-b border-b-gray-200 py-2 -px-3 "
+            className="flex items-center border-b border-b-gray-200 py-5 -px-3 "
           >
             <img src={data?.photoUrl} className="rounded-full h-12 w-12" />
             <div className="pl-2 px-2">
@@ -90,10 +106,24 @@ export default function DatingUsers() {
           </div>
         ))}
         <div className="py-3 font-bold">Top Inactive Users</div>
+        {!inactiveUsers &&
+          [...new Array(3)].map((d) => (
+            <div className="flex items-center border-b border-b-gray-200 py-5 -px-3 ">
+              <Skeleton height={30} width={200} />
+              <div className="pl-2 px-2">
+                <div className="font-medium">
+                  <Skeleton height={15} />
+                </div>
+                <div className="text-gray-500">
+                  <Skeleton height={15} />
+                </div>
+              </div>
+            </div>
+          ))}
         {inactiveUsers?.map((data, i) => (
           <div
             key={i}
-            className="flex items-center border-b border-b-gray-200 py-2 -px-3 "
+            className="flex items-center border-b border-b-gray-200 py-5 -px-3 "
           >
             <img src={data?.photoUrl} className="rounded-full h-12 w-12" />
             <div className="pl-2 px-2">

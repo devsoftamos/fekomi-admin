@@ -4,16 +4,34 @@ import { COLUMNS } from "../../column";
 import TableHeaders from "../utils/TableHeaders";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-export default function StockTable({ productsData }) {
+import Pagination from "../utils/Pagination";
+import StoreModal from "./modal/StockModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+export default function StockTable({
+  productsData,
+  nextPage,
+  prevPage,
+  getAllProductsData,
+  filterTriggered,
+  setFilterTriggered,
+  filterProduct,
+  setFilterProduct,
+  setChooseData,
+  chooseData,
+  reload,
+  setReload,
+}) {
   const d = new Date();
   let monthNumber = [d.getMonth()];
   let yearNumber = [d.getFullYear()];
   const [monthIndex, setMonthIndex] = useState(monthNumber);
   const [currentYear, setCurrentYear] = useState(yearNumber);
-  const [filterProduct, setFilterProduct] = useState();
+  const [modalOpen, setModalOpen] = useState();
   const [loading, setLoading] = useState();
   const [searchValue, setSearchValue] = useState();
-
+  const [editData, setEditData] = useState();
+  const [deleteData, setDeleteData] = useState();
   var currentDate = new Date(currentYear, monthIndex);
   var firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   var lastDay = new Date(
@@ -21,16 +39,11 @@ export default function StockTable({ productsData }) {
     currentDate.getMonth() + 1,
     0
   );
-  console.log(
-    firstDay.toLocaleDateString().replaceAll("/", "-"),
-    lastDay,
-    "POP"
-  );
+
   const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-  const getProductsData = async () => {
-    console.log(process.env.REACT_APP_DATING);
+  const getFilterProductsData = async () => {
     setLoading(true);
     const token = localStorage.getItem("fekomi-token");
     const headers = {
@@ -90,12 +103,81 @@ export default function StockTable({ productsData }) {
       //   }
     }
   };
+  const deleteProduct = (data) => {
+    setLoading("loading");
 
+    const token = localStorage.getItem("fekomi-token");
+    const headers = {
+      "content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    };
+    const options = {
+      url: `${process.env.REACT_APP_ECOMMERCE}/product/${data?.uid}`,
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+        Authorization: ` Bearer ${token}`,
+      },
+      data: {},
+    };
+
+    axios(options)
+      .then((response) => {
+        setLoading("");
+
+        setReload(false);
+        toast.success(response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        getAllProductsData();
+      })
+      .catch((error) => {
+        setLoading("");
+        toast.error(error?.response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  };
   useEffect(() => {
-    getProductsData();
+    if (filterTriggered) {
+      getFilterProductsData();
+    }
   }, [monthIndex]);
+
   return (
     <div className="pt-7">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <StoreModal
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        edit={true}
+        editData={editData}
+        reload={reload}
+        setReload={setReload}
+      />
       <div class="flex flex-col">
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
@@ -106,7 +188,8 @@ export default function StockTable({ productsData }) {
                   setMonthIndex={setMonthIndex}
                   setSearchValue={setSearchValue}
                   getProductsSearch={getProductsSearch}
-                  reset={getProductsData}
+                  reset={getAllProductsData}
+                  setFilterTriggered={setFilterTriggered}
                 />
               </div>
 
@@ -167,7 +250,7 @@ export default function StockTable({ productsData }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {!productsData?.products?.data &&
+                  {!productsData?.data?.products &&
                     [...new Array(4)].map((d) => (
                       <tr
                         //key={i}
@@ -236,18 +319,27 @@ export default function StockTable({ productsData }) {
                             {numberWithCommas(data?.price || 0)}
                           </td>
                           <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
-                            <div className="bg-[#cecfe0] font-bold  text-black text-center py-2 px-1 rounded-lg">
+                            <div
+                              onClick={() => {
+                                setEditData(data);
+                                setModalOpen("modal-open");
+                              }}
+                              className="bg-[#cecfe0] font-bold  text-black text-center py-2 px-1 rounded-lg"
+                            >
                               Edit
                             </div>
                           </td>
                           <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
-                            <div className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg">
+                            <div
+                              onClick={() => deleteProduct(data)}
+                              className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg"
+                            >
                               Delete
                             </div>
                           </td>
                         </tr>
                       ))
-                    : productsData?.products?.data?.map((data, i) => (
+                    : productsData?.data?.products?.map((data, i) => (
                         <tr
                           //onClick={() => navigate("/userdetails")}
                           class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
@@ -262,7 +354,7 @@ export default function StockTable({ productsData }) {
                             {data?.name}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            {data?.category}
+                            {data?.productcategory?.name}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             {data?.quantity}
@@ -278,12 +370,21 @@ export default function StockTable({ productsData }) {
                             {numberWithCommas(data?.price || 0)}
                           </td>
                           <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
-                            <div className="bg-[#cecfe0] font-bold  text-black text-center py-2 px-1 rounded-lg">
+                            <div
+                              onClick={() => {
+                                setEditData(data);
+                                setModalOpen("modal-open");
+                              }}
+                              className="bg-[#cecfe0] font-bold  text-black text-center py-2 px-1 rounded-lg"
+                            >
                               Edit
                             </div>
                           </td>
                           <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
-                            <div className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg">
+                            <div
+                              onClick={() => deleteProduct(data)}
+                              className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg"
+                            >
                               Delete
                             </div>
                           </td>
@@ -296,6 +397,20 @@ export default function StockTable({ productsData }) {
                   <div className="text-xl font-black">No Available data</div>
                 </div>
               )}
+              {productsData?.data?.products?.length == 0 && (
+                <div className="flex justify-center items-center h-screen">
+                  <div className="text-xl font-black">No Available data</div>
+                </div>
+              )}
+              <div className="flex justify-end items-center pb-20 px-6">
+                <Pagination
+                  nextPage={nextPage}
+                  prevPage={prevPage}
+                  setChooseData={setChooseData}
+                  chooseData={chooseData}
+                  totalPage={productsData?.data?.total}
+                />
+              </div>
             </div>
           </div>
         </div>
