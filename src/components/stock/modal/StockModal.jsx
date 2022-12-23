@@ -5,7 +5,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ImageUploader from "../../draganddrop/ImageUploader";
-
+import { compareAsc, format } from "date-fns";
 export default function StoreModal(props) {
   const {
     register,
@@ -23,9 +23,36 @@ export default function StoreModal(props) {
   const [formData, setFormData] = useState();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+
   const createProduct = (e) => {
     e.preventDefault();
     setLoading("loading");
+    let formattedEnd = new Date(formData?.end_date)
+      .toLocaleDateString("en-GB")
+      .replaceAll("/", "-");
+    let formattedStart = new Date(formData?.start_date)
+      .toLocaleDateString("en-GB")
+      .replaceAll("/", "-");
+
+    console.log(props.modalType, "OPOP");
+    const payload = {
+      ...formData,
+      main_product_image: images[0]?.data_url,
+      secondary_product_image_1: images[1]?.data_url,
+      secondary_product_image_2: images[2]?.data_url,
+      type: props.modalType ? "HOTSALE" : "REGULAR",
+    };
+    let data = { ...payload };
+    if (props.modalType) {
+      data = {
+        ...payload,
+        start_date: formattedStart,
+        end_date: formattedEnd,
+      };
+    } else {
+      delete data.start_date;
+      delete data.end_date;
+    }
     const token = localStorage.getItem("fekomi-token");
     const headers = {
       "content-type": "application/json",
@@ -39,30 +66,13 @@ export default function StoreModal(props) {
         "Content-Type": "application/json;charset=UTF-8",
         Authorization: ` Bearer ${token}`,
       },
-      data: {
-        ...formData,
-        main_product_image: images[0]?.data_url,
-        secondary_product_image_1: images[1]?.data_url,
-        secondary_product_image_2: images[2]?.data_url,
-        type: props.modalType ? "HOTSALE" : "REGULAR",
-        [startDate]: props.modalType
-          ? new Date(formData?.start_date)
-              .toLocaleDateString()
-              .replaceAll("/", "-")
-          : "",
-        [endDate]: props.modalType
-          ? new Date(formData?.end_date)
-              .toLocaleDateString()
-              .replaceAll("/", "-")
-          : "",
-      },
+      data,
     };
 
     axios(options)
       .then((response) => {
         setLoading("");
         props.setModalOpen("");
-        props.setReload(false);
         toast.success(response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -72,7 +82,9 @@ export default function StoreModal(props) {
           draggable: true,
           progress: undefined,
         });
+        window.location.reload();
         props.getAllProductsData();
+        props.setReload(false);
       })
       .catch((error) => {
         setLoading("");
@@ -136,7 +148,7 @@ export default function StoreModal(props) {
       },
       data: {
         ...formData,
-        type: "REGULAR",
+        type: props.modalType ? "HOTSALE" : "REGULAR",
         main_product_image: images[0]?.data_url,
         secondary_product_image_1: images[1]?.data_url,
         secondary_product_image_2: images[2]?.data_url,
@@ -176,9 +188,17 @@ export default function StoreModal(props) {
 
   useEffect(() => {
     getCategory();
+
+    console.log(formData);
   }, []);
+  useEffect(() => {
+    if (props.editData?.type == "HOTSALE") {
+      setFormData();
+      props.setModalType(true);
+    }
+  }, [props.editData]);
   const handleProduct = (e) => {
-    if (e.target.name == "start_date" && e.target.name == "end_date") {
+    if (e.target.name == "start_date" || e.target.name == "end_date") {
       setStartDate(e.target.name);
       setEndDate(e.target.name);
       setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -188,9 +208,7 @@ export default function StoreModal(props) {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
   };
-  console.log(
-    new Date(formData?.start_date).toLocaleDateString().replaceAll("/", "-")
-  );
+
   return (
     <div>
       {/* Put this part before </body> tag */}

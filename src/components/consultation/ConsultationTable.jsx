@@ -1,48 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { COLUMNS } from "../../column";
-import axios from "axios";
-export default function OrderTable() {
-  const [orderData, setOrderData] = useState();
+import TableHeaders from "../utils/TableHeaders";
 
-  const getOrderData = async () => {
-    const token = localStorage.getItem("fekomi-token");
-    const headers = {
-      "content-type": "application/json",
-      Authorization: ` Bearer ${token}`,
-    };
-
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_ECOMMERCE}/orders/all?page=1&limit=1`,
-        {
-          headers: headers,
-        }
-      );
-
-      console.log(response?.data?.data);
-    } catch (error) {
-      //setMessage(error?.response?.data?.message);
-      //   if (error?.response?.data?.message == "Unauthenticated.") {
-      //     navigate("/");
-      //   }
-    }
-  };
-  useEffect(() => {
-    getOrderData();
-  }, []);
+export default function ConsultationTable() {
   return (
-    <div>
+    <div className="pt-7">
       <div class="flex flex-col">
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
-            <div class="overflow-hidden">
+            <div class="overflow-hidden bg-white">
+              <div className="py-3 px-4">
+                <TableHeaders showFilter={true} />
+              </div>
+
               <table class="min-w-full">
                 <thead class="bg-white border-b   border-gray-300">
                   <tr>
-                    <th
-                      scope="col"
-                      class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
-                    ></th>
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
@@ -53,32 +26,35 @@ export default function OrderTable() {
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                      Email Address
+                      Date of Appointment
                     </th>
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                      Status
+                      Time of Appointment
                     </th>
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                      Date of Transaction
+                      Type of Appointment
                     </th>
-                    <th
-                      scope="col"
-                      class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
-                    >
-                      Amount
-                    </th>
+
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
                       Action
                     </th>
+                    <th
+                      scope="col"
+                      class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
+                    ></th>
+                    <th
+                      scope="col"
+                      class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
+                    ></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -86,29 +62,33 @@ export default function OrderTable() {
                     //onClick={() => navigate("/userdetails")}
                     class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
                   >
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      <img src="/stock.svg" />
+                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                      Adeoni Muili Yewande
+                      <div className="text-xs">ade@gmail.com</div>
                     </td>
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      Herrbal Tea
+                      16th July, 2022
                     </td>
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      Otto@gmail.com
+                      8:30AM - 9:00AM
+                    </td>
+                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                      Online
                     </td>
 
-                    <td class="text-sm text-green-600 font-light px-6 py-4 whitespace-nowrap">
-                      CONFIRMED
+                    <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
+                      <div className="bg-[#EBFFF3] text-[#61BB84] text-center py-2 px-1 rounded-lg">
+                        Confirm
+                      </div>
                     </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      26th July 1990
+                    <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                      <div className="bg-[#FFEFDF] font-bold  text-[#E4750D] text-center py-2 px-1 rounded-lg">
+                        Reschedule
+                      </div>
                     </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      Amount
-                    </td>
-
                     <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
                       <div className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg">
-                        Out for Delivery
+                        Cancel
                       </div>
                     </td>
                   </tr>

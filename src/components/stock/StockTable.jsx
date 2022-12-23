@@ -8,6 +8,7 @@ import Pagination from "../utils/Pagination";
 import StoreModal from "./modal/StockModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { CSVLink, CSVDownload } from "react-csv";
 export default function StockTable({
   productsData,
   nextPage,
@@ -31,6 +32,7 @@ export default function StockTable({
   const [loading, setLoading] = useState();
   const [searchValue, setSearchValue] = useState();
   const [editData, setEditData] = useState();
+  const [modalType, setModalType] = useState(false);
   const [deleteData, setDeleteData] = useState();
   var currentDate = new Date(currentYear, monthIndex);
   var firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -177,6 +179,9 @@ export default function StockTable({
         editData={editData}
         reload={reload}
         setReload={setReload}
+        modalType={modalType}
+        setModalType={setModalType}
+        getAllProductsData={getAllProductsData}
       />
       <div class="flex flex-col">
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -190,10 +195,12 @@ export default function StockTable({
                   getProductsSearch={getProductsSearch}
                   reset={getAllProductsData}
                   setFilterTriggered={setFilterTriggered}
+                  rootElementId="pagetodownload"
+                  downloadFileName="Fekomi-Product-Table"
                 />
               </div>
 
-              <table class="min-w-full">
+              <table class="min-w-full " id="pagetodownload">
                 <thead class="bg-white border-b   border-gray-300">
                   <tr>
                     <th
@@ -303,17 +310,17 @@ export default function StockTable({
                             {data?.name}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            {data?.category}
+                            {data?.productcategory[0]?.name}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             {data?.quantity}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            3
+                            {data?.number_sold}
                           </td>
 
                           <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
-                            FEK122445
+                            {data?.sku_number}
                           </td>
                           <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
                             {numberWithCommas(data?.price || 0)}
@@ -354,17 +361,17 @@ export default function StockTable({
                             {data?.name}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            {data?.productcategory?.name}
+                            {data?.productcategory[0]?.name}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             {data?.quantity}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            3
+                            {data?.number_sold}
                           </td>
 
                           <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
-                            FEK122445
+                            {data?.sku_number}
                           </td>
                           <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
                             {numberWithCommas(data?.price || 0)}

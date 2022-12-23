@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 export default function TableHeaders(props) {
   const [chooseData, setChooseData] = useState();
   const [showDropDown, setShowDropDown] = useState(true);
@@ -10,6 +11,15 @@ export default function TableHeaders(props) {
   });
   const handleChange = (e) => {
     props.setSearchValue(e.target.value);
+  };
+  const downloadFileDocument = () => {
+    const input = document.getElementById(props.rootElementId);
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "pt", "a3");
+      pdf.addImage(imgData, "JPEG", 0, 0);
+      pdf.save(`${props.downloadFileName}`);
+    });
   };
   return (
     <div className="flex justify-between">
@@ -65,7 +75,10 @@ export default function TableHeaders(props) {
       {props.showFilter && (
         <div>
           <div className="flex  items-center">
-            <div className="border flex items-center py-2 border-gray-300 px-3 rounded-2xl">
+            <div
+              onClick={downloadFileDocument}
+              className="border flex items-center cursor-pointer py-2 border-gray-300 px-3 rounded-2xl"
+            >
               Download
               <div className="pl-1">
                 <img src="/outline.svg" />
