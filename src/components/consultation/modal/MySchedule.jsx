@@ -1,0 +1,242 @@
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import moment from "moment";
+export default function MySchedule(props) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      price: props.editData?.price,
+      name: "editData?.name",
+    },
+  });
+  const [loading, setLoading] = useState();
+  const [catData, setCatData] = useState();
+  const [images, setImages] = React.useState([]);
+  const [formData, setFormData] = useState();
+  const [selectedTime, setSelectedTime] = useState();
+  const createProduct = (e) => {
+    e.preventDefault();
+    setLoading("loading");
+    const token = localStorage.getItem("fekomi-token");
+    const headers = {
+      "content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    };
+    const options = {
+      url: `${process.env.REACT_APP_ECOMMERCE}/product`,
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+        Authorization: ` Bearer ${token}`,
+      },
+      data: {
+        ...formData,
+        main_product_image: images[0]?.data_url,
+        secondary_product_image_1: images[1]?.data_url,
+        secondary_product_image_2: images[2]?.data_url,
+        type: "REGULAR",
+      },
+    };
+
+    axios(options)
+      .then((response) => {
+        setLoading("");
+        props.setModalOpen("");
+        props.setReload(false);
+        toast.success(response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        props.getAllProductsData();
+      })
+      .catch((error) => {
+        setLoading("");
+        toast.error(error?.response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  };
+  const getCategory = async () => {
+    setLoading("loading");
+
+    const token = localStorage.getItem("fekomi-token");
+    const headers = {
+      "content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    };
+    const options = {
+      url: `${process.env.REACT_APP_ECOMMERCE}/product-category`,
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+        Authorization: ` Bearer ${token}`,
+      },
+    };
+
+    axios(options)
+      .then((response) => {
+        setCatData(response?.data?.data);
+        setLoading("");
+        props.setModalOpen("");
+      })
+      .catch((error) => {
+        setLoading("");
+      });
+  };
+
+  //UPDATE PRODUCTS ENDPOINT
+  const updateProduct = (e) => {
+    e.preventDefault();
+    setLoading("loading");
+
+    const token = localStorage.getItem("fekomi-token");
+    const headers = {
+      "content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    };
+    const options = {
+      url: `${process.env.REACT_APP_ECOMMERCE}/product/${props.editData?.uid}`,
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+        Authorization: ` Bearer ${token}`,
+      },
+      data: {
+        ...formData,
+        type: "REGULAR",
+        main_product_image: images[0]?.data_url,
+        secondary_product_image_1: images[1]?.data_url,
+        secondary_product_image_2: images[2]?.data_url,
+      },
+    };
+
+    axios(options)
+      .then((response) => {
+        setLoading("");
+        props.setModalOpen("");
+        props.setReload(false);
+        toast.success(response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        props.getAllProductsData();
+      })
+      .catch((error) => {
+        setLoading("");
+        toast.error(error?.response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  };
+  //UPDATE PRODUCTS ENDPOINT
+
+  useEffect(() => {
+    getCategory();
+    const locale = "en"; // or whatever you want...
+    const hours = [];
+
+    moment.locale(locale); // optional - can remove if you are only dealing with one locale
+
+    for (let hour = 0; hour < 24; hour++) {
+      hours.push(moment({ hour }).format("h:mm A"));
+    }
+
+    setSelectedTime(hours);
+  }, []);
+  const handleProduct = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  return (
+    <div>
+      {/* Put this part before </body> tag */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <input type="checkbox" id="store-modal" className="modal-toggle" />
+      <div className={`modal ${props.openSchedule}`}>
+        <div className="modal-box bg-[#FAFAFA]  max-w-[820px]">
+          <div className="flex justify-between rounded-md items-center bg-white py-3 px-2 border-b">
+            <div className="text-lg font-bold">Create Schedule</div>
+            <div
+              onClick={() => props.setOpenSchedule("")}
+              className="bg-[#C2C2C2] rounded-full px-2 py-1 cursor-pointer text-white"
+            >
+              ✕
+            </div>
+          </div>
+          <div className="pt-5">
+            <div className="bg-white shadow rounded-md py-7 px-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="inline-flex items-center">
+                    <div>Schedule 1</div>
+                    <div className="pl-2">
+                      <div className="bg-[#EBFFF3] rounded text-[#61BB84] px-2 py-2">
+                        Default
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="pl-2">
+                  <div className="inline-flex">
+                    <div>
+                      <div className="bg-[#FFEFDF] rounded text-[#E4750D] px-2 py-2">
+                        Reschedule
+                      </div>
+                    </div>
+                    <div className="pl-2">
+                      <div className="bg-[#FFDFE5] text-[#F9395B] px-2 py-2 ">
+                        Delete
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -20,7 +20,7 @@ export default function Consultation(props) {
   const [catData, setCatData] = useState();
   const [images, setImages] = React.useState([]);
   const [formData, setFormData] = useState();
-  const [selectedTime, setSelectedTime] = useState();
+  const [selectedTime, setSelectedTime] = useState([]);
   const createProduct = (e) => {
     e.preventDefault();
     setLoading("loading");
@@ -247,7 +247,7 @@ export default function Consultation(props) {
                 <div>Day</div>
                 <div>Time</div>
               </div>
-              <div className="flex justify-between py-10 px-14">
+              <div className="flex justify-between pt-10 pb-2 px-14">
                 <div>
                   <div className="flex justify-evenly">
                     <div>
@@ -262,6 +262,258 @@ export default function Consultation(props) {
                       />
                     </div>
                     <div className="pl-2">Sunday</div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-3">
+                    <div className="">
+                      <select className="py- bg-white border text-sm border-gray-400 rounded-2xl h-[30px] px-1 w-[96px]  focus:bg-white outline-0  ">
+                        <option disabled selected>
+                          {selectedTime[0]}
+                        </option>
+                        {selectedTime?.map((data, i) => (
+                          <option>{data}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="">
+                      <select className="py- bg-white border text-sm border-gray-400 rounded-2xl px-1  h-[30px] w-[96px]  focus:bg-white outline-0  ">
+                        <option disabled selected>
+                          {selectedTime[0]}
+                        </option>
+                        {selectedTime?.map((data, i) => (
+                          <option>{data}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between pb-2 px-14">
+                <div>
+                  <div className="flex justify-evenly">
+                    <div>
+                      {" "}
+                      <input
+                        type="checkbox"
+                        name="name"
+                        className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
+                        onChange={handleProduct}
+                        defaultValue={props.editData?.name}
+                        // required
+                      />
+                    </div>
+                    <div className="pl-2">Monday</div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-3">
+                    <div className="">
+                      <select className="py- bg-white border text-sm border-gray-400 rounded-2xl h-[30px] px-1 w-[96px]  focus:bg-white outline-0  ">
+                        <option disabled selected>
+                          {selectedTime[0]}
+                        </option>
+                        {selectedTime?.map((data, i) => (
+                          <option>{data}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="">
+                      <select className="py- bg-white border text-sm border-gray-400 rounded-2xl px-1  h-[30px] w-[96px]  focus:bg-white outline-0  ">
+                        <option disabled selected>
+                          {selectedTime[0]}
+                        </option>
+                        {selectedTime?.map((data, i) => (
+                          <option>{data}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between pb-2 px-14">
+                <div>
+                  <div className="flex justify-evenly">
+                    <div>
+                      {" "}
+                      <input
+                        type="checkbox"
+                        name="name"
+                        className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
+                        onChange={handleProduct}
+                        defaultValue={props.editData?.name}
+                        // required
+                      />
+                    </div>
+                    <div className="pl-2">Tuesday</div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-3">
+                    <div className="">
+                      <select className="py- bg-white border text-sm border-gray-400 rounded-2xl h-[30px] px-1 w-[96px]  focus:bg-white outline-0  ">
+                        <option disabled selected>
+                          {selectedTime[0]}
+                        </option>
+                        {selectedTime?.map((data, i) => (
+                          <option>{data}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="">
+                      <select className="py- bg-white border text-sm border-gray-400 rounded-2xl px-1  h-[30px] w-[96px]  focus:bg-white outline-0  ">
+                        <option disabled selected>
+                          {selectedTime[0]}
+                        </option>
+                        {selectedTime?.map((data, i) => (
+                          <option>{data}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between pb-2 px-14">
+                <div>
+                  <div className="flex justify-evenly">
+                    <div>
+                      {" "}
+                      <input
+                        type="checkbox"
+                        name="name"
+                        className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
+                        onChange={handleProduct}
+                        defaultValue={props.editData?.name}
+                        // required
+                      />
+                    </div>
+                    <div className="pl-2">Wednesday</div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-3">
+                    <div className="">
+                      <select className="py- bg-white border text-sm border-gray-400 rounded-2xl h-[30px] px-1 w-[96px]  focus:bg-white outline-0  ">
+                        <option disabled selected>
+                          {selectedTime[0]}
+                        </option>
+                        {selectedTime?.map((data, i) => (
+                          <option>{data}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="">
+                      <select className="py- bg-white border text-sm border-gray-400 rounded-2xl px-1  h-[30px] w-[96px]  focus:bg-white outline-0  ">
+                        <option disabled selected>
+                          {selectedTime[0]}
+                        </option>
+                        {selectedTime?.map((data, i) => (
+                          <option>{data}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between pb-2 px-14">
+                <div>
+                  <div className="flex justify-evenly">
+                    <div>
+                      {" "}
+                      <input
+                        type="checkbox"
+                        name="name"
+                        className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
+                        onChange={handleProduct}
+                        defaultValue={props.editData?.name}
+                        // required
+                      />
+                    </div>
+                    <div className="pl-2">Thursday</div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-3">
+                    <div className="">
+                      <select className="py- bg-white border text-sm border-gray-400 rounded-2xl h-[30px] px-1 w-[96px]  focus:bg-white outline-0  ">
+                        <option disabled selected>
+                          {selectedTime[0]}
+                        </option>
+                        {selectedTime?.map((data, i) => (
+                          <option>{data}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="">
+                      <select className="py- bg-white border text-sm border-gray-400 rounded-2xl px-1  h-[30px] w-[96px]  focus:bg-white outline-0  ">
+                        <option disabled selected>
+                          {selectedTime[0]}
+                        </option>
+                        {selectedTime?.map((data, i) => (
+                          <option>{data}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between pb-2 px-14">
+                <div>
+                  <div className="flex justify-evenly">
+                    <div>
+                      {" "}
+                      <input
+                        type="checkbox"
+                        name="name"
+                        className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
+                        onChange={handleProduct}
+                        defaultValue={props.editData?.name}
+                        // required
+                      />
+                    </div>
+                    <div className="pl-2">Friday</div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-3">
+                    <div className="">
+                      <select className="py- bg-white border text-sm border-gray-400 rounded-2xl h-[30px] px-1 w-[96px]  focus:bg-white outline-0  ">
+                        <option disabled selected>
+                          {selectedTime[0]}
+                        </option>
+                        {selectedTime?.map((data, i) => (
+                          <option>{data}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="">
+                      <select className="py- bg-white border text-sm border-gray-400 rounded-2xl px-1  h-[30px] w-[96px]  focus:bg-white outline-0  ">
+                        <option disabled selected>
+                          {selectedTime[0]}
+                        </option>
+                        {selectedTime?.map((data, i) => (
+                          <option>{data}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between pb-2 px-14">
+                <div>
+                  <div className="flex justify-evenly">
+                    <div>
+                      {" "}
+                      <input
+                        type="checkbox"
+                        name="name"
+                        className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
+                        onChange={handleProduct}
+                        defaultValue={props.editData?.name}
+                        // required
+                      />
+                    </div>
+                    <div className="pl-2">Saturday</div>
                   </div>
                 </div>
                 <div>
@@ -310,10 +562,9 @@ export default function Consultation(props) {
                 ) : (
                   <button
                     onClick={createProduct}
-                    disabled={images?.length <= 2 ? true : false}
                     className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
                   >
-                    Create News
+                    Reschedule
                   </button>
                 )}
               </div>

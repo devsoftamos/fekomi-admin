@@ -4,10 +4,12 @@ import Header from "../components/header/Header";
 
 import ConsultationTable from "../components/consultation/ConsultationTable";
 import Consultation from "../components/consultation/modal/Consultation";
+import MySchedule from "../components/consultation/modal/MySchedule";
 
 export default function Econsultation() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState();
+  const [openSchedule, setOpenSchedule] = useState();
   const [images, setImages] = useState([]);
   const handleProduct = (e) => {
     console.log(e.target.value);
@@ -16,6 +18,10 @@ export default function Econsultation() {
     <div className="flex h-screen overflow-hidden ">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       <Consultation modalOpen={modalOpen} setModalOpen={setModalOpen} />
+      <MySchedule
+        openSchedule={openSchedule}
+        setOpenSchedule={setOpenSchedule}
+      />
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
@@ -27,7 +33,7 @@ export default function Econsultation() {
                   <div className="pl-2">
                     <button
                       onClick={() => {
-                        setModalOpen("modal-open");
+                        setOpenSchedule("modal-open");
                       }}
                       className="px-2 py-3 capitalize font-black text-[#2F93F6] border border-[#2F93F6] rounded"
                     >
