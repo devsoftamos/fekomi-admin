@@ -23,7 +23,10 @@ const LogIn = () => {
     var config = {
       method: "post",
       url: `${process.env.REACT_APP_ADMIN}auth/login`,
-      headers: {},
+
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
       data: { ...data },
     };
 
