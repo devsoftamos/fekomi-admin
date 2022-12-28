@@ -15,11 +15,11 @@ import "react-toastify/dist/ReactToastify.css";
 import NavBar from "../components/header/NavBar";
 const LogIn = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState();
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const onSubmit = (data) => {
-    setLoading(true);
+    setLoading("loading");
     var config = {
       method: "post",
       url: `${process.env.REACT_APP_ADMIN}auth/login`,
@@ -32,7 +32,7 @@ const LogIn = () => {
 
     axios(config)
       .then(function (response) {
-        setLoading(false);
+        setLoading("");
         toast.success(response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -42,8 +42,6 @@ const LogIn = () => {
           draggable: true,
           progress: undefined,
         });
-        console.log(response?.data?.data?.access_token);
-        return;
         localStorage.setItem(
           "fekomiAuthToken",
           response?.data?.data?.access_token
@@ -54,7 +52,7 @@ const LogIn = () => {
       })
       .catch(function (error) {
         if (error?.response?.data?.error) {
-          setLoading(false);
+          setLoading("");
           toast.error(error?.response?.data?.error[0], {
             position: "top-right",
             autoClose: 5000,
@@ -66,7 +64,7 @@ const LogIn = () => {
           });
           return;
         } else {
-          setLoading(false);
+          setLoading("");
           toast.error(error?.response?.data?.message, {
             position: "top-right",
             autoClose: 5000,
@@ -155,17 +153,19 @@ const LogIn = () => {
                     </div>
                   </div>
                   <div className="pt-4">
-                    <button className="bg-deepBlue text-center  w-full text-base py-3 text-white rounded border-deepBlue  font-medium">
-                      {loading ? "Loading" : "Login"}
+                    <button
+                      className={`bg-deepBlue btn text-center ${loading} w-full text-base py-3 text-white rounded border-deepBlue  font-medium`}
+                    >
+                      {"Login"}
                     </button>
                   </div>
-                  <div className="text-right font-black py-4 text-deepBlue">
+                  {/* <div className="text-right font-black py-4 text-deepBlue">
                     Forget Password
-                  </div>
-                  <div>
+                  </div> */}
+                  {/* <div>
                     Don't have an account{" "}
                     <span className="text-deepBlue font-black">Sign Up</span>
-                  </div>
+                  </div> */}
                 </form>
               </div>
             </div>
