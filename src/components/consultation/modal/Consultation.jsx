@@ -237,7 +237,7 @@ export default function Consultation(props) {
                 <option disabled selected>
                   Select One
                 </option>
-                <option value={"data?.id"}>Online</option>
+                <option value={"data?.id"}>Virtual</option>
                 <option value={"data?.id"}>Physical</option>
               </select>
             </div>
