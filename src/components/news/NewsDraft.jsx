@@ -1,9 +1,74 @@
-import React from "react";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function NewsDraft() {
+  const [loading, setLoading] = useState();
+  const [formData, setFormData] = useState();
+
+  const updateProduct = (e) => {
+    e.preventDefault();
+    setLoading("loading");
+
+    const token = localStorage.getItem("fekomi-token");
+    const headers = {
+      "content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    };
+    const options = {
+      url: `${process.env.REACT_APP_ECOMMERCE}/admin/posts/639f8d2cbf7912d03d087f5c`,
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+        Authorization: ` Bearer ${token}`,
+      },
+      data: {
+        ...formData,
+      },
+    };
+
+    axios(options)
+      .then((response) => {
+        setLoading("");
+
+        toast.success(response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+      .catch((error) => {
+        setLoading("");
+        toast.error(error?.response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  };
   return (
     <div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="flex flex-wrap items-center">
         <Link to="/newsdraft">
           <div className="pt-2">

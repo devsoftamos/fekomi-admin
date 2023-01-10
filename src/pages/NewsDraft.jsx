@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import Sidebar from "../components/sidebar/Sidebar";
 import Header from "../components/header/Header";
 import CustomerTable from "../components/customers/CustomerTable";
@@ -6,6 +6,9 @@ import OrderTable from "../components/order/OrderTable";
 import NewsDraft from "../components/news/NewsDraft";
 import CreateNews from "../components/news/modal/CreateNews";
 import DragAndDrop from "../components/news/modal/DragandDrop";
+import Dropzone, { useDropzone } from "react-dropzone";
+import "../components/news/modal/DragAndDrop.css";
+import axios from "axios";
 
 export default function NewsDraftPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -14,6 +17,34 @@ export default function NewsDraftPage() {
   const handleProduct = (e) => {
     console.log(e.target.value);
   };
+
+  const onDrop = useCallback((acceptedFiles) => {
+    console.log(acceptedFiles);
+    // Do something with the files
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  // const onDrop = (files) => {
+  //   let formData = new FormData();
+  //   const config = {
+  //     header: { "content-type": "multipart/form-data" },
+  //   };
+  //   console.log(files);
+  //   formData.append("file", files[0]);
+
+  //   // axios.post("/api/video/uploadfiles", formData, config).then((response) => {
+  //   //   if (response.data.success) {
+  //   //     let variable = {
+  //   //       filePath: response.data.filePath,
+  //   //       fileName: response.data.fileName,
+  //   //     };
+  //   //     //setFilePath(response.data.filePath);
+
+  //   //     //gerenate thumbnail with this filepath !
+  //   //   } else {
+  //   //     alert("failed to save the video in server");
+  //   //   }
+  //   // });
+  // };
   return (
     <div className="flex h-screen overflow-hidden ">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -47,7 +78,20 @@ export default function NewsDraftPage() {
                     </div>
                   </div>
                   <div className="py-2">
-                    <DragAndDrop images={images} setImages={setImages} />
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      {isDragActive ? (
+                        <div className="upload-container">
+                          Drop the files here ...
+                        </div>
+                      ) : (
+                        <div className="upload-container">
+                          Drag 'n' drop some files here, or click to select
+                          files
+                        </div>
+                      )}
+                    </div>
+                    {/* <DragAndDrop images={images} setImages={setImages} /> */}
                   </div>
                   <div>
                     <label className="font-black text-sm">Message</label>

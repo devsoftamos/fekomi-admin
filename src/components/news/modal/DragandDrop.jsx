@@ -5,7 +5,7 @@ import "./DragAndDrop.css";
 
 const DragAndDrop = (props) => {
   const {
-    maxNumber = 3,
+    maxNumber = 1,
     acceptType = ["jpeg", "jpg", "png"],
     maxFileSize = 5000000,
     setImages,
@@ -105,7 +105,7 @@ const DragAndDrop = (props) => {
             )} */}
 
             <div className="upload__image-wrapper">
-              {images?.length <= 2 && (
+              {images?.length < 1 && (
                 <div
                   className="upload-container"
                   {...dragProps}
