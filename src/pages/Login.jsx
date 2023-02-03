@@ -42,11 +42,12 @@ const LogIn = () => {
           draggable: true,
           progress: undefined,
         });
+        localStorage.setItem("fekomiAuthToken", response?.data?.data?.token);
         localStorage.setItem(
-          "fekomiAuthToken",
-          response?.data?.data?.access_token
+          "fekomi-token",
+          JSON.stringify(response.data?.data?.user)
         );
-        console.log(response?.data?.data?.access_token);
+
         navigate("/dashboard");
         // console.log(JSON.stringify(response.data));
       })

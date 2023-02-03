@@ -8,12 +8,24 @@ export default function DatingUsers() {
   const [inactiveUsers, setInActiveUsers] = useState();
   const [loading, setLoading] = useState();
   const getDatingActiveUsers = async () => {
-    console.log(process.env.REACT_APP_DATING);
     setLoading(true);
     const token = localStorage.getItem("fekomi-token");
+    const covertedToken = JSON.parse(token);
+    const tokenParsed = {
+      firstName: covertedToken.firstname,
+      lastName: covertedToken.lastname,
+      userId: covertedToken.id,
+      role: {
+        admin: true,
+        superAdmin: true,
+      },
+      permission: {
+        dating: true,
+      },
+    };
     const headers = {
       "content-type": "application/json",
-      Authorization: ` Bearer ${token}`,
+      Authorization: `${JSON.stringify(tokenParsed)}`,
     };
 
     try {
@@ -37,12 +49,24 @@ export default function DatingUsers() {
     }
   };
   const getDatinginActiveUsers = async () => {
-    console.log(process.env.REACT_APP_DATING);
     setLoading(true);
     const token = localStorage.getItem("fekomi-token");
+    const covertedToken = JSON.parse(token);
+    const tokenParsed = {
+      firstName: covertedToken.firstname,
+      lastName: covertedToken.lastname,
+      userId: covertedToken.id,
+      role: {
+        admin: true,
+        superAdmin: true,
+      },
+      permission: {
+        dating: true,
+      },
+    };
     const headers = {
       "content-type": "application/json",
-      Authorization: ` Bearer ${token}`,
+      Authorization: `${JSON.stringify(tokenParsed)}`,
     };
 
     try {

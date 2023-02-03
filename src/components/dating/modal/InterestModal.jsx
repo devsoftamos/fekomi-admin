@@ -164,22 +164,30 @@ export default function InterestModal({ modalOpen, setModalOpen, datingData }) {
     setEditValue({ name: data, id: id });
   };
   const updateInterest = () => {
-    console.log(datingData, "UID");
+    // console.log(datingData, "UID");
     setLoading("loading");
-
     const token = localStorage.getItem("fekomi-token");
+    const covertedToken = JSON.parse(token);
+    const tokenParsed = {
+      firstName: covertedToken.firstname,
+      lastName: covertedToken.lastname,
+      userId: covertedToken.id,
+      role: {
+        admin: true,
+        superAdmin: true,
+      },
+      permission: {
+        dating: true,
+      },
+    };
     const headers = {
       "content-type": "application/json",
-      Authorization: ` Bearer ${token}`,
+      Authorization: `${JSON.stringify(tokenParsed)}`,
     };
     const options = {
       url: `${process.env.REACT_APP_DATING}/admin/interests/${editValue?.id}`,
       method: "PATCH",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
-        Authorization: ` Bearer ${token}`,
-      },
+      headers: headers,
       data: {
         name: editValue.name,
       },

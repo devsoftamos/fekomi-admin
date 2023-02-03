@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 export default function NewsDraft() {
   const [loading, setLoading] = useState();
   const [formData, setFormData] = useState();
-
+  const [newsData, setNewsData] = useState();
   const updateProduct = (e) => {
     e.preventDefault();
     setLoading("loading");
@@ -56,6 +56,37 @@ export default function NewsDraft() {
         });
       });
   };
+
+  const getNewsData = async () => {
+    const token = localStorage.getItem("fekomi-token");
+    const headers = {
+      "content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    };
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_NEWS}/admin/posts`,
+        {
+          headers: headers,
+        }
+      );
+      setNewsData(response.data);
+      // setOrderData(response?.data?.data?.data);
+      console.log(response?.data, "POPO");
+    } catch (error) {
+      //setMessage(error?.response?.data?.message);
+      //   if (error?.response?.data?.message == "Unauthenticated.") {
+      //     navigate("/");
+      //   }
+    }
+  };
+  useEffect(() => {
+    getNewsData();
+  }, []);
+  function isImage(url) {
+    return /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
+  }
   return (
     <div>
       <ToastContainer
@@ -69,30 +100,39 @@ export default function NewsDraft() {
         draggable
         pauseOnHover
       />
-      <div className="flex flex-wrap items-center">
-        <Link to="/newsdraft">
-          <div className="pt-2">
-            <div className="card w-96 bg-base-100 shadow-xl">
-              <figure>
-                <img src="https://placeimg.com/400/225/arch" alt="Shoes" />
-              </figure>
-              <div className="card-body">
-                <p>Why herbal tea is good for you</p>
-                <div className="text-sm text-gray-400">
-                  Created: Aug 26, 2022
+      <div className="flex flex-wrap  gap-4 items-stretch h-full">
+        {newsData?.data?.map((data, i) => (
+          <Link to={`/newsdraft/${data?._id}`}>
+            <div key={i} className="pt-2">
+              <div className="card w-96 bg-base-100 shadow-xl bg-contain">
+                {isImage(data?.mediaUrl) ? (
+                  <figure
+                    style={{
+                      backgroundImage: `url(${data?.mediaUrl})`,
+                      height: "100%",
+                    }}
+                    className="bg-cover w-full pb-56 h-full"
+                  ></figure>
+                ) : (
+                  <video
+                    className="  w-full -pb-56 -h-full"
+                    src={data?.mediaUrl}
+                  ></video>
+                )}
+                <div className="card-body">
+                  <p>{data?.title}</p>
+                  <div className="text-sm text-gray-400">
+                    {new Date(data?.createdAt).toDateString()}
+                  </div>
                 </div>
-                {/* <div className="card-actions justify-end">
-                <div className="badge badge-outline">Fashion</div>
-                <div className="badge badge-outline">Products</div>
-              </div> */}
-              </div>
-              <div className="w-full flex justify-center pt-5 h-16 bg-[#FFEFDF]">
-                <div className="text-[#E4750D]">Unpublished</div>
+                {/* <div className="w-full flex justify-center pt-5 h-16 bg-[#FFEFDF]">
+                  <div className="text-[#E4750D]">Unpublished</div>
+                </div> */}
               </div>
             </div>
-          </div>
-        </Link>
-        <Link to="/newsdraft">
+          </Link>
+        ))}
+        {/* <Link to="/newsdraft">
           <div className="pl-2 pt-2">
             <div className="card w-96 bg-base-100 shadow-xl">
               <figure>
@@ -103,17 +143,14 @@ export default function NewsDraft() {
                 <div className="text-sm text-gray-400">
                   Created: Aug 26, 2022
                 </div>
-                {/* <div className="card-actions justify-end">
-                <div className="badge badge-outline">Fashion</div>
-                <div className="badge badge-outline">Products</div>
-              </div> */}
+               
               </div>
               <div className="w-full flex justify-center pt-5 h-16 bg-[#EBFFF3]">
                 <div className="text-[#61BB84]">Unpublished</div>
               </div>
             </div>
           </div>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

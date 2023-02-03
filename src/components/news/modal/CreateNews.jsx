@@ -281,8 +281,6 @@ export default function CreateNews(props) {
               ) : (
                 ""
               )}
-
-              {/* <DragAndDrop images={images} setImages={setImages} /> */}
             </div>
             <div>
               <label className="font-black text-sm">Message</label>
