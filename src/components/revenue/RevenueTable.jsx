@@ -1,6 +1,44 @@
-import React from "react";
+import axios from "axios";
+import React,{useState,useEffect} from "react";
 import { COLUMNS } from "../../column";
 export default function RevenueTable() {
+  const [revenueData,setRevenueData] = useState()
+  const [loading,setLoading] = useState()
+  const [chooseData, setChooseData] = useState(5);
+  const [pageNumber, setpageNumber] = useState(1);
+  const getRevenue = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("fekomi-token");
+    const headers = {
+      "content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    };
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_WALLET_URL}/wallet/revenue/all`,
+        {
+          headers: headers,
+        }
+      );
+
+      console.log(response.data);
+
+      setRevenueData(response?.data?.data);
+      setLoading(false);
+     
+    } catch (error) {
+      setLoading(false);
+
+      //setMessage(error?.response?.data?.message);
+      //   if (error?.response?.data?.message == "Unauthenticated.") {
+      //     navigate("/");
+      //   }
+    }
+  };
+  useEffect(()=>{
+    getRevenue()
+  },[])
   const bag2 = "/card-wallet.svg";
   return (
     <div>

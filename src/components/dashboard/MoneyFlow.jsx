@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useState,useEffect } from "react";
 
 import Chart from "react-apexcharts";
 import ReactApexChart from "react-apexcharts";
@@ -91,9 +92,42 @@ export default function MoneyFlow() {
       },
     },
   });
+  const [monthlyData, setMonthlyData] = useState([])
+  const [loading,setLoading] = useState()
   const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
+  const getMonthly = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("fekomi-token");
+    const headers = {
+      "content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    };
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_WALLET_URL}/wallet/revenue/total/monthly`,
+        {
+          headers: headers,
+        }
+      );
+ console.log(response.data.data);
+ setMonthlyData(response.data.data?.data)
+      setLoading(false);
+       
+    } catch (error) {
+      setLoading(false);
+
+      //setMessage(error?.response?.data?.message);
+      //   if (error?.response?.data?.message == "Unauthenticated.") {
+      //     navigate("/");
+      //   }
+    }
+  };
+  useEffect(()=>{
+    getMonthly()
+  },[])
   return (
     <div className="bg-white h-[323px] w-full ">
       <div className="flex justify-between px-2 pt-1">

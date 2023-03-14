@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { COLUMNS } from "../../column";
 import Pagination from "../utils/Pagination";
 import TableHeaders from "../utils/TableHeaders";
-
+import Skeleton from "react-loading-skeleton";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export default function CustomerTable() {
@@ -12,6 +12,9 @@ export default function CustomerTable() {
   const [pageNumber, setpageNumber] = useState(1);
   const [searchValue, setSearchValue] = useState();
   const [loading, setLoading] = useState();
+  const [filterTriggered, setFilterTriggered] = useState(false);
+  const [filteredUser, setFilteredUser] = useState();
+
   const getUserData = async () => {
     const token = localStorage.getItem("fekomiAuthToken");
     const headers = {
@@ -27,7 +30,7 @@ export default function CustomerTable() {
         }
       );
       setUserData(response?.data?.data);
-      console.log(response?.data, "POPO");
+      setFilteredUser()
     } catch (error) {
       //setMessage(error?.response?.data?.message);
       //   if (error?.response?.data?.message == "Unauthenticated.") {
@@ -46,34 +49,23 @@ export default function CustomerTable() {
 
   const getUserSearch = async () => {
     setLoading(true);
-    const token = localStorage.getItem("fekomi-token");
-    const covertedToken = JSON.parse(token);
-    const tokenParsed = {
-      firstName: covertedToken.firstname,
-      lastName: covertedToken.lastname,
-      userId: covertedToken.id,
-      role: {
-        admin: true,
-        superAdmin: true,
-      },
-      permission: {
-        dating: true,
-      },
-    };
+    const token = localStorage.getItem("fekomiAuthToken");
+
     const headers = {
       "content-type": "application/json",
-      Authorization: `${JSON.stringify(tokenParsed)}`,
+      Authorization: ` Bearer ${token}`,
     };
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_ADMIN_URL}/admin/profiles/search/users?page=1&limit=5&searchValue=${searchValue}`,
+        `${process.env.REACT_APP_ADMIN_URL}/auth/search-members/${searchValue}`,
         {
           headers: headers,
         }
       );
 
-      setFilterDating(response?.data?.data);
+      setFilteredUser(response?.data?.data);
+      
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -253,68 +245,162 @@ export default function CustomerTable() {
                   </tr>
                 </thead>
                 <tbody>
-                  {userData?.data?.map((data, i) => (
-                    <tr
-                      key={i}
-                      //onClick={() => navigate("/userdetails")}
-                      class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
-                    >
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        <img
-                          src={data?.profile_image || "/avatar.png"}
-                          className="rounded-full h-10 w-10"
-                        />
-                      </td>
-                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                        {data?.name}
-                      </td>
-                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                        {data?.email}
-                      </td>
-                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                        {data?.phone_no || "-"}
-                      </td>
-                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                        <div
-                          className={`${
-                            data?.block
-                              ? "bg-[#fc9f92] text-[#61BB84"
-                              : "bg-[#EBFFF3] text-[#61BB84"
-                          }  ] text-center py-2 px-1 rounded-lg`}
-                        >
-                          {data?.block ? "Blocked" : "Active" || "-"}
-                        </div>
-                      </td>
+                  {!userData?.data &&
+                    [...new Array(6)].map((d) => (
+                      <tr
+                        //key={i}
+                        className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100"
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-gray-900">
+                          <Skeleton height={15} />
+                        </td>
+                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                          <Skeleton height={15} />
+                        </td>
+                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                          <Skeleton height={15} />
+                        </td>
+                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                          <Skeleton height={15} />
+                        </td>
 
-                      {/* <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
+                        <td
+                          //onClick={() => handleGetData(data)}
+                          className="text-sm text-[#0AC293] capitalize font-bold px-6 py-4 whitespace-nowrap"
+                        >
+                          <Skeleton height={15} />
+                        </td>
+                        <td className="text-sm text-[#0AC293] capitalize font-bold px-6 py-4 whitespace-nowrap">
+                          <Skeleton height={15} />
+                        </td>
+                      </tr>
+                    ))}
+
+                  {filteredUser
+                    ? filteredUser?.map((data, i) => (
+                        <tr
+                          key={i}
+                          //onClick={() => navigate("/userdetails")}
+                          class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
+                        >
+                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <img
+                              src={data?.profile_image || "/avatar.png"}
+                              className="rounded-full h-10 w-10"
+                            />
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.name}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.email}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.phone_no || "-"}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            <div
+                              className={`${
+                                data?.block
+                                  ? "bg-[#fc9f92] text-[#61BB84"
+                                  : "bg-[#EBFFF3] text-[#61BB84"
+                              }  ] text-center py-2 px-1 rounded-lg`}
+                            >
+                              {data?.block ? "Blocked" : "Active" || "-"}
+                            </div>
+                          </td>
+
+                          {/* <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
                         <div className="bg-[#EBFFF3] text-[#61BB84] text-center py-2 px-1 rounded-lg">
                           Edit
                         </div>
                       </td> */}
-                      {/* <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                          {/* <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
                         <div className="bg-[#FFEFDF] font-bold  text-[#E4750D] text-center py-2 px-1 rounded-lg">
                           Disable
                         </div>
                       </td> */}
-                      <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
-                        {data?.block ? (
-                          <div
-                            onClick={() => unblockUser(data?.id)}
-                            className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg"
-                          >
-                            Unblock
-                          </div>
-                        ) : (
-                          <div
-                            onClick={() => blockUser(data?.id)}
-                            className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg"
-                          >
-                            Block
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                          <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                            {data?.block ? (
+                              <div
+                                onClick={() => unblockUser(data?.id)}
+                                className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg"
+                              >
+                                Unblock
+                              </div>
+                            ) : (
+                              <div
+                                onClick={() => blockUser(data?.id)}
+                                className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg"
+                              >
+                                Block
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))
+                    : userData?.data?.map((data, i) => (
+                        <tr
+                          key={i}
+                          //onClick={() => navigate("/userdetails")}
+                          class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
+                        >
+                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <img
+                              src={data?.profile_image || "/avatar.png"}
+                              className="rounded-full h-10 w-10"
+                            />
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.name}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.email}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.phone_no || "-"}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            <div
+                              className={`${
+                                data?.block
+                                  ? "bg-[#fc9f92] text-[#61BB84"
+                                  : "bg-[#EBFFF3] text-[#61BB84"
+                              }  ] text-center py-2 px-1 rounded-lg`}
+                            >
+                              {data?.block ? "Blocked" : "Active" || "-"}
+                            </div>
+                          </td>
+
+                          {/* <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
+                        <div className="bg-[#EBFFF3] text-[#61BB84] text-center py-2 px-1 rounded-lg">
+                          Edit
+                        </div>
+                      </td> */}
+                          {/* <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                        <div className="bg-[#FFEFDF] font-bold  text-[#E4750D] text-center py-2 px-1 rounded-lg">
+                          Disable
+                        </div>
+                      </td> */}
+                          <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                            {data?.block ? (
+                              <div
+                                onClick={() => unblockUser(data?.id)}
+                                className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg"
+                              >
+                                Unblock
+                              </div>
+                            ) : (
+                              <div
+                                onClick={() => blockUser(data?.id)}
+                                className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg"
+                              >
+                                Block
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
                 </tbody>
               </table>
               <div className="flex justify-end items-center pb-24 px-6">

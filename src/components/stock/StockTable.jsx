@@ -78,7 +78,7 @@ export default function StockTable({
   };
 
   const getProductsSearch = async () => {
-    console.log(process.env.REACT_APP_DATING);
+    
     setLoading(true);
     const token = localStorage.getItem("fekomi-token");
     const headers = {
