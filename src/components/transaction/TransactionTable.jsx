@@ -236,8 +236,7 @@ export default function TransactionTable() {
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                      {data?.description}
                     </td>
-                    
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                       {new Date(data?.created_at).toDateString()}
                     </td>
 
