@@ -15,6 +15,9 @@ import News from "./pages/News";
 
 import NewsDraftPage from "./pages/NewsDraft";
 import Econsultation from "./pages/Econsultation";
+import StorePoint from "./pages/StorePoint";
+import StoreProduct from "./pages/StoreProduct";
+import Products from "./pages/Products";
 
 const RoutesFile = () => {
   return (
@@ -33,6 +36,9 @@ const RoutesFile = () => {
       <Route exact path="/news" element={<News />} />
       <Route exact path="/newsdraft/:id" element={<NewsDraftPage />} />
       <Route exact path="/consultation" element={<Econsultation />} />
+      <Route exact path="/store-point/:id" element={<StorePoint />} />
+      <Route exact path="/store-point/:id" element={<StoreProduct />} />
+      <Route exact path="/products" element={< Products/>} />
     </Routes>
   );
 };

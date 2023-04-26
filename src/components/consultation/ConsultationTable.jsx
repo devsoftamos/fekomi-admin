@@ -1,8 +1,40 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { COLUMNS } from "../../column";
 import TableHeaders from "../utils/TableHeaders";
+import axios from "axios";
 
 export default function ConsultationTable() {
+  const [loading,setLoading] =useState()
+  const getConsultation = async () => {
+    setLoading("loading");
+
+    const token = localStorage.getItem("fekomi-token");
+    const headers = {
+      "content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    };
+    const options = {
+      url: `${process.env.REACT_APP_CONSULTATION}/schedules`,
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+        Authorization: ` Bearer ${token}`,
+      },
+    };
+
+    axios(options)
+      .then((response) => {
+       console.log(response.data,"POST");
+        
+      })
+      .catch((error) => {
+        setLoading("");
+      });
+  };
+  useEffect(()=>{
+getConsultation()
+  },[])
   return (
     <div className="pt-7">
       <div class="flex flex-col">

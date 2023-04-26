@@ -6,6 +6,8 @@ export default function RevenueTable() {
   const [loading,setLoading] = useState()
   const [chooseData, setChooseData] = useState(5);
   const [pageNumber, setpageNumber] = useState(1);
+  const [totalRevnue,setTotalRevenue] = useState()
+  const [totalMonthly,setTotalMonthly] = useState()
   const getRevenue = async () => {
     setLoading(true);
     const token = localStorage.getItem("fekomi-token");
@@ -16,7 +18,7 @@ export default function RevenueTable() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_WALLET_URL}/wallet/revenue/all`,
+        `${process.env.REACT_APP_WALLET_URL}/wallet/revenue/all?page=${pageNumber}&limit=${chooseData}`,
         {
           headers: headers,
         }
@@ -24,7 +26,69 @@ export default function RevenueTable() {
 
       console.log(response.data);
 
-      setRevenueData(response?.data?.data);
+      setRevenueData(response?.data?.data?.data);
+      setLoading(false);
+     
+    } catch (error) {
+      setLoading(false);
+
+      //setMessage(error?.response?.data?.message);
+      //   if (error?.response?.data?.message == "Unauthenticated.") {
+      //     navigate("/");
+      //   }
+    }
+  };
+
+  const getTotalRevenue = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("fekomi-token");
+    const headers = {
+      "content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    };
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_WALLET_URL}/wallet/revenue/total?currency=NGN`,
+        {
+          headers: headers,
+        }
+      );
+
+      console.log(response.data);
+
+      setTotalRevenue(response?.data?.data?.total_revenue);
+      setLoading(false);
+     
+    } catch (error) {
+      setLoading(false);
+
+      //setMessage(error?.response?.data?.message);
+      //   if (error?.response?.data?.message == "Unauthenticated.") {
+      //     navigate("/");
+      //   }
+    }
+  };
+
+  const getTotalMonthly = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("fekomi-token");
+    const headers = {
+      "content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    };
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_WALLET_URL}/wallet/revenue/total/monthly`,
+        {
+          headers: headers,
+        }
+      );
+
+      console.log(response.data);
+
+      setTotalMonthly(response?.data?.data?.total_revenue);
       setLoading(false);
      
     } catch (error) {
@@ -39,7 +103,17 @@ export default function RevenueTable() {
   useEffect(()=>{
     getRevenue()
   },[])
+  useEffect(()=>{
+    getTotalRevenue()
+    getTotalMonthly()
+  },[])
+  const handleWalletChange=(e)=>{
+console.log(e.target.value)
+  }
   const bag2 = "/card-wallet.svg";
+  const numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
   return (
     <div>
       <div className="">
@@ -50,8 +124,8 @@ export default function RevenueTable() {
           >
             <div>
               <div className="flex justify-end  px-2 py-6 text-right">
-                <select className="py-4 text-white outline-none bg-transparent px-2 w-[95px] border border-white rounded-3xl">
-                  <option disabled selected>
+                <select onChange={handleWalletChange} className="py-4 text-white outline-none bg-transparent px-2 w-[95px] border border-white rounded-3xl">
+                  <option value="NGN" disabled selected>
                     NGN
                   </option>
                   <option className="bg-gray-500">USD</option>
@@ -61,7 +135,7 @@ export default function RevenueTable() {
               <div className="px-4">
                 <div className="text-white">Total Revenue</div>
                 <div className="py-2 text-white font-black text-lg">
-                  200,000,000
+                 {numberWithCommas(totalRevnue||0)}
                 </div>
               </div>
             </div>
@@ -137,29 +211,48 @@ export default function RevenueTable() {
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
+                      Debit (NGN)
+                    </th>
+                    <th
+                      scope="col"
+                      class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
+                    >
+                     Credit (NGN)
+                    </th>
+                    <th
+                      scope="col"
+                      class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
+                    >
                       Status
                     </th>
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                      Amount Paid (NGN)
+                    Balance (NGN)
                     </th>
                   </tr>
                 </thead>
                 <tbody>
+                 {revenueData?.revenues?.map((data,i)=>(
                   <tr
                     //onClick={() => navigate("/userdetails")}
                     class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
                   >
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      Adeoni Muili Yewande
+                     {data?.user[0]?.name}
                     </td>
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      softamos@gmail.com
+                     {data?.user[0]?.email}
                     </td>
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      Oct 28, 2022
+                     {new Date(data?.created_at).toDateString()}
+                    </td>
+                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                     {data?.debit}
+                    </td>
+                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                     {data?.credit}
                     </td>
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                       <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
@@ -169,9 +262,10 @@ export default function RevenueTable() {
                       </td>
                     </td>
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      10,000
+                     {data?.balance}
                     </td>
                   </tr>
+                 )) }
                 </tbody>
               </table>
             </div>

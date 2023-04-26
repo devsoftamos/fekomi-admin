@@ -20,7 +20,9 @@ export default function Consultation(props) {
   const [catData, setCatData] = useState();
   const [images, setImages] = React.useState([]);
   const [formData, setFormData] = useState();
+  const [selectedData, setSelectedData] = useState([]);
   const [selectedTime, setSelectedTime] = useState([]);
+
   const createProduct = (e) => {
     e.preventDefault();
     setLoading("loading");
@@ -29,8 +31,13 @@ export default function Consultation(props) {
       "content-type": "application/json",
       Authorization: ` Bearer ${token}`,
     };
+
+    const Payload = {
+      ...formData,
+      days: [],
+    };
     const options = {
-      url: `${process.env.REACT_APP_ECOMMERCE}/product`,
+      url: `${process.env.REACT_APP_CONSULTATION}/schedules`,
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -176,8 +183,25 @@ export default function Consultation(props) {
     setSelectedTime(hours);
   }, []);
   const handleProduct = (e) => {
+    if (e.target.name == "sunday") {
+    }
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const handleDaysChange = (e) => {
+    if (e.target.checked) {
+       setSelectedData(
+     { ...selectedData,
+      
+        [e.target.name]:e.target?.value ,
+        
+     } 
+    );
+    }
+   
+  };
+
+  console.log(selectedData, "FORM");
 
   return (
     <div>
@@ -216,7 +240,7 @@ export default function Consultation(props) {
                 </label>
                 <input
                   type="text"
-                  name="name"
+                  name="title"
                   placeholder="Enter news title"
                   className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                   onChange={handleProduct}
@@ -231,7 +255,7 @@ export default function Consultation(props) {
               </label>
               <select
                 onChange={handleProduct}
-                name="product_category_id"
+                name="appointment_type"
                 className="py-4 border border-[#E8E9EA] bg-white px-2 w-full outline-0 focus:bg-white focus:border-0"
               >
                 <option disabled selected>
@@ -254,10 +278,10 @@ export default function Consultation(props) {
                       {" "}
                       <input
                         type="checkbox"
-                        name="name"
+                        name="day"
                         className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
-                        onChange={handleProduct}
-                        defaultValue={props.editData?.name}
+                        onChange={handleDaysChange}
+                        value="sunday"
                         // required
                       />
                     </div>
@@ -267,22 +291,30 @@ export default function Consultation(props) {
                 <div>
                   <div className="flex items-center gap-3">
                     <div className="">
-                      <select className="py- bg-white border text-sm border-gray-400 rounded-2xl h-[30px] px-1 w-[96px]  focus:bg-white outline-0  ">
+                      <select
+                        name="start_time"
+                        onChange={handleDaysChange}
+                        className="py- bg-white border text-sm border-gray-400 rounded-2xl h-[30px] px-1 w-[96px]  focus:bg-white outline-0  "
+                      >
                         <option disabled selected>
                           {selectedTime[0]}
                         </option>
                         {selectedTime?.map((data, i) => (
-                          <option>{data}</option>
+                          <option value={data}>{data}</option>
                         ))}
                       </select>
                     </div>
                     <div className="">
-                      <select className="py- bg-white border text-sm border-gray-400 rounded-2xl px-1  h-[30px] w-[96px]  focus:bg-white outline-0  ">
+                      <select
+                        name="end_time"
+                        onChange={handleDaysChange}
+                        className="py- bg-white border text-sm border-gray-400 rounded-2xl px-1  h-[30px] w-[96px]  focus:bg-white outline-0  "
+                      >
                         <option disabled selected>
                           {selectedTime[0]}
                         </option>
                         {selectedTime?.map((data, i) => (
-                          <option>{data}</option>
+                          <option value={data}>{data}</option>
                         ))}
                       </select>
                     </div>

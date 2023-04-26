@@ -14,13 +14,30 @@ export default function InterestModal({ modalOpen, setModalOpen, datingData }) {
   const [end, setEnd] = useState(4);
   const [interestValue, setInterestValue] = useState();
   const [editValue, setEditValue] = useState();
+
+
+
   const getInterest = async () => {
-    setLoading(true);
     const token = localStorage.getItem("fekomi-token");
+    const covertedToken = JSON.parse(token);
+    const tokenParsed = {
+      firstName: covertedToken.firstname,
+      lastName: covertedToken.lastname,
+      userId: covertedToken.id,
+      role: {
+        admin: true,
+        superAdmin: true,
+      },
+      permission: {
+        dating: true,
+      },
+    };
     const headers = {
       "content-type": "application/json",
-      Authorization: ` Bearer ${token}`,
+      Authorization: `${JSON.stringify(tokenParsed)}`,
     };
+    setLoading(true);
+     
 
     try {
       const response = await axios.get(

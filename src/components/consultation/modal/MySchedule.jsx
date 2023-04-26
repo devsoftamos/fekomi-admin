@@ -75,7 +75,7 @@ export default function MySchedule(props) {
         });
       });
   };
-  const getCategory = async () => {
+  const getSchedule = async () => {
     setLoading("loading");
 
     const token = localStorage.getItem("fekomi-token");
@@ -84,7 +84,7 @@ export default function MySchedule(props) {
       Authorization: ` Bearer ${token}`,
     };
     const options = {
-      url: `${process.env.REACT_APP_ECOMMERCE}/product-category`,
+      url: `${process.env.REACT_APP_ECOMMERCE}/schedules`,
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -95,6 +95,7 @@ export default function MySchedule(props) {
 
     axios(options)
       .then((response) => {
+        console.log(response);
         setCatData(response?.data?.data);
         setLoading("");
         props.setModalOpen("");
@@ -163,7 +164,7 @@ export default function MySchedule(props) {
   //UPDATE PRODUCTS ENDPOINT
 
   useEffect(() => {
-    getCategory();
+    getSchedule();
     const locale = "en"; // or whatever you want...
     const hours = [];
 

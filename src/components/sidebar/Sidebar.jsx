@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
 import SidebarLinkGroup from "./SidebarLinkGroup";
+import axios from "axios";
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const location = useLocation();
@@ -9,6 +10,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
   const trigger = useRef(null);
   const sidebar = useRef(null);
+  const [storeList,setStoreList] = useState()
 
   const storedSidebarExpanded = localStorage.getItem("sidebar-expanded");
   // const [sidebarExpanded, setSidebarExpanded] = useState(
@@ -16,6 +18,50 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
   // );
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
 
+  const getStorePoint = async () => {
+    const token = localStorage.getItem("fekomi-token");
+    const covertedToken = JSON.parse(token);
+    const tokenParsed = {
+      firstName: covertedToken.firstname,
+      lastName: covertedToken.lastname,
+      userId: covertedToken.id,
+      role: {
+        admin: true,
+        superAdmin: true,
+      },
+      permission: {
+        dating: true,
+      },
+    };
+    const headers = {
+      "content-type": "application/json",
+      Authorization: `${JSON.stringify(tokenParsed)}`,
+    };
+   
+     
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_OFFLINESTORE}admin/stores`,
+        {
+          headers: headers,
+        }
+      );  
+      setStoreList(response?.data?.data)
+     
+    } catch (error) {
+      
+
+      //setMessage(error?.response?.data?.message);
+      //   if (error?.response?.data?.message == "Unauthenticated.") {
+      //     navigate("/");
+      //   }
+    }
+  };
+
+  useEffect(() => {
+    getStorePoint()
+  }, []);
   // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }) => {
@@ -65,7 +111,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
       <div
         id="sidebar"
         ref={sidebar}
-        className={`flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-64 lg:w-20 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-white border-r-2 p-4 transition-all duration-200 ease-in-out ${
+        className={`bg-white border-r shadow top-0 h-screen md:w-64 w-3/4  px-0 absolute inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ease-in-out  overflow-y-auto ${
           sidebarOpen ? "translate-x-0" : "-translate-x-64"
         }`}
       >
@@ -239,6 +285,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   </div>
                 </NavLink>
               </li>
+             
               <li
                 className={`px-3 py-4 rounded-lg mb-0.5 last:mb-0 ${
                   pathname.includes("transaction") && "bg-lightblue"
@@ -341,6 +388,75 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
                     <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                       Orders
+                    </span>
+                  </div>
+                </NavLink>
+              </li>
+              <li
+                className={`px-3 py-4 rounded-lg mb-0.5 last:mb-0 ${
+                  pathname.includes("store-point") && "bg-lightblue"
+                }`}
+              >
+                <NavLink
+                  end
+                  to={`/store-point/${storeList?.id||1}`||`/store-point`}
+                  className={`block text-black hover:text-black truncate transition duration-150 ${
+                    pathname.includes("store-point") && "text-deepBlue"
+                  }`}
+                >
+                  <div className="flex items-center">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 15 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill={
+                          pathname.includes("store-point") ? "#0177FD" : "#A4B4CB"
+                        }
+                        d="M12.5938 7.875H7.4751V2.75625C7.4751 2.3175 7.1826 2.025 6.74385 2.025C3.0876 2.025 0.162598 4.95 0.162598 8.60625C0.162598 12.2625 3.0876 15.1875 6.74385 15.1875C10.4001 15.1875 13.3251 12.2625 13.3251 8.60625C13.3251 8.1675 13.0326 7.875 12.5938 7.875ZM7.4751 13.6519C4.69635 14.0906 2.06385 12.1163 1.69822 9.3375C1.25947 6.55875 3.23385 3.92625 6.0126 3.56062V8.60625C6.0126 9.045 6.3051 9.3375 6.74385 9.3375H11.7895C11.497 11.6044 9.74197 13.3594 7.4751 13.6519ZM9.66885 0.5625C9.2301 0.5625 8.9376 0.855 8.9376 1.29375V5.68125C8.9376 6.12 9.2301 6.4125 9.66885 6.4125H14.0563C14.4951 6.4125 14.7876 6.12 14.7876 5.68125C14.7876 2.82937 12.5207 0.5625 9.66885 0.5625ZM10.4001 4.95V2.09812C11.8626 2.39062 12.9595 3.4875 13.252 4.95H10.4001Z"
+                      />
+                    </svg>
+
+                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                     Store Point
+                    </span>
+                  </div>
+                </NavLink>
+              </li>
+
+              <li
+                className={`px-3 py-4 rounded-lg mb-0.5 last:mb-0 ${
+                  pathname.includes("products") && "bg-lightblue"
+                }`}
+              >
+                <NavLink
+                  end
+                  to="/products"
+                  className={`block text-black hover:text-black truncate transition duration-150 ${
+                    pathname.includes("products") && "text-deepBlue"
+                  }`}
+                >
+                  <div className="flex items-center">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 15 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill={
+                          pathname.includes("products") ? "#0177FD" : "#A4B4CB"
+                        }
+                        d="M12.5938 7.875H7.4751V2.75625C7.4751 2.3175 7.1826 2.025 6.74385 2.025C3.0876 2.025 0.162598 4.95 0.162598 8.60625C0.162598 12.2625 3.0876 15.1875 6.74385 15.1875C10.4001 15.1875 13.3251 12.2625 13.3251 8.60625C13.3251 8.1675 13.0326 7.875 12.5938 7.875ZM7.4751 13.6519C4.69635 14.0906 2.06385 12.1163 1.69822 9.3375C1.25947 6.55875 3.23385 3.92625 6.0126 3.56062V8.60625C6.0126 9.045 6.3051 9.3375 6.74385 9.3375H11.7895C11.497 11.6044 9.74197 13.3594 7.4751 13.6519ZM9.66885 0.5625C9.2301 0.5625 8.9376 0.855 8.9376 1.29375V5.68125C8.9376 6.12 9.2301 6.4125 9.66885 6.4125H14.0563C14.4951 6.4125 14.7876 6.12 14.7876 5.68125C14.7876 2.82937 12.5207 0.5625 9.66885 0.5625ZM10.4001 4.95V2.09812C11.8626 2.39062 12.9595 3.4875 13.252 4.95H10.4001Z"
+                      />
+                    </svg>
+
+                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                     Products
                     </span>
                   </div>
                 </NavLink>

@@ -28,27 +28,77 @@ export default function CreateNews(props) {
   const [formData, setFormData] = useState();
   const [fileData, setFileData] = useState();
   const [imagePreview, setImagePreview] = useState();
+
+
+
+// const createNew=(data)=>{
+//   const token = localStorage.getItem("fekomi-token");
+//   const covertedToken = JSON.parse(token);
+//   const tokenParsed = {
+//     firstName: covertedToken.firstname,
+//     lastName: covertedToken.lastname,
+//     userId: covertedToken.id,
+//     role: {
+//       admin: true,
+//       superAdmin: true,
+//     },
+//     permission: {
+//       dating: true,
+//     },
+//   };
+//   const headers = {
+//     "content-type": "application/json",
+//     Authorization: `${JSON.stringify(tokenParsed)}`,
+//   };
+//   axios.post(`${process.env.REACT_APP_NEWS}/admin/posts`, {
+//     ...formData,
+//     mediaUrl: data,
+//   },{
+//     headers:headers
+//   }
+  
+//   )
+//   .then(function (response) {
+//     console.log(response);
+//   })
+//   .catch(function (error) {
+//     console.log(error);
+//   });
+// }
+
   const createNews = (data) => {
     const token = localStorage.getItem("fekomi-token");
-    setLoading("loading");
+    const covertedToken = JSON.parse(token);
+    const tokenParsed = {
+      firstName: covertedToken.firstname,
+      lastName: covertedToken.lastname,
+      userId: covertedToken.id,
+      role: {
+        admin: true,
+        superAdmin: true,
+      },
+      permission: {
+        dating: true,
+      },
+    };
     const headers = {
       "content-type": "application/json",
-      Authorization: ` Bearer ${token}`,
+      Authorization: `${JSON.stringify(tokenParsed)}`,
     };
+    setLoading("loading");
+    const payLoad={
+      ...formData,
+      mediaUrl: data,
+    } 
     const options = {
       url: `${process.env.REACT_APP_NEWS}/admin/posts`,
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
-        Authorization: ` Bearer ${token}`,
+      method: "post",
+      
+      headers:headers,
+      data:{
+        ...payLoad
       },
-      data: {
-        ...formData,
-        mediaUrl: data,
-      },
-    };
-
+    }; 
     axios(options)
       .then((response) => {
         setLoading("");

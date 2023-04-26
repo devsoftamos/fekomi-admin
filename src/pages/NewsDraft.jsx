@@ -43,9 +43,22 @@ export default function NewsDraftPage() {
 
   const getSingleNews = async () => {
     const token = localStorage.getItem("fekomi-token");
+    const covertedToken = JSON.parse(token);
+    const tokenParsed = {
+      firstName: covertedToken.firstname,
+      lastName: covertedToken.lastname,
+      userId: covertedToken.id,
+      role: {
+        admin: true,
+        superAdmin: true,
+      },
+      permission: {
+        dating: true,
+      },
+    };
     const headers = {
       "content-type": "application/json",
-      Authorization: ` Bearer ${token}`,
+      Authorization: `${JSON.stringify(tokenParsed)}`,
     };
 
     try {
@@ -68,9 +81,22 @@ export default function NewsDraftPage() {
   };
   const getComments = async () => {
     const token = localStorage.getItem("fekomi-token");
+    const covertedToken = JSON.parse(token);
+    const tokenParsed = {
+      firstName: covertedToken.firstname,
+      lastName: covertedToken.lastname,
+      userId: covertedToken.id,
+      role: {
+        admin: true,
+        superAdmin: true,
+      },
+      permission: {
+        dating: true,
+      },
+    };
     const headers = {
       "content-type": "application/json",
-      Authorization: ` Bearer ${token}`,
+      Authorization: `${JSON.stringify(tokenParsed)}`,
     };
 
     try {
@@ -256,6 +282,58 @@ export default function NewsDraftPage() {
                     ) : (
                       ""
                     )}
+                       {/* {newsData&&newsData?.mediaUrl?.includes("mp4") ? (
+                      <div className="relative">
+                        <div>
+                          <video
+                            src={newsData?.mediaUrl}
+                            className="image-upload"
+                          ></video>
+                        </div>
+                        <div
+                          onClick={() => setImagePreview()}
+                          className="absolute top-0 right-0 px-2 text-red-700 text-xl"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="w-8 h-8"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    ) : imagePreview?.includes("image") ? (
+                      <div className="relative">
+                        <div className="">
+                          <img src={imagePreview} className="upload-image" />
+                        </div>
+                        <div
+                          onClick={() => setImagePreview()}
+                          className="absolute top-0 right-0 px-2 text-red-700 text-xl"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="w-8 h-8"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    ) : (
+                      ""
+                    )} */}
                   </div>
                   <div>
                     <label className="font-black text-sm">Message</label>
@@ -278,6 +356,7 @@ export default function NewsDraftPage() {
               </div>
               <div className="bg-white rounded-sm w-1/2 px-3">
                 <div className="py-4 font-black text-lg">Comments</div>
+                {comments?.length==0&&<div className="flex justify-center items-center pt-20">No Comments Available for this post</div>}
                 {comments?.map((data, i) => (
                   <div className="flex items-start gap-6">
                     <div>

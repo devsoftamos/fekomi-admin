@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import ReactPlayer from "react-player";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,6 +8,8 @@ export default function NewsDraft() {
   const [loading, setLoading] = useState();
   const [formData, setFormData] = useState();
   const [newsData, setNewsData] = useState();
+
+  
   const updateProduct = (e) => {
     e.preventDefault();
     setLoading("loading");
@@ -59,9 +62,22 @@ export default function NewsDraft() {
 
   const getNewsData = async () => {
     const token = localStorage.getItem("fekomi-token");
+    const covertedToken = JSON.parse(token);
+    const tokenParsed = {
+      firstName: covertedToken.firstname,
+      lastName: covertedToken.lastname,
+      userId: covertedToken.id,
+      role: {
+        admin: true,
+        superAdmin: true,
+      },
+      permission: {
+        dating: true,
+      },
+    };
     const headers = {
       "content-type": "application/json",
-      Authorization: ` Bearer ${token}`,
+      Authorization: `${JSON.stringify(tokenParsed)}`,
     };
 
     try {
@@ -102,7 +118,7 @@ export default function NewsDraft() {
       />
       <div className="flex flex-wrap  gap-4 items-stretch h-full">
         {newsData?.data?.map((data, i) => (
-          <Link to={`/newsdraft/${data?._id}`}>
+         
             <div key={i} className="pt-2">
               <div className="card w-96 bg-base-100 shadow-xl bg-contain">
                 {isImage(data?.mediaUrl) ? (
@@ -114,23 +130,26 @@ export default function NewsDraft() {
                     className="bg-cover w-full pb-56 h-full"
                   ></figure>
                 ) : (
-                  <video
-                    className="  w-full -pb-56 -h-full"
-                    src={data?.mediaUrl}
-                  ></video>
+                  <ReactPlayer  controls="true" width={384} height url={data?.mediaUrl} />
+                  // <video
+                  //   className="  w-full -pb-56 -h-full"
+                  //   src={data?.mediaUrl}
+                  // ></video>
                 )}
+                 <Link to={`/newsdraft/${data?._id}`}> 
                 <div className="card-body">
                   <p>{data?.title}</p>
                   <div className="text-sm text-gray-400">
                     {new Date(data?.createdAt).toDateString()}
                   </div>
                 </div>
+                </Link>
                 {/* <div className="w-full flex justify-center pt-5 h-16 bg-[#FFEFDF]">
                   <div className="text-[#E4750D]">Unpublished</div>
                 </div> */}
               </div>
             </div>
-          </Link>
+         
         ))}
         {/* <Link to="/newsdraft">
           <div className="pl-2 pt-2">
