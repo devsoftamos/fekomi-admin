@@ -312,7 +312,7 @@ export default function ProductTable({
                           </td>
                         </tr>
                       ))
-                    : productsData?.map((data, i) => (
+                    : productsData?.records?.map((data, i) => (
                         <tr
                         key={i}
                         //onClick={() => navigate("/userdetails")}
@@ -362,7 +362,7 @@ export default function ProductTable({
                   <div className="text-xl font-black">No Available data</div>
                 </div>
               )}
-              {productsData?.data?.products?.length == 0 && (
+              {productsData?.records?.length == 0 && (
                 <div className="flex justify-center items-center h-screen">
                   <div className="text-xl font-black">No Available data</div>
                 </div>

@@ -5,6 +5,7 @@ import axios from "axios";
 
 export default function ConsultationTable() {
   const [loading,setLoading] =useState()
+  const [appointmentsData, setAppointmentData] =useState()
   const getConsultation = async () => {
     setLoading("loading");
 
@@ -14,7 +15,7 @@ export default function ConsultationTable() {
       Authorization: ` Bearer ${token}`,
     };
     const options = {
-      url: `${process.env.REACT_APP_CONSULTATION}/schedules`,
+      url: `${process.env.REACT_APP_CONSULTATION}/appointments`,
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -25,7 +26,7 @@ export default function ConsultationTable() {
 
     axios(options)
       .then((response) => {
-       console.log(response.data,"POST");
+        setAppointmentData(response.data?.data?.response);
         
       })
       .catch((error) => {
@@ -41,9 +42,9 @@ getConsultation()
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white">
-              <div className="py-3 px-4">
+              {/* <div className="py-3 px-4">
                 <TableHeaders showFilter={true} />
-              </div>
+              </div> */}
 
               <table class="min-w-full">
                 <thead class="bg-white border-b   border-gray-300">
@@ -90,27 +91,29 @@ getConsultation()
                   </tr>
                 </thead>
                 <tbody>
+                 {appointmentsData?.appointments?.map((data,i)=>(
                   <tr
+                  key={i}
                     //onClick={() => navigate("/userdetails")}
                     class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
                   >
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      Adeoni Muili Yewande
-                      <div className="text-xs">ade@gmail.com</div>
+                      {data?.user[0]?.name}
+                      <div className="text-xs">{data?.user[0]?.email}</div>
                     </td>
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      16th July, 2022
+                     {data?.date}
                     </td>
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      8:30AM - 9:00AM
+                      {data?.start_time} - {data?.end_time}
                     </td>
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      Online
+                      {data?.type}
                     </td>
 
                     <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
                       <div className="bg-[#EBFFF3] text-[#61BB84] text-center py-2 px-1 rounded-lg">
-                        Confirm
+                       {data?.status}
                       </div>
                     </td>
                     <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
@@ -124,6 +127,8 @@ getConsultation()
                       </div>
                     </td>
                   </tr>
+                 ))
+                  }
                 </tbody>
               </table>
             </div>

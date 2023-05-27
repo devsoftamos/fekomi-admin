@@ -269,7 +269,7 @@ export default function RemoveQuantity(props) {
                       Select Product
                     </option>
                   )}
-                  {productData?.records?.map((data, i) => (
+                  {productData?.map((data, i) => (
                     <option value={data?.id} key={i}>
                       {data?.name}
                     </option>

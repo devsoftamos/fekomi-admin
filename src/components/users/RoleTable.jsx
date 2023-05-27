@@ -1,8 +1,38 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { COLUMNS } from "../../column";
 import TableHeaders from "../utils/TableHeaders";
 import UsersTab from "./UsersTab";
+import axios from "axios";
 export default function RoleTable() {
+  const [rolesData,setRolesData] =useState()
+
+  const getRolesData = async () => {
+    const token = localStorage.getItem("fekomiAuthToken");
+    const headers = {
+      "content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    };
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_ADMIN_URL}/auth/list_all_roles`,
+        {
+          headers: headers,
+        }
+      );
+      setRolesData(response?.data?.data);
+      console.log(response?.data, "POPO");
+    } catch (error) {
+      //setMessage(error?.response?.data?.message);
+      //   if (error?.response?.data?.message == "Unauthenticated.") {
+      //     navigate("/");
+      //   }
+    }
+  };
+
+  useEffect(() => {
+    getRolesData()
+  }, []);
   return (
     <div className="pt-7">
       <div class="flex flex-col">

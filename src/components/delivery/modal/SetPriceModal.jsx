@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ImageUploader from "../../draganddrop/ImageUploader";
 import { useParams } from "react-router-dom";
 
-export default function MakeTransfer(props) {
+export default function SetPriceModal(props) {
   const {
     register,
     handleSubmit,
@@ -23,9 +23,12 @@ export default function MakeTransfer(props) {
   const [images, setImages] = React.useState([]);
   const [formData, setFormData] = useState();
   const [productData, setProductsData] = useState();
-  const [storeData,setStoreData] = useState()
   const { id } = useParams();
-  const createTransfer = (e) => {
+
+
+
+
+  const createProduct = (e) => {
     e.preventDefault();
     setLoading("loading");
     const token = localStorage.getItem("fekomi-token");
@@ -47,21 +50,18 @@ export default function MakeTransfer(props) {
       Authorization: `${JSON.stringify(tokenParsed)}`,
     };
     const options = {
-      url: `${process.env.REACT_APP_OFFLINESTORE}admin/stocks/transfer`,
+      url: `${process.env.REACT_APP_ECOMMERCE}/delivery-region`,
       method: "POST",
       headers: headers,
       data: {
-        storeId: Number(id),
-        quantity: Number(formData?.quantity),
-        productId: Number(formData?.productId),
-        destinationStoreId:Number(formData?.destinationStoreId)
+       ...formData
       },
     };
 
     axios(options)
       .then((response) => {
         setLoading("");
-        props.setModalCatOpen("");
+        props.setModalOpen("");
         window.location.reload();
         toast.success(response?.data?.message, {
           position: "top-right",
@@ -125,73 +125,34 @@ export default function MakeTransfer(props) {
       //   }
     }
   };
+  const getCategory = async () => {
+    setLoading("loading");
 
-  const getAllStoreData = async () => {
     const token = localStorage.getItem("fekomi-token");
-    const covertedToken = JSON.parse(token);
-    const tokenParsed = {
-      firstName: covertedToken.firstname,
-      lastName: covertedToken.lastname,
-      userId: covertedToken.id,
-      role: {
-        admin: true,
-        superAdmin: true,
-      },
-      permission: {
-        dating: true,
-      },
-    };
     const headers = {
       "content-type": "application/json",
-      Authorization: `${JSON.stringify(tokenParsed)}`,
+      Authorization: ` Bearer ${token}`,
     };
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/stores`,
-        {
-          headers: headers,
-        }
-      );
+    const options = {
+      url: `${process.env.REACT_APP_ECOMMERCE}/product-category`,
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+        Authorization: ` Bearer ${token}`,
+      },
+    };
 
-      console.log(response?.data, "STORE");
-      setStoreData(response?.data?.data);
-      //setLoading(false);
-    } catch (error) {
-      // setLoading(false);
-      //setMessage(error?.response?.data?.message);
-      //   if (error?.response?.data?.message == "Unauthenticated.") {
-      //     navigate("/");
-      //   }
-    }
+    axios(options)
+      .then((response) => {
+        setCatData(response?.data?.data);
+        setLoading("");
+        props.setModalOpen("");
+      })
+      .catch((error) => {
+        setLoading("");
+      });
   };
-  // const getCategory = async () => {
-  //   setLoading("loading");
-
-  //   const token = localStorage.getItem("fekomi-token");
-  //   const headers = {
-  //     "content-type": "application/json",
-  //     Authorization: ` Bearer ${token}`,
-  //   };
-  //   const options = {
-  //     url: `${process.env.REACT_APP_ECOMMERCE}/product-category`,
-  //     method: "GET",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json;charset=UTF-8",
-  //       Authorization: ` Bearer ${token}`,
-  //     },
-  //   };
-
-  //   axios(options)
-  //     .then((response) => {
-  //       setCatData(response?.data?.data);
-  //       setLoading("");
-  //       props.setModalOpen("");
-  //     })
-  //     .catch((error) => {
-  //       setLoading("");
-  //     });
-  // };
 
   //UPDATE PRODUCTS ENDPOINT
   const updateProduct = (e) => {
@@ -252,9 +213,8 @@ export default function MakeTransfer(props) {
   //UPDATE PRODUCTS ENDPOINT
 
   useEffect(() => {
-   // getCategory();
+    getCategory();
     getAllProductsData();
-    getAllStoreData()
   }, []);
   const handleProduct = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -275,12 +235,12 @@ export default function MakeTransfer(props) {
         pauseOnHover
       />
       <input type="checkbox" id="store-modal" className="modal-toggle" />
-      <div className={`modal ${props.modalCatOpen}`}>
+      <div className={`modal ${props.modalOpen}`}>
         <div className="modal-box bg-[#FAFAFA]    max-w-[700px]">
           <div className="flex justify-between rounded-md items-center bg-white py-3 px-2 border-b">
-            <div className="text-lg font-bold">Transfer to store point</div>
+            <div className="text-lg font-bold">Region Price</div>
             <div
-              onClick={() => props.setModalCatOpen("")}
+              onClick={() => props.setModalOpen("")}
               className="bg-[#C2C2C2] rounded-full px-2 py-1 cursor-pointer text-white"
             >
               ✕
@@ -291,95 +251,32 @@ export default function MakeTransfer(props) {
           //onSubmit={handleSubmit(props.edit ? updateProduct : createProduct)}
           >
             <div className="pt-10 py-3">
-              <div className="w-full pl-2">
-                <label className="text-black text-sm font-black px-2">
-                  Sending Store
-                </label>
-                <select
-                  onChange={handleProduct}
-                  name="storeId"
-                  className="py-4 bg-white px-2 w-full outline-0 focus:bg-white focus:border-0"
-                >
-                  {props.editData ? (
-                    <option selected>
-                      {props.editData?.productData?.name}
-                    </option>
-                  ) : (
-                    <option disabled selected>
-                      Select Sending store
-                    </option>
-                  )}
-                  {storeData?.map((data, i) => (
-                    <option value={data?.id} key={i}>
-                      {data?.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-              <div className="-pt-10 py-3">
-              <div className="w-full pl-2">
-                <label className="text-black text-sm font-black px-2">
-                  Destination Store
-                </label>
-                <select
-                  onChange={handleProduct}
-                  name="destinationStoreId"
-                  className="py-4 bg-white px-2 w-full outline-0 focus:bg-white focus:border-0"
-                >
-                  {props.editData ? (
-                    <option selected>
-                      {props.editData?.productData?.name}
-                    </option>
-                  ) : (
-                    <option disabled selected>
-                      Select destination store
-                    </option>
-                  )}
-                  {storeData?.map((data, i) => (
-                    <option value={data?.id} key={i}>
-                      {data?.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="-pt-10 py-3">
-              <div className="w-full pl-2">
-                <label className="text-black text-sm font-black px-2">
-                  Select Product
-                </label>
-                <select
-                  onChange={handleProduct}
-                  name="productId"
-                  className="py-4 bg-white px-2 w-full outline-0 focus:bg-white focus:border-0"
-                >
-                  {props.editData ? (
-                    <option selected>
-                      {props.editData?.productData?.name}
-                    </option>
-                  ) : (
-                    <option disabled selected>
-                      Select Product
-                    </option>
-                  )}
-                  {productData?.map((data, i) => (
-                    <option value={data?.id} key={i}>
-                      {data?.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
             <div className="pb-6">
-              <div className="w-full pl-2">
+              <div className="w-full">
                 <label className="text-black text-sm font-black px-2">
-                  Volume
+                  Region
                 </label>
                 <input
                   type="text"
-                  name="quantity"
-                  placeholder="Enter Quantity Volume"
+                  name="name"
+                  placeholder="Enter Region"
+                  className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
+                  onChange={handleProduct}
+                  defaultValue={props.editData?.name}
+                  // required
+                />
+              </div>
+            </div>
+            </div>
+            <div className="pb-6">
+              <div className="w-full">
+                <label className="text-black text-sm font-black px-2">
+                  Price
+                </label>
+                <input
+                  type="text"
+                  name="cost"
+                  placeholder="Enter Price"
                   className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                   onChange={handleProduct}
                   defaultValue={props.editData?.name}
@@ -420,11 +317,11 @@ export default function MakeTransfer(props) {
                   </button>
                 ) : (
                   <button
-                    onClick={createTransfer}
+                    onClick={createProduct}
                     disabled={Object.keys(formData||{}) ? false : true}
                     className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
                   >
-                    Transfer Stock
+                    Create Stock
                   </button>
                 )}
               </div>

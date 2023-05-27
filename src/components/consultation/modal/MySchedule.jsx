@@ -5,6 +5,8 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
+import Reschedule from "./Reschedule";
+
 export default function MySchedule(props) {
   const {
     register,
@@ -17,64 +19,13 @@ export default function MySchedule(props) {
     },
   });
   const [loading, setLoading] = useState();
-  const [catData, setCatData] = useState();
+  const [myScheduleData, setMyScheduleData] = useState();
   const [images, setImages] = React.useState([]);
   const [formData, setFormData] = useState();
   const [selectedTime, setSelectedTime] = useState();
-  const createProduct = (e) => {
-    e.preventDefault();
-    setLoading("loading");
-    const token = localStorage.getItem("fekomi-token");
-    const headers = {
-      "content-type": "application/json",
-      Authorization: ` Bearer ${token}`,
-    };
-    const options = {
-      url: `${process.env.REACT_APP_ECOMMERCE}/product`,
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
-        Authorization: ` Bearer ${token}`,
-      },
-      data: {
-        ...formData,
-        main_product_image: images[0]?.data_url,
-        secondary_product_image_1: images[1]?.data_url,
-        secondary_product_image_2: images[2]?.data_url,
-        type: "REGULAR",
-      },
-    };
-
-    axios(options)
-      .then((response) => {
-        setLoading("");
-        props.setModalOpen("");
-        props.setReload(false);
-        toast.success(response?.data?.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        props.getAllProductsData();
-      })
-      .catch((error) => {
-        setLoading("");
-        toast.error(error?.response?.data?.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      });
-  };
+  const [openReSchedule, setOpenReSchedule] = useState();
+  const [clickedData, setClickedData] = useState();
+ 
   const getSchedule = async () => {
     setLoading("loading");
 
@@ -84,7 +35,7 @@ export default function MySchedule(props) {
       Authorization: ` Bearer ${token}`,
     };
     const options = {
-      url: `${process.env.REACT_APP_ECOMMERCE}/schedules`,
+      url: `${process.env.REACT_APP_CONSULTATION}/schedules`,
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -95,8 +46,8 @@ export default function MySchedule(props) {
 
     axios(options)
       .then((response) => {
-        console.log(response);
-        setCatData(response?.data?.data);
+        console.log(response?.data?.data?.data, "ECONS");
+        setMyScheduleData(response?.data?.data?.data);
         setLoading("");
         props.setModalOpen("");
       })
@@ -105,38 +56,30 @@ export default function MySchedule(props) {
       });
   };
 
-  //UPDATE PRODUCTS ENDPOINT
-  const updateProduct = (e) => {
-    e.preventDefault();
+  const deleteSchedule = (data) => {
+    //e.preventDefault();
     setLoading("loading");
-
     const token = localStorage.getItem("fekomi-token");
     const headers = {
       "content-type": "application/json",
       Authorization: ` Bearer ${token}`,
     };
     const options = {
-      url: `${process.env.REACT_APP_ECOMMERCE}/product/${props.editData?.uid}`,
-      method: "PATCH",
+      url: `${process.env.REACT_APP_CONSULTATION}/schedule/${data.id}`,
+      method: "DELETE",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json;charset=UTF-8",
         Authorization: ` Bearer ${token}`,
       },
-      data: {
-        ...formData,
-        type: "REGULAR",
-        main_product_image: images[0]?.data_url,
-        secondary_product_image_1: images[1]?.data_url,
-        secondary_product_image_2: images[2]?.data_url,
-      },
+      data: { },
     };
 
     axios(options)
       .then((response) => {
         setLoading("");
-        props.setModalOpen("");
-        props.setReload(false);
+        props.setOpenSchedule("");
+       // props.setReload(false);
         toast.success(response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -146,7 +89,8 @@ export default function MySchedule(props) {
           draggable: true,
           progress: undefined,
         });
-        props.getAllProductsData();
+        getSchedule()
+       // props.getAllProductsData();
       })
       .catch((error) => {
         setLoading("");
@@ -161,7 +105,6 @@ export default function MySchedule(props) {
         });
       });
   };
-  //UPDATE PRODUCTS ENDPOINT
 
   useEffect(() => {
     getSchedule();
@@ -194,6 +137,12 @@ export default function MySchedule(props) {
         draggable
         pauseOnHover
       />
+      <Reschedule
+        openReSchedule={openReSchedule}
+        setOpenReSchedule={setOpenReSchedule}
+        setOpenSchedule={props.setOpenSchedule}
+        clickedData={clickedData}
+      />
       <input type="checkbox" id="store-modal" className="modal-toggle" />
       <div className={`modal ${props.openSchedule}`}>
         <div className="modal-box bg-[#FAFAFA]  max-w-[820px]">
@@ -208,32 +157,42 @@ export default function MySchedule(props) {
           </div>
           <div className="pt-5">
             <div className="bg-white shadow rounded-md py-7 px-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="inline-flex items-center">
-                    <div>Schedule 1</div>
-                    <div className="pl-2">
-                      <div className="bg-[#EBFFF3] rounded text-[#61BB84] px-2 py-2">
-                        Default
+              {myScheduleData?.schedules?.map((data, i) => (
+                <div className="flex items-center pt-5 justify-between">
+                  <div>
+                    <div className="inline-flex items-center">
+                      <div>{data.title}</div>
+                      {data.default == 1 && (
+                        <div className="pl-2">
+                          <div className="bg-[#EBFFF3] rounded text-[#61BB84] px-2 py-2">
+                            Default
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="pl-2">
+                    <div className="inline-flex">
+                      <div
+                        onClick={() => {
+                          setOpenReSchedule("modal-open");
+                          props.setOpenSchedule("");
+                          setClickedData(data);
+                        }}
+                      >
+                        <div className="bg-[#FFEFDF] cursor-pointer rounded text-[#E4750D] px-2 py-2">
+                          Reschedule
+                        </div>
+                      </div>
+                      <div onClick={()=>deleteSchedule(data)} className="pl-2 cursor-pointer">
+                        <div className="bg-[#FFDFE5] text-[#F9395B] px-2 py-2 ">
+                          Delete
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="pl-2">
-                  <div className="inline-flex">
-                    <div>
-                      <div className="bg-[#FFEFDF] rounded text-[#E4750D] px-2 py-2">
-                        Reschedule
-                      </div>
-                    </div>
-                    <div className="pl-2">
-                      <div className="bg-[#FFDFE5] text-[#F9395B] px-2 py-2 ">
-                        Delete
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

@@ -5,6 +5,7 @@ import React, { useState } from "react";
 // import UserMenu from "./header/UserMenu";
 import UserMenu from "./UserMenu";
 import Notifications from "./Notifications";
+import { Link } from "react-router-dom";
 
 function Header({ sidebarOpen, setSidebarOpen }) {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -96,15 +97,18 @@ function Header({ sidebarOpen, setSidebarOpen }) {
             {/* 
            
             <Help /> */}
-            <div>
+            <Link to="/orders">
+             <div>
               <button className="rounded-2xl bg-deepBlue px-5 py-3 text-white ">
                 My Orders
               </button>
             </div>
+            </Link>
+           
             <Notifications />
             {/*  Divider */}
             <hr className="w-px h-6 bg-slate-200 mx-3" />
-            <UserMenu />
+            {/* <UserMenu /> */}
           </div>
         </div>
       </div>
