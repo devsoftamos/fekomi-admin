@@ -377,6 +377,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                     >
+                      
                       <path
                         fill={
                           pathname.includes("store-point") ? "#0177FD" : "#A4B4CB"
