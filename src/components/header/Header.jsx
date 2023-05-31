@@ -6,12 +6,15 @@ import React, { useState } from "react";
 import UserMenu from "./UserMenu";
 import Notifications from "./Notifications";
 import { Link } from "react-router-dom";
+import WalkOrder from "../walkorder/WalkOrder";
 
 function Header({ sidebarOpen, setSidebarOpen }) {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [modalCatOpen, setModalCatOpen] =useState()
 
   return (
     <header className="sticky top-0 bg-white border-b border-slate-200 z-30">
+      <WalkOrder modalCatOpen={modalCatOpen} setModalCatOpen={setModalCatOpen}/>
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20 -mb-px">
           {/* Header: Left side */}
@@ -97,7 +100,7 @@ function Header({ sidebarOpen, setSidebarOpen }) {
             {/* 
            
             <Help /> */} 
-             <div>
+             <div onClick={()=>setModalCatOpen("modal-open")}>
               <button className="rounded-3xl bg-[#020B32] text-sm px-3 py-2 text-white ">
               Place a Walk-In Order
               </button>
