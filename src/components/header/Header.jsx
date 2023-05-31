@@ -96,10 +96,16 @@ function Header({ sidebarOpen, setSidebarOpen }) {
             </button> */}
             {/* 
            
-            <Help /> */}
-            <Link to="/orders">
+            <Help /> */} 
              <div>
-              <button className="rounded-2xl bg-deepBlue px-5 py-3 text-white ">
+              <button className="rounded-3xl bg-[#020B32] text-sm px-3 py-2 text-white ">
+              Place a Walk-In Order
+              </button>
+            </div>
+            
+            <Link to="/orders">
+             <div className="pl-5">
+              <button className="rounded-3xl bg-deepBlue text-sm px-3 py-2 text-white ">
                 My Orders
               </button>
             </div>

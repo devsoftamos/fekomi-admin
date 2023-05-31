@@ -170,7 +170,7 @@ export default function StorePoint() {
                      onClick={() => setModalCatOpen("modal-open")}
                       className="px-2 py-3 capitalize font-black text-[#2F93F6] border border-[#2F93F6] rounded"
                     >
-                     Transfer Stock
+                    Make A Transfer
                     </button>
                   </div>
                     
