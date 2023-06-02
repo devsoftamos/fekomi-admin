@@ -102,7 +102,7 @@ const [storeList,setStoreList] = useState([])
   }
 
   return (
-    <div>
+    <div className="pt-[70px]">
         <CreateStorePointModal modalOpen={modalOpen} setModalOpen={setModalOpen}/>
       {/* Sidebar backdrop (mobile only) */}
       <div
@@ -146,6 +146,7 @@ const [storeList,setStoreList] = useState([])
         <div className="space-y-8">
           {/* Pages group */}
           <div>
+          <div className="font-bold text-black px-4 border-b border-gray-300 py-2">All Store Points</div>
             <ul className="mt-3">
               {/* Dashboard */}
              {storeList?.map((data,i)=>(

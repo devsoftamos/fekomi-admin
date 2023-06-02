@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form"; 
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; 
+import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router-dom";
 
 export default function WalkOrder(props) {
@@ -21,9 +21,10 @@ export default function WalkOrder(props) {
   const [images, setImages] = React.useState([]);
   const [formData, setFormData] = useState();
   const [productData, setProductsData] = useState();
-  const [storeData,setStoreData] = useState()
+  const [storeData, setStoreData] = useState();
+  const [productPrice, setProductPrice] = useState();
   const { id } = useParams();
-  const createTransfer = (e) => {
+  const createOrder = (e) => {
     e.preventDefault();
     setLoading("loading");
     const token = localStorage.getItem("fekomi-token");
@@ -45,14 +46,19 @@ export default function WalkOrder(props) {
       Authorization: `${JSON.stringify(tokenParsed)}`,
     };
     const options = {
-      url: `${process.env.REACT_APP_OFFLINESTORE}admin/stocks/transfer`,
+      url: `${process.env.REACT_APP_OFFLINESTORE}admin/orders`,
       method: "POST",
       headers: headers,
+
       data: {
-        storeId: Number(id),
-        quantity: Number(formData?.quantity),
-        productId: Number(formData?.productId),
-        destinationStoreId:Number(formData?.destinationStoreId)
+        customerAddress: formData.customerAddress,
+        customerName: formData.customerName,
+        customerPhone: formData.customerPhone,
+        modeOfPayment: formData?.modeOfPayment,
+        quantity: Number(+formData?.quantity),
+        productId: Number(productPrice?.id),
+        totalPrice:
+          +productPrice?.price * +formData?.quantity || +productPrice?.price,
       },
     };
 
@@ -69,8 +75,7 @@ export default function WalkOrder(props) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        }); 
-       
+        });
       })
       .catch((error) => {
         setLoading("");
@@ -85,83 +90,7 @@ export default function WalkOrder(props) {
         });
       });
   };
-  const getAllProductsData = async () => {
-    const token = localStorage.getItem("fekomi-token");
-    const covertedToken = JSON.parse(token);
-    const tokenParsed = {
-      firstName: covertedToken.firstname,
-      lastName: covertedToken.lastname,
-      userId: covertedToken.id,
-      role: {
-        admin: true,
-        superAdmin: true,
-      },
-      permission: {
-        dating: true,
-      },
-    };
-    const headers = {
-      "content-type": "application/json",
-      Authorization: `${JSON.stringify(tokenParsed)}`,
-    };
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/products`,
-        {
-          headers: headers,
-        }
-      );
 
-      console.log(response?.data, "DATA");
-      setProductsData(response?.data?.data);
-      //setLoading(false);
-    } catch (error) {
-      // setLoading(false);
-      //setMessage(error?.response?.data?.message);
-      //   if (error?.response?.data?.message == "Unauthenticated.") {
-      //     navigate("/");
-      //   }
-    }
-  };
-
-  const getAllStoreData = async () => {
-    const token = localStorage.getItem("fekomi-token");
-    const covertedToken = JSON.parse(token);
-    const tokenParsed = {
-      firstName: covertedToken.firstname,
-      lastName: covertedToken.lastname,
-      userId: covertedToken.id,
-      role: {
-        admin: true,
-        superAdmin: true,
-      },
-      permission: {
-        dating: true,
-      },
-    };
-    const headers = {
-      "content-type": "application/json",
-      Authorization: `${JSON.stringify(tokenParsed)}`,
-    };
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/stores`,
-        {
-          headers: headers,
-        }
-      );
-
-      console.log(response?.data, "STORE");
-      setStoreData(response?.data?.data);
-      //setLoading(false);
-    } catch (error) {
-      // setLoading(false);
-      //setMessage(error?.response?.data?.message);
-      //   if (error?.response?.data?.message == "Unauthenticated.") {
-      //     navigate("/");
-      //   }
-    }
-  };
   // const getCategory = async () => {
   //   setLoading("loading");
 
@@ -191,73 +120,51 @@ export default function WalkOrder(props) {
   //     });
   // };
 
-  //UPDATE PRODUCTS ENDPOINT
-  const updateProduct = (e) => {
-    e.preventDefault();
-    setLoading("loading");
+  const getAllProductsData = async () => {
+    setLoading(true);
 
     const token = localStorage.getItem("fekomi-token");
     const headers = {
       "content-type": "application/json",
       Authorization: ` Bearer ${token}`,
     };
-    const options = {
-      url: `${process.env.REACT_APP_ECOMMERCE}/product/${props.editData?.uid}`,
-      method: "PATCH",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
-        Authorization: ` Bearer ${token}`,
-      },
-      data: {
-        ...formData,
-        type: "REGULAR",
-        main_product_image: images[0]?.data_url,
-        secondary_product_image_1: images[1]?.data_url,
-        secondary_product_image_2: images[2]?.data_url,
-      },
-    };
 
-    axios(options)
-      .then((response) => {
-        setLoading("");
-        props.setModalOpen("");
-        props.setReload(false);
-        toast.success(response?.data?.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        props.getAllProductsData();
-      })
-      .catch((error) => {
-        setLoading("");
-        toast.error(error?.response?.data?.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      });
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_ECOMMERCE}/products/all`,
+        {
+          headers: headers,
+        }
+      );
+      console.log(response?.data?.data, "PRODUCT");
+      setProductsData(response?.data?.data?.data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+
+      //setMessage(error?.response?.data?.message);
+      //   if (error?.response?.data?.message == "Unauthenticated.") {
+      //     navigate("/");
+      //   }
+    }
   };
   //UPDATE PRODUCTS ENDPOINT
 
   useEffect(() => {
-   // getCategory();
+    // getCategory();
     getAllProductsData();
-    getAllStoreData()
   }, []);
   const handleProduct = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+  const handleProductChange = (e) => {
+    const parsedValue = JSON.parse(e.target.value);
+    setProductPrice(parsedValue);
+    console.log(parsedValue, "POU");
+  };
+  const numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
   return (
     <div>
       {/* Put this part before </body> tag */}
@@ -276,7 +183,7 @@ export default function WalkOrder(props) {
       <div className={`modal ${props.modalCatOpen}`}>
         <div className="modal-box bg-[#FAFAFA]    max-w-[700px]">
           <div className="flex justify-between rounded-md items-center bg-white py-3 px-2 border-b">
-            <div className="text-lg font-bold">Transfer to store point</div>
+            <div className="text-lg font-bold">Place Walk-In Order</div>
             <div
               onClick={() => props.setModalCatOpen("")}
               className="bg-[#C2C2C2] rounded-full px-2 py-1 cursor-pointer text-white"
@@ -288,14 +195,14 @@ export default function WalkOrder(props) {
           <form
           //onSubmit={handleSubmit(props.edit ? updateProduct : createProduct)}
           >
-             <div className="pt-10 py-3">
+            <div className="pt-10 py-3">
               <div className="w-full pl-2">
                 <label className="text-black text-sm font-black px-2">
-                Name of Customer
+                  Name of Customer
                 </label>
                 <input
                   type="text"
-                  name="quantity"
+                  name="customerName"
                   placeholder="Enter Name of Customer"
                   className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                   onChange={handleProduct}
@@ -304,15 +211,15 @@ export default function WalkOrder(props) {
                 />
               </div>
             </div>
-           
+
             <div className="pt-10 py-3">
               <div className="w-full pl-2">
                 <label className="text-black text-sm font-black px-2">
-                Customer’s Phone Number
+                  Customer’s Phone Number
                 </label>
                 <input
                   type="text"
-                  name="quantity"
+                  name="customerPhone"
                   placeholder="Enter Customer Phone Number"
                   className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                   onChange={handleProduct}
@@ -325,11 +232,11 @@ export default function WalkOrder(props) {
             <div className="pt-10 py-3">
               <div className="w-full pl-2">
                 <label className="text-black text-sm font-black px-2">
-                Customer’s Address
+                  Customer’s Address
                 </label>
                 <input
                   type="text"
-                  name="quantity"
+                  name="customerAddress"
                   placeholder="Enter Customer Address"
                   className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                   onChange={handleProduct}
@@ -339,28 +246,22 @@ export default function WalkOrder(props) {
               </div>
             </div>
 
-
             <div className="-pt-10 py-3">
               <div className="w-full pl-2">
                 <label className="text-black text-sm font-black px-2">
-                  Select Product
+                  Product
                 </label>
                 <select
-                  onChange={handleProduct}
+                  onChange={handleProductChange}
                   name="productId"
                   className="py-4 bg-white px-2 w-full outline-0 focus:bg-white focus:border-0"
                 >
-                  {props.editData ? (
-                    <option selected>
-                      {props.editData?.productData?.name}
-                    </option>
-                  ) : (
-                    <option disabled selected>
-                      Select Product
-                    </option>
-                  )}
-                  {productData?.map((data, i) => (
-                    <option value={data?.id} key={i}>
+                  <option disabled selected>
+                    Select Product
+                  </option>
+
+                  {productData?.products?.map((data, i) => (
+                    <option value={JSON.stringify(data)} key={i}>
                       {data?.name}
                     </option>
                   ))}
@@ -371,7 +272,10 @@ export default function WalkOrder(props) {
             <div className="pt-10 py-3">
               <div className="w-full pl-2">
                 <label className="text-black text-sm font-black px-2">
-                Quantity
+                  Quantity{" "}
+                  {productPrice && (
+                    <span>Available quantity({productPrice?.quantity})</span>
+                  )}
                 </label>
                 <input
                   type="text"
@@ -386,17 +290,39 @@ export default function WalkOrder(props) {
             </div>
 
             <div className="py-3">
-              <div className="flex ">
-                 <label className="text-black text-sm font-black px-2">
-                Total Price:
+              <div className="flex items-center">
+                <label className="text-black text-sm font-black px-2">
+                  Total Price:
                 </label>
+                <div className="font-black text-black text-xl">
+                  N
+                  {numberWithCommas(
+                    +productPrice?.price * +formData?.quantity ||
+                      +productPrice?.price ||
+                      0
+                  )}
+                </div>
               </div>
-              <div></div>
-               
-                
             </div>
-          
-           
+            <div className="pt-10 py-3">
+              <div className="w-full pl-2">
+                <label className="text-black text-sm font-black px-2">
+                  Mode Of Payment
+                </label>
+                <select
+                  onChange={handleProduct}
+                  name="modeOfPayment"
+                  className="py-4 bg-white px-2 w-full outline-0 focus:bg-white focus:border-0"
+                >
+                  <option selected disabled>
+                    {" "}
+                    Select Mode Of Payment
+                  </option>
+                  <option value="TRANSFER">Transfer</option>
+                  <option value="CASH">Cash</option>
+                </select>
+              </div>
+            </div>
 
             {/* <div className="flex py-7">
               <div>
@@ -421,15 +347,15 @@ export default function WalkOrder(props) {
                 </label>
               </div>
               <div className="pl-2">
-                
-                  <button
-                    onClick={createTransfer}
-                    disabled={Object.keys(formData||{}) ? false : true}
-                    className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
-                  >
-                   Place Order
-                  </button>
-               
+                <button
+                  onClick={createOrder}
+                  disabled={
+                    Object.keys(formData || {}).length <= 4 ? true : false
+                  }
+                  className={`${loading} btn bg-[#2F93F6] border-0 px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
+                >
+                  Place Order
+                </button>
               </div>
             </div>
           </form>

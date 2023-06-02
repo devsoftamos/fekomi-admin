@@ -14,8 +14,11 @@ export default function Revenue() {
         <main>
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <div className="font-black text-lg"> Revenue</div>
-            <div>
-              <RevenueTable />
+            <div className="flex justify-center items-center pt-28">
+              <div className="font-black text-black text-3xl">
+                This Page is currently unavailable
+              </div>
+              {/* <RevenueTable /> */}
             </div>
           </div>
         </main>

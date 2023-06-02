@@ -155,7 +155,7 @@ const [formData, setFormData] =useState()
                 </label>
               </div>
             </div>
-                <div className="flex justify-between py-4 pt-10">
+                <div className="flex justify-between items-center py-4 pt-10">
               <div>
                 <label
                   onClick={() => setModalOpen("")}
@@ -168,7 +168,7 @@ const [formData, setFormData] =useState()
                 
                   <button 
                   onClick={createStorePoint}
-                    className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
+                    className={`${loading} btn bg-[#2F93F6] border-0 px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
                   >
                     Create Store Point
                   </button>
