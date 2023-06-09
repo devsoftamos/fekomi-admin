@@ -274,13 +274,13 @@ export default function WalkOrder(props) {
                 <label className="text-black text-sm font-black px-2">
                   Quantity{" "}
                   {productPrice && (
-                    <span>Available quantity({productPrice?.quantity})</span>
+                    <span className="font-light text-xs">Available quantity({productPrice?.quantity})</span>
                   )}
                 </label>
                 <input
                   type="text"
                   name="quantity"
-                  placeholder="Enter Customer Address"
+                  placeholder="Enter quantity"
                   className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                   onChange={handleProduct}
                   defaultValue={props.editData?.name}

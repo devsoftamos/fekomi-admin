@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ImageUploader from "../../draganddrop/ImageUploader";
 import { useParams } from "react-router-dom";
 
-export default function SetPriceModal(props) {
+export default function ChangeModalPrice(props) {
   const {
     register,
     handleSubmit,
@@ -25,8 +25,7 @@ export default function SetPriceModal(props) {
   const [productData, setProductsData] = useState();
   const { id } = useParams();
 
-
-
+  
 
   const createProduct = (e) => {
     e.preventDefault();
@@ -50,8 +49,8 @@ export default function SetPriceModal(props) {
       Authorization: `${JSON.stringify(tokenParsed)}`,
     };
     const options = {
-      url: `${process.env.REACT_APP_ECOMMERCE}/delivery-region`,
-      method: "POST",
+      url: `${process.env.REACT_APP_ECOMMERCE}/delivery-region/${props.editData.id}`,
+      method: "PATCH",
       headers: headers,
       data: {
        ...formData
@@ -60,8 +59,7 @@ export default function SetPriceModal(props) {
 
     axios(options)
       .then((response) => {
-        setLoading("");
-        props.setModalOpen("");
+        setLoading(""); 
         window.location.reload();
         toast.success(response?.data?.message, {
           position: "top-right",
@@ -87,139 +85,12 @@ export default function SetPriceModal(props) {
         });
       });
   };
-  const getAllProductsData = async () => {
-    const token = localStorage.getItem("fekomi-token");
-    const covertedToken = JSON.parse(token);
-    const tokenParsed = {
-      firstName: covertedToken.firstname,
-      lastName: covertedToken.lastname,
-      userId: covertedToken.id,
-      role: {
-        admin: true,
-        superAdmin: true,
-      },
-      permission: {
-        dating: true,
-      },
-    };
-    const headers = {
-      "content-type": "application/json",
-      Authorization: `${JSON.stringify(tokenParsed)}`,
-    };
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/products`,
-        {
-          headers: headers,
-        }
-      );
-
-      console.log(response?.data, "DATA");
-      setProductsData(response?.data?.data);
-      //setLoading(false);
-    } catch (error) {
-      // setLoading(false);
-      //setMessage(error?.response?.data?.message);
-      //   if (error?.response?.data?.message == "Unauthenticated.") {
-      //     navigate("/");
-      //   }
-    }
-  };
-  const getCategory = async () => {
-    setLoading("loading");
-
-    const token = localStorage.getItem("fekomi-token");
-    const headers = {
-      "content-type": "application/json",
-      Authorization: ` Bearer ${token}`,
-    };
-    const options = {
-      url: `${process.env.REACT_APP_ECOMMERCE}/product-category`,
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
-        Authorization: ` Bearer ${token}`,
-      },
-    };
-
-    axios(options)
-      .then((response) => {
-        setCatData(response?.data?.data);
-        setLoading("");
-        props.setModalOpen("");
-      })
-      .catch((error) => {
-        setLoading("");
-      });
-  };
-
-  //UPDATE PRODUCTS ENDPOINT
-  const updateProduct = (e) => {
-    e.preventDefault();
-    setLoading("loading");
-
-    const token = localStorage.getItem("fekomi-token");
-    const headers = {
-      "content-type": "application/json",
-      Authorization: ` Bearer ${token}`,
-    };
-    const options = {
-      url: `${process.env.REACT_APP_ECOMMERCE}/product/${props.editData?.uid}`,
-      method: "PATCH",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
-        Authorization: ` Bearer ${token}`,
-      },
-      data: {
-        ...formData,
-        type: "REGULAR",
-        main_product_image: images[0]?.data_url,
-        secondary_product_image_1: images[1]?.data_url,
-        secondary_product_image_2: images[2]?.data_url,
-      },
-    };
-
-    axios(options)
-      .then((response) => {
-        setLoading("");
-        props.setModalOpen("");
-        props.setReload(false);
-        toast.success(response?.data?.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        props.getAllProductsData();
-      })
-      .catch((error) => {
-        setLoading("");
-        toast.error(error?.response?.data?.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      });
-  };
   //UPDATE PRODUCTS ENDPOINT
 
-  useEffect(() => {
-    getCategory();
-    getAllProductsData();
-  }, []);
+  
   const handleProduct = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
+  }; 
   return (
     <div>
       {/* Put this part before </body> tag */}
@@ -235,12 +106,12 @@ export default function SetPriceModal(props) {
         pauseOnHover
       />
       <input type="checkbox" id="store-modal" className="modal-toggle" />
-      <div className={`modal ${props.modalOpen}`}>
+      <div className={`modal ${props.openChangeModal}`}>
         <div className="modal-box bg-[#FAFAFA]    max-w-[700px]">
           <div className="flex justify-between rounded-md items-center bg-white py-3 px-2 border-b">
-            <div className="text-lg font-bold">Region Price</div>
+            <div className="text-lg font-bold">Change Region Price</div>
             <div
-              onClick={() => props.setModalOpen("")}
+              onClick={() => props.setOpenModalChange("")}
               className="bg-[#C2C2C2] rounded-full px-2 py-1 cursor-pointer text-white"
             >
               ✕
@@ -279,7 +150,7 @@ export default function SetPriceModal(props) {
                   placeholder="Enter Price"
                   className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                   onChange={handleProduct}
-                  defaultValue={props.editData?.name}
+                  defaultValue={props.editData?.cost}
                   // required
                 />
               </div>
@@ -308,22 +179,15 @@ export default function SetPriceModal(props) {
                 </label>
               </div>
               <div className="pl-2">
-                {props.edit ? (
-                  <button
-                    onClick={updateProduct}
-                    className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
-                  >
-                    Update Stock
-                  </button>
-                ) : (
+                 
                   <button
                     onClick={createProduct}
                     disabled={Object.keys(formData||{}) ? false : true}
                     className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
                   >
-                    Create Delivery
+                    Update 
                   </button>
-                )}
+                
               </div>
             </div>
           </form>
