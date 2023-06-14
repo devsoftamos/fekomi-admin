@@ -287,7 +287,7 @@ export default function StoreModal(props) {
                 </label>
                 <div className="flex w-full">
                   <div className="">
-                    <select className="py-4 bg-white px-2 w-[95px]  focus:bg-white outline-0 focus:border-0">
+                    <select disabled className="py-4 bg-white px-2 w-[95px]  focus:bg-white outline-0 focus:border-0">
                       <option disabled selected>
                         NGN
                       </option>
@@ -325,6 +325,33 @@ export default function StoreModal(props) {
                 </div>
               </div>
             </div>
+            <div className="w-full">
+                <label className="text-black text-sm font-black px-2 pb-1">
+                  USDT Price
+                </label>
+                <div className="flex w-full">
+                  <div className="">
+                    <select disabled className="py-4 bg-white px-2 w-[95px]  focus:bg-white outline-0 focus:border-0">
+                      <option disabled selected>
+                      USDT
+                      </option>
+                      <option></option>
+                      <option>JPY</option>
+                    </select>
+                  </div>
+                  <div className="w-full">
+                    <input
+                      type="text"
+                      placeholder="Enter Price in USDT"
+                      name="usdt_price"
+                      className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
+                      onChange={handleProduct}
+                      defaultValue={props.editData?.price}
+                      // required
+                    />
+                  </div>
+                </div>
+              </div>
             <div>
               <label className="font-black text-sm">Description</label>
               <textarea
