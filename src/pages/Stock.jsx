@@ -109,10 +109,14 @@ export default function Stock() {
                         //onClick={() => setShowDropDown(true)}
                         className="bg-[#2F93F6] px-8 text-[#fff] rounded-lg py-4 cursor-pointer"
                       >
-                        NEW{" "}
-                        {/* <span>
-                          <img src="/down.svg" />
-                        </span> */}
+                        <div className="inline-flex items-center">
+                        <span>NEW </span>
+                        <span className="pl-1">
+                          <img src="/sharp.svg" />
+                        </span>
+
+                        </div>
+                       
                       </label>
                       <ul
                         tabIndex={0}
