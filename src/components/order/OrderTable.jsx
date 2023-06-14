@@ -84,6 +84,18 @@ export default function OrderTable() {
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
+                      Delivery Cost
+                    </th>
+                    <th
+                      scope="col"
+                      class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
+                    >
+                     Transaction Reference
+                    </th>
+                    <th
+                      scope="col"
+                      class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
+                    >
                       Total Amount
                     </th>
                     <th
@@ -145,7 +157,13 @@ export default function OrderTable() {
                         {data?.delivery_address}
                       </td>
                       <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                        {data?.total_cost}
+                      ₦{" "}{data?.delivery_cost}
+                      </td>
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        {data?.transaction_reference}
+                      </td>
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                      ₦{" "}{data?.total_cost}
                       </td>
                       <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                         {new Date(data?.created_at).toDateString()}

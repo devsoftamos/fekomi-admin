@@ -61,8 +61,8 @@ export default function MakeTransfer(props) {
     axios(options)
       .then((response) => {
         setLoading("");
-        props.setModalCatOpen("");
-        window.location.reload();
+        //props.setModalCatOpen("");
+       
         toast.success(response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -72,6 +72,7 @@ export default function MakeTransfer(props) {
           draggable: true,
           progress: undefined,
         }); 
+        window.location.reload();
        
       })
       .catch((error) => {
@@ -422,7 +423,7 @@ export default function MakeTransfer(props) {
                   <button
                     onClick={createTransfer}
                     disabled={Object.keys(formData||{}) ? false : true}
-                    className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
+                    className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] capitalize rounded-lg py-4 cursor-pointer`}
                   >
                     Transfer Stock
                   </button>

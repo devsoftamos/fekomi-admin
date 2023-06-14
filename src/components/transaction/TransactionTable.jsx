@@ -241,7 +241,7 @@ export default function TransactionTable() {
                     </td>
 
                     <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
-                      {numberWithCommas(+data?.debit||0)}
+                    ₦{" "}{numberWithCommas(+data?.debit||0)}
                     </td>
                   </tr>
                   )):
@@ -262,7 +262,7 @@ export default function TransactionTable() {
                       </td>
  
                       <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
-                        {numberWithCommas(+data?.debit||0)}
+                      ₦{" "}{numberWithCommas(+data?.debit||0)}
                       </td>
                     </tr>
                   ))}

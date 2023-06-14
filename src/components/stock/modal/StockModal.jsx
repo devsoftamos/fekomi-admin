@@ -227,7 +227,7 @@ export default function StoreModal(props) {
       <div className={`modal ${props.modalOpen}`}>
         <div className="modal-box bg-[#FAFAFA]    max-w-[820px]">
           <div className="flex justify-between rounded-md items-center bg-white py-3 px-2 border-b">
-            <div className="text-lg font-bold">New Stock</div>
+            <div className="text-lg font-bold text-black">New Stock</div>
             <div
               onClick={() => props.setModalOpen("")}
               className="bg-[#C2C2C2] rounded-full px-2 py-1 cursor-pointer text-white"
@@ -287,7 +287,10 @@ export default function StoreModal(props) {
                 </label>
                 <div className="flex w-full">
                   <div className="">
-                    <select disabled className="py-4 bg-white px-2 w-[95px]  focus:bg-white outline-0 focus:border-0">
+                    <select
+                      disabled
+                      className="py-4 bg-white px-2 w-[95px]  focus:bg-white outline-0 focus:border-0"
+                    >
                       <option disabled selected>
                         NGN
                       </option>
@@ -325,15 +328,20 @@ export default function StoreModal(props) {
                 </div>
               </div>
             </div>
-            <div className="w-full">
+
+            <div className="flex justify-between pt-10 py-3">
+              <div className="w-1/2 py-4">
                 <label className="text-black text-sm font-black px-2 pb-1">
                   USDT Price
                 </label>
                 <div className="flex w-full">
                   <div className="">
-                    <select disabled className="py-4 bg-white px-2 w-[95px]  focus:bg-white outline-0 focus:border-0">
+                    <select
+                      disabled
+                      className="py-4 bg-white px-2 w-[95px]  focus:bg-white outline-0 focus:border-0"
+                    >
                       <option disabled selected>
-                      USDT
+                        USDT
                       </option>
                       <option></option>
                       <option>JPY</option>
@@ -352,6 +360,25 @@ export default function StoreModal(props) {
                   </div>
                 </div>
               </div>
+              <div className="w-1/2 py-4 pl-3">
+                <label className="text-black text-sm font-black px-2 pb-1">
+                  Product Url
+                </label>
+
+                <div className="w-full">
+                  <input
+                    type="text"
+                    placeholder="Enter product Url"
+                    name="product_url"
+                    className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
+                    onChange={handleProduct}
+                    defaultValue={props.editData?.price}
+                    // required
+                  />
+                </div>
+              </div>
+            </div>
+
             <div>
               <label className="font-black text-sm">Description</label>
               <textarea

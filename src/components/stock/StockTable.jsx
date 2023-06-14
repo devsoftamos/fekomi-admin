@@ -310,7 +310,7 @@ export default function StockTable({
                             {data?.name}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            {data?.productcategory[0]?.name}
+                            {data?.productcategory?data?.productcategory[0]?.name:"-"}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             {data?.quantity}
@@ -319,11 +319,11 @@ export default function StockTable({
                             {data?.number_sold}
                           </td>
 
-                          <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
+                          <td class="text-sm text-gray-900 font-light  px-6 py-4 whitespace-nowrap">
                             {data?.sku_number}
                           </td>
-                          <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
-                            {numberWithCommas(data?.price || 0)}
+                          <td class="text-sm text-gray-900 font-light  px-6 py-4 whitespace-nowrap">
+                          ₦{" "}{numberWithCommas(data?.price || 0)}
                           </td>
                           <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
                             <div
@@ -361,7 +361,7 @@ export default function StockTable({
                             {data?.name}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            {data?.productcategory[0]?.name}
+                          {data?.productcategory?data?.productcategory[0]?.name:"-"}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             {data?.quantity}
@@ -370,11 +370,11 @@ export default function StockTable({
                             {data?.number_sold}
                           </td>
 
-                          <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
+                          <td class="text-sm text-gray-900 font-light  px-6 py-4 whitespace-nowrap">
                             {data?.sku_number}
                           </td>
-                          <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
-                            {numberWithCommas(data?.price || 0)}
+                          <td class="text-sm text-gray-900 font-light  px-6 py-4 whitespace-nowrap">
+                          ₦{" "}{numberWithCommas(data?.price || 0)}
                           </td>
                           <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
                             <div

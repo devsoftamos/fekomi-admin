@@ -199,7 +199,7 @@ export default function ProductTable({
             <div class="overflow-hidden bg-white">
               <div className="py-3 px-4">
                 <TableHeaders
-                  showFilter={true}
+                  showFilter={false}
                   setMonthIndex={setMonthIndex}
                   setSearchValue={setSearchValue}
                   getProductsSearch={getProductsSearch}

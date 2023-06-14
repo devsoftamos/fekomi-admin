@@ -228,7 +228,7 @@ export default function ProductTable({
                             {data?.delivery_status}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            {data?.product?.price}
+                          ₦{" "}{data?.product?.price}
                           </td>
                           <td class="text-sm font-bold  px-4 py-4 whitespace-nowrap">
                             <Menu

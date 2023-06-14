@@ -230,8 +230,8 @@ export default function Consultation(props) {
                 <option disabled selected>
                   Select One
                 </option>
-                <option value="Virtual">Virtual</option>
-                <option value="PHYSICAL">Physical</option>
+                <option value="ONLINE">Virtual Appointment</option>
+                <option value="PHYSICAL">Physical Appointment</option>
               </select>
             </div>
             <div className="py-6">

@@ -168,7 +168,7 @@ const [formData, setFormData] =useState()
                 
                   <button 
                   onClick={createStorePoint}
-                    className={`${loading} btn bg-[#2F93F6] border-0 px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
+                    className={`${loading} btn bg-[#2F93F6] capitalize border-0 px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
                   >
                     Create Store Point
                   </button>

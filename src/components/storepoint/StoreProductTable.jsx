@@ -247,7 +247,7 @@ export default function StoreProductTable({
             <div class="overflow-hidden bg-white">
               <div className="py-3 px-4">
                 <TableHeaders
-                  showFilter={true}
+                  showFilter={false}
                   setMonthIndex={setMonthIndex}
                   setSearchValue={setSearchValue}
                   getProductsSearch={getProductsSearch}
@@ -356,7 +356,7 @@ export default function StoreProductTable({
                             {data?.number_sold}
                           </td>
 
-                          <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                          {/* <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
                             <div
                               onClick={() => {
                                 setEditData(data);
@@ -366,7 +366,7 @@ export default function StoreProductTable({
                             >
                               Remove
                             </div>
-                          </td>
+                          </td> */}
                           <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
                             <div
                               onClick={() => deleteProduct(data)}
@@ -401,7 +401,7 @@ export default function StoreProductTable({
                             {data?.remainingQuantity}
                           </td>
 
-                          <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                          {/* <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
                             <div
                               onClick={() => {
                                 setEditData(data);
@@ -411,7 +411,7 @@ export default function StoreProductTable({
                             >
                               Remove
                             </div>
-                          </td>
+                          </td> */}
                           <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
                             <div
                               onClick={() => deleteProduct(data)}

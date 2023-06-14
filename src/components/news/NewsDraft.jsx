@@ -122,15 +122,19 @@ export default function NewsDraft() {
             <div key={i} className="pt-2">
               <div className="card w-96 bg-base-100 shadow-xl bg-contain">
                 {isImage(data?.mediaUrl) ? (
-                  <figure
+                  <>
+                   <img className="h-48" src={data?.mediaUrl}/>
+                  {/* <figure
                     style={{
                       backgroundImage: `url(${data?.mediaUrl})`,
                       height: "100%",
                     }}
                     className="bg-cover w-full pb-56 h-full"
-                  ></figure>
+                  ></figure> */}
+                  </>
+                 
                 ) : (
-                  <ReactPlayer  controls="true" width={384} height url={data?.mediaUrl} />
+                  <ReactPlayer  controls="true" width={384} height={192} url={data?.mediaUrl} />
                   // <video
                   //   className="  w-full -pb-56 -h-full"
                   //   src={data?.mediaUrl}

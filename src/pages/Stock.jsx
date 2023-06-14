@@ -88,7 +88,7 @@ export default function Stock() {
 
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <div className="flex justify-between">
-              <div className="font-black text-lg">Stock Inventory</div>
+              <div className="font-black text-black text-lg">Stock Inventory</div>
               <div>
                 <div className="flex items-center">
                   <div className="pl-2">
@@ -97,7 +97,7 @@ export default function Stock() {
                         setModalOpen("modal-open");
                         setModalType(true);
                       }}
-                      className="px-2 py-3 capitalize font-black text-[#2F93F6] border border-[#2F93F6] rounded"
+                      className="px-2 py-3 capitalize font-medium text-[#2F93F6] border border-[#2F93F6] rounded"
                     >
                       Create Hot Sales
                     </button>

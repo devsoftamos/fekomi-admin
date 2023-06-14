@@ -159,7 +159,7 @@ export default function StorePoint() {
                         setModalOpen("modal-open");
                         setModalType(true);
                       }}
-                      className="px-2 py-3 capitalize font-black text-[#2F93F6] border border-[#2F93F6] rounded"
+                      className="px-2 py-3 capitalize font-medium text-[#2F93F6] border border-[#2F93F6] rounded"
                     >
                       Add Stock
                     </button>
@@ -168,7 +168,7 @@ export default function StorePoint() {
                   <div className="pl-2">
                     <button
                      onClick={() => setModalCatOpen("modal-open")}
-                      className="px-2 py-3  font-black text-white  bg-[#2F93F6] rounded"
+                      className="px-2 py-3  font-medium text-white  bg-[#2F93F6] rounded"
                     >
                     Make a transfer
                     </button>

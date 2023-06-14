@@ -117,22 +117,32 @@ export default function NewsDraftPage() {
       //   }
     }
   };
-  const deleteComment = () => {
+  const deleteComment = (data) => {
     setLoading("loading");
+    console.log(data,"COMMENT");
 
     const token = localStorage.getItem("fekomi-token");
+    const covertedToken = JSON.parse(token);
+    const tokenParsed = {
+      firstName: covertedToken.firstname,
+      lastName: covertedToken.lastname,
+      userId: covertedToken.id,
+      role: {
+        admin: true,
+        superAdmin: true,
+      },
+      permission: {
+        dating: true,
+      },
+    };
     const headers = {
       "content-type": "application/json",
-      Authorization: ` Bearer ${token}`,
+      Authorization: `${JSON.stringify(tokenParsed)}`,
     };
     const options = {
-      url: `${process.env.REACT_APP_NEWS}/admin/comments/${id}`,
+      url: `${process.env.REACT_APP_NEWS}/admin/comments/${data?._id}`,
       method: "DELETE",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
-        Authorization: ` Bearer ${token}`,
-      },
+      headers:headers,
       data: {},
     };
 
@@ -384,7 +394,7 @@ export default function NewsDraftPage() {
                           {/* Block User */}
                         </div>
                         <div
-                          onClick={deleteComment}
+                          onClick={()=>deleteComment(data)}
                           className="pl-3 font-semibold text-gray-500 cursor-pointer"
                         >
                           Delete
