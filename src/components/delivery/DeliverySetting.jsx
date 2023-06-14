@@ -3,7 +3,7 @@ import SetPriceModal from "./modal/SetPriceModal";
 import axios from "axios";
 import ChangeModalPrice from "./modal/ChangeModalPrice";
 
-export default function () {
+export default function DeliverySetting () {
   const [modalOpen, setModalOpen] = useState();
   const [regionAddress, setRegionAddress] = useState();
 const [openChangeModal, setOpenModalChange] =useState()
@@ -62,7 +62,7 @@ const [editData,setEditData]=useState()
       </div>
       {regionAddress?.delivery_regions?.map((data, i) => (
         <div className="py-2">
-          <div className="inline-flex">
+          <div className="flex justify-between w-96">
             <div className="text-black capitalize">{data?.name}</div>
             
             <div className="pl-40 flex">
