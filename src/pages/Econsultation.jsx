@@ -5,11 +5,13 @@ import Header from "../components/header/Header";
 import ConsultationTable from "../components/consultation/ConsultationTable";
 import Consultation from "../components/consultation/modal/Consultation";
 import MySchedule from "../components/consultation/modal/MySchedule";
+import ConsultationFee from "../components/consultation/modal/ConsultationFee";
 
 export default function Econsultation() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState();
   const [openSchedule, setOpenSchedule] = useState();
+  const [openFee, setOpenFee] = useState();
   const [images, setImages] = useState([]);
   const handleProduct = (e) => {
     console.log(e.target.value);
@@ -22,6 +24,8 @@ export default function Econsultation() {
         openSchedule={openSchedule}
         setOpenSchedule={setOpenSchedule}
       />
+      <ConsultationFee openSchedule={openFee}
+        setOpenSchedule={setOpenFee}/>
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
@@ -47,6 +51,16 @@ export default function Econsultation() {
                         className="bg-[#2F93F6] px-8 text-[#fff] rounded-lg py-4 cursor-pointer"
                       >
                         Create Schedule
+                      </label>
+                    </div>
+                  </div>
+                  <div className="pl-2">
+                    <div className="">
+                      <label
+                        onClick={() => setOpenFee("modal-open")}
+                        className="bg-[#2F93F6] px-8 text-[#fff] rounded-lg py-4 cursor-pointer"
+                      >
+                        Consultation Fee
                       </label>
                     </div>
                   </div>

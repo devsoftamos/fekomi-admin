@@ -22,7 +22,7 @@ const LogIn = () => {
     setLoading("loading");
     var config = {
       method: "post",
-      url: `${process.env.REACT_APP_ADMIN}auth/login`,
+      url: `${process.env.REACT_APP_ADMIN_URL}/auth/login`,
 
       headers: {
         "Access-Control-Allow-Origin": "*",

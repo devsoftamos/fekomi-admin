@@ -6,6 +6,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-toastify/dist/ReactToastify.css";
 import Pagination from "../utils/Pagination";
 import ProductTable from "./ProductTable";
+import PrintModal from "./modal/PrintModal";
 export default function WalkInOrder() {
   const [orderData, setOrderData] = useState();
   const [searchValue, setSearchValue] = useState();
@@ -50,18 +51,19 @@ export default function WalkInOrder() {
 
   const getOrderProduct = (data) => {
     setProductData(data);
-    setModalOpen("modal-open");
+    //setModalOpen("modal-open");
   };
   const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
   return (
     <div>
-      <ProductTable
+      <PrintModal
         modalOpen={modalOpen}
-        productData={productData}
+        printData={productData}
         setModalOpen={setModalOpen}
-        getAllOrderData={getOrderData}
+        order={false}
+         
       />
       <div class="flex flex-col">
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -75,13 +77,19 @@ export default function WalkInOrder() {
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                     Customer Name
+                      Product Name
                     </th>
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                     Phone Number
+                      Customer Name
+                    </th>
+                    <th
+                      scope="col"
+                      class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
+                    >
+                      Phone Number
                     </th>
                     <th
                       scope="col"
@@ -99,13 +107,13 @@ export default function WalkInOrder() {
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                     Quantity
+                      Quantity
                     </th>
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                    Mode Of Payment
+                      Mode Of Payment
                     </th>
                     <th
                       scope="col"
@@ -155,10 +163,13 @@ export default function WalkInOrder() {
                   {orderData?.records?.map((data, i) => (
                     <tr
                       key={i}
-                     // onClick={() => getOrderProduct(data)}
+                      // onClick={() => getOrderProduct(data)}
                       class="bg-white border-gray-300 border-b  transition duration-300 ease-in-out hover:bg-gray-100"
                     >
-                         <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        {data?.ecommerceProduct?.name}
+                      </td>
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                         {data?.customerName}
                       </td>
                       <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
@@ -169,16 +180,27 @@ export default function WalkInOrder() {
                         {data?.customerAddress}
                       </td>
                       <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                       N{numberWithCommas(data?.totalPrice||0)}
+                        N{numberWithCommas(data?.totalPrice || 0)}
                       </td>
                       <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                       {data?.quantity}
+                        {data?.quantity}
                       </td>
                       <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                       {data?.modeOfPayment}
+                        {data?.modeOfPayment}
                       </td>
                       <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                         {new Date(data?.createdAt).toDateString()}
+                      </td>
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        <div
+                          onClick={() => {
+                            getOrderProduct(data)
+                            setModalOpen("modal-open");
+                          }}
+                          className="bg-[#cecfe0] cursor-pointer font-bold  text-black text-center py-2 px-1 rounded-lg"
+                        >
+                          Print Receipt
+                        </div>
                       </td>
                     </tr>
                   ))}

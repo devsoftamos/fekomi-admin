@@ -12,6 +12,10 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import S3FileUpload from "react-s3/lib/ReactS3";
+
+import S3 from "aws-s3";
+window.Buffer = window.Buffer || require("buffer").Buffer;
 export default function NewsDraftPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState();
@@ -21,9 +25,93 @@ export default function NewsDraftPage() {
   const [fileData, setFileData] = useState();
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState();
+  const [formData, setFormData] = useState();
   const { id } = useParams();
-  const handleProduct = (e) => {
-    console.log(e.target.value);
+
+  const updateNews = (data) => {
+    const token = localStorage.getItem("fekomi-token");
+    const covertedToken = JSON.parse(token);
+    const tokenParsed = {
+      firstName: covertedToken.firstname,
+      lastName: covertedToken.lastname,
+      userId: covertedToken.id,
+      role: {
+        admin: true,
+        superAdmin: true,
+      },
+      permission: {
+        dating: true,
+      },
+    };
+    const headers = {
+      "content-type": "application/json",
+      Authorization: `${JSON.stringify(tokenParsed)}`,
+    };
+    setLoading("loading");
+    const payLoad = {
+      ...formData,
+      mediaUrl: data,
+    };
+    const options = {
+      url: `${process.env.REACT_APP_NEWS}/admin/posts/${id}`,
+      method: "patch",
+
+      headers: headers,
+      data: {
+        ...payLoad,
+      },
+    };
+    axios(options)
+      .then((response) => {
+        setLoading("");
+        //props.setModalOpen("");
+
+        toast.success(response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        //window.location.reload();
+      })
+      .catch((error) => {
+        setLoading("");
+        toast.error(error?.response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  };
+
+  const savedToAws = () => {
+    
+    setLoading("loading");
+    const config = {
+      bucketName: "fekomi-static-files",
+      dirName: "Feeds" /* optional */,
+      region: "us-east-1",
+      accessKeyId: `${process.env.REACT_APP_ACCESSKEY}`,
+      secretAccessKey: `${process.env.REACT_APP_SECRETKEY}`,
+      // s3Url: "https:/your-custom-s3-url.com/" /* optional */,
+    };
+
+    S3FileUpload.uploadFile(fileData, config)
+      .then((data) => {
+        updateNews(data.location);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading();
+      });
+    return;
   };
   const onDrop = useCallback((acceptedFiles) => {
     const reader = new FileReader();
@@ -119,7 +207,7 @@ export default function NewsDraftPage() {
   };
   const deleteComment = (data) => {
     setLoading("loading");
-    console.log(data,"COMMENT");
+    console.log(data, "COMMENT");
 
     const token = localStorage.getItem("fekomi-token");
     const covertedToken = JSON.parse(token);
@@ -142,7 +230,7 @@ export default function NewsDraftPage() {
     const options = {
       url: `${process.env.REACT_APP_NEWS}/admin/comments/${data?._id}`,
       method: "DELETE",
-      headers:headers,
+      headers: headers,
       data: {},
     };
 
@@ -179,6 +267,21 @@ export default function NewsDraftPage() {
     getSingleNews();
     getComments();
   }, []);
+  const handleProduct = (e) => {
+    if (e.target.name === "isTopFlash" && e.target.checked) {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+        isTopFlash: true,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+        isTopFlash: false,
+      });
+    }
+  };
 
   return (
     <div className="flex h-screen overflow-hidden ">
@@ -224,7 +327,7 @@ export default function NewsDraftPage() {
                     </div>
                   </div>
                   <div className="py-2">
-                    {!imagePreview && (
+                    {!imagePreview && !newsData?.mediaUrl && (
                       <div {...getRootProps()}>
                         <input {...getInputProps()} />
                         {isDragActive ? (
@@ -292,8 +395,9 @@ export default function NewsDraftPage() {
                     ) : (
                       ""
                     )}
-                       {/* {newsData&&newsData?.mediaUrl?.includes("mp4") ? (
-                      <div className="relative">
+
+                    {newsData && newsData?.mediaUrl?.includes("mp4") ? (
+                      <div {...getRootProps()} className="relative">
                         <div>
                           <video
                             src={newsData?.mediaUrl}
@@ -301,7 +405,9 @@ export default function NewsDraftPage() {
                           ></video>
                         </div>
                         <div
-                          onClick={() => setImagePreview()}
+                          onClick={() => {
+                            setNewsData({ ...newsData, mediaUrl: "" });
+                          }}
                           className="absolute top-0 right-0 px-2 text-red-700 text-xl"
                         >
                           <svg
@@ -318,13 +424,20 @@ export default function NewsDraftPage() {
                           </svg>
                         </div>
                       </div>
-                    ) : imagePreview?.includes("image") ? (
+                    ) : newsData?.mediaUrl?.includes(
+                        "png" || "jpg" || "jpeg"
+                      ) ? (
                       <div className="relative">
                         <div className="">
-                          <img src={imagePreview} className="upload-image" />
+                          <img
+                            src={newsData?.mediaUrl}
+                            className="upload-image"
+                          />
                         </div>
                         <div
-                          onClick={() => setImagePreview()}
+                          onClick={() => {
+                            setNewsData({ ...newsData, mediaUrl: "" });
+                          }}
                           className="absolute top-0 right-0 px-2 text-red-700 text-xl"
                         >
                           <svg
@@ -343,7 +456,7 @@ export default function NewsDraftPage() {
                       </div>
                     ) : (
                       ""
-                    )} */}
+                    )}
                   </div>
                   <div>
                     <label className="font-black text-sm">Message</label>
@@ -356,8 +469,15 @@ export default function NewsDraftPage() {
                   </div>
 
                   <div className="flex justify-between py-10">
-                    <div>
-                      <label className="bg-[#2F93F6] text-white px-5 rounded-lg py-4">
+                    <div onClick={()=>{
+                      if (imagePreview) {
+                        savedToAws()
+                      }else{
+                        updateNews(newsData.media_url)
+                      }
+                        
+                    }}>
+                      <label className="bg-[#2F93F6] cursor-pointer text-white px-5 rounded-lg py-4">
                         Save Changes
                       </label>
                     </div>
@@ -366,7 +486,11 @@ export default function NewsDraftPage() {
               </div>
               <div className="bg-white rounded-sm w-1/2 px-3">
                 <div className="py-4 font-black text-lg">Comments</div>
-                {comments?.length==0&&<div className="flex justify-center items-center pt-20">No Comments Available for this post</div>}
+                {comments?.length == 0 && (
+                  <div className="flex justify-center items-center pt-20">
+                    No Comments Available for this post
+                  </div>
+                )}
                 {comments?.map((data, i) => (
                   <div className="flex items-start gap-6">
                     <div>
@@ -394,7 +518,7 @@ export default function NewsDraftPage() {
                           {/* Block User */}
                         </div>
                         <div
-                          onClick={()=>deleteComment(data)}
+                          onClick={() => deleteComment(data)}
                           className="pl-3 font-semibold text-gray-500 cursor-pointer"
                         >
                           Delete
