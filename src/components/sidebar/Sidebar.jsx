@@ -106,9 +106,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
       <div
         id="sidebar"
         ref={sidebar}
-        className={`bg-white border-r shadow top-0 h-screen md:w-64 w-3/4  px-0 absolute inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ease-in-out  overflow-y-auto ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-64"
-        }`}
+        className={`bg-white border-r shadow top-0 h-screen md:w-64 w-3/4  px-0 absolute inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ease-in-out  overflow-y-auto`}
       >
         {/* Sidebar header */}
         <div className="flex justify-between mb-10 pr-3 sm:px-2">
@@ -147,7 +145,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 className={`px-3 py-4 rounded-lg mb-0.5 last:mb-0 ${
                   pathname.includes("dashboard") && "bg-lightblue"
                 }`}
-              >
+              > 
                 <NavLink
                   end
                   to="/dashboard"
@@ -171,7 +169,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
 
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    <span className="text-sm font-medium ml-3  lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                       Dashboard
                     </span>
                   </div>
@@ -206,7 +204,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
 
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    <span className="text-sm font-medium ml-3  lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                       Customers
                     </span>
                   </div>
@@ -242,7 +240,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
 
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    <span className="text-sm font-medium ml-3  lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                       Users & Roles
                     </span>
                   </div>
@@ -277,7 +275,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
 
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    <span className="text-sm font-medium ml-3  lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                       Stock Inventory
                     </span>
                   </div>
@@ -314,7 +312,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
 
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    <span className="text-sm font-medium ml-3  lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                       Transactions
                     </span>
                   </div>
@@ -349,7 +347,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
 
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    <span className="text-sm font-medium ml-3  lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                       Revenue
                     </span>
                   </div>
@@ -384,7 +382,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
 
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    <span className="text-sm font-medium ml-3  lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                       Orders
                     </span>
                   </div>
@@ -420,7 +418,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
 
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    <span className="text-sm font-medium ml-3  lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                       Store Point
                     </span>
                   </div>
@@ -455,7 +453,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
 
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    <span className="text-sm font-medium ml-3  lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                       Products
                     </span>
                   </div>
@@ -491,7 +489,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
 
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    <span className="text-sm font-medium ml-3  lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                       News
                     </span>
                   </div>
@@ -527,7 +525,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
 
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    <span className="text-sm font-medium ml-3  lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                       e-consultation
                     </span>
                   </div>
@@ -561,7 +559,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
 
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    <span className="text-sm font-medium ml-3  lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                       Dating
                     </span>
                   </div>
@@ -596,7 +594,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
 
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    <span className="text-sm font-medium ml-3  lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                      Delivery Settings
                     </span>
                   </div>
