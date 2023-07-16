@@ -58,7 +58,13 @@ export default function Consultation(props) {
       "day":"friday",
       "start_time":"09:00 AM",
       "end_time":"10:00 AM"
-  }
+  },
+  {
+    "check": false,
+    "day":"Saturday",
+    "start_time":"09:00 AM",
+    "end_time":"10:00 AM"
+}
   ])
 
   const createSchedules = (e) => {
