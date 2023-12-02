@@ -9,7 +9,7 @@ import DragAndDrop from "./DragandDrop";
 import Dropzone, { useDropzone } from "react-dropzone";
 import S3FileUpload from "react-s3/lib/ReactS3";
 import AWS from "aws-sdk";
-import OceanSpaceUploader from "./OceanSpaceUploader";
+ 
 
 import { decode } from "base64-arraybuffer";
 import S3 from "aws-s3";
@@ -75,7 +75,7 @@ export default function CreateNews(props) {
     bucketName: "fekomi-new-images",
   };
 
-  const uploader = new OceanSpaceUploader(config);
+  
 
   const createNews = (data) => {
     const token = localStorage.getItem("fekomi-token");
