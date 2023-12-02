@@ -8,7 +8,10 @@ import ImageUploader from "../../draganddrop/ImageUploader";
 import DragAndDrop from "./DragandDrop";
 import Dropzone, { useDropzone } from "react-dropzone";
 import S3FileUpload from "react-s3/lib/ReactS3";
+import AWS from "aws-sdk";
+import OceanSpaceUploader from "./OceanSpaceUploader";
 
+import { decode } from "base64-arraybuffer";
 import S3 from "aws-s3";
 window.Buffer = window.Buffer || require("buffer").Buffer;
 export default function CreateNews(props) {
@@ -28,43 +31,51 @@ export default function CreateNews(props) {
   const [formData, setFormData] = useState();
   const [fileData, setFileData] = useState();
   const [imagePreview, setImagePreview] = useState();
+  const [isVideo, setIsVideo] = useState();
 
+  // const createNew=(data)=>{
+  //   const token = localStorage.getItem("fekomi-token");
+  //   const covertedToken = JSON.parse(token);
+  //   const tokenParsed = {
+  //     firstName: covertedToken.firstname,
+  //     lastName: covertedToken.lastname,
+  //     userId: covertedToken.id,
+  //     role: {
+  //       admin: true,
+  //       superAdmin: true,
+  //     },
+  //     permission: {
+  //       dating: true,
+  //     },
+  //   };
+  //   const headers = {
+  //     "content-type": "application/json",
+  //     Authorization: `${JSON.stringify(tokenParsed)}`,
+  //   };
+  //   axios.post(`${process.env.REACT_APP_NEWS}/admin/posts`, {
+  //     ...formData,
+  //     mediaUrl: data,
+  //   },{
+  //     headers:headers
+  //   }
 
+  //   )
+  //   .then(function (response) {
+  //     console.log(response);
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //   });
+  // }
+  const config = {
+    oceanSpaceAccessKey: process.env.REACT_APP_ACCESSKEY,
+    oceanSpaceSecretKey: process.env.REACT_APP_SECRETKEY,
+    oceanSpaceRegion: "nyc3.digitaloceanspaces.com",
+    uploadEndpoint: "https://fekomi-new-images.nyc3.digitaloceanspaces.com",
+    bucketName: "fekomi-new-images",
+  };
 
-// const createNew=(data)=>{
-//   const token = localStorage.getItem("fekomi-token");
-//   const covertedToken = JSON.parse(token);
-//   const tokenParsed = {
-//     firstName: covertedToken.firstname,
-//     lastName: covertedToken.lastname,
-//     userId: covertedToken.id,
-//     role: {
-//       admin: true,
-//       superAdmin: true,
-//     },
-//     permission: {
-//       dating: true,
-//     },
-//   };
-//   const headers = {
-//     "content-type": "application/json",
-//     Authorization: `${JSON.stringify(tokenParsed)}`,
-//   };
-//   axios.post(`${process.env.REACT_APP_NEWS}/admin/posts`, {
-//     ...formData,
-//     mediaUrl: data,
-//   },{
-//     headers:headers
-//   }
-  
-//   )
-//   .then(function (response) {
-//     console.log(response);
-//   })
-//   .catch(function (error) {
-//     console.log(error);
-//   });
-// }
+  const uploader = new OceanSpaceUploader(config);
 
   const createNews = (data) => {
     const token = localStorage.getItem("fekomi-token");
@@ -86,19 +97,19 @@ export default function CreateNews(props) {
       Authorization: `${JSON.stringify(tokenParsed)}`,
     };
     setLoading("loading");
-    const payLoad={
+    const payLoad = {
       ...formData,
       mediaUrl: data,
-    } 
+    };
     const options = {
       url: `${process.env.REACT_APP_NEWS}/admin/posts`,
       method: "post",
-      
-      headers:headers,
-      data:{
-        ...payLoad
+
+      headers: headers,
+      data: {
+        ...payLoad,
       },
-    }; 
+    };
     axios(options)
       .then((response) => {
         setLoading("");
@@ -128,29 +139,96 @@ export default function CreateNews(props) {
         });
       });
   };
+  const spacesEndpoint = new AWS.Endpoint("nyc3.digitaloceanspaces.com");
+  const S3 = new AWS.S3({
+    endpoint: spacesEndpoint,
+    accessKeyId: process.env.REACT_APP_ACCESSKEY,
+    secretAccessKey: process.env.REACT_APP_SECRETKEY,
+  });
+  const Config = {
+    // digitalOceanSpaces: 'https://nyc3.digitaloceanspaces.com',
+    bucketName: "fekomi-new-images",
+  };
 
   const savedToAws = (e) => {
     e.preventDefault();
     setLoading("loading");
-    const config = {
-      bucketName: "fekomi-static-files",
-      dirName: "Feeds" /* optional */,
-      region: "us-east-1",
-      accessKeyId: `${process.env.REACT_APP_ACCESSKEY}`,
-      secretAccessKey: `${process.env.REACT_APP_SECRETKEY}`,
-      // s3Url: "https:/your-custom-s3-url.com/" /* optional */,
+    let url;
+    let data = {};
+    const token = localStorage.getItem("fekomiAuthToken");
+
+    const headers = {
+      "content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
     };
 
-    S3FileUpload.uploadFile(fileData, config)
-      .then((data) => {
-        createNews(data.location);
+    if (isVideo) {
+      url =
+        "https://goldfish-app-we85f.ondigitalocean.app/admin/v1/auth/upload-video";
+      data = {
+        base64_video: imagePreview,
+      };
+    } else {
+      url =
+        "https://goldfish-app-we85f.ondigitalocean.app/admin/v1/auth/upload-image";
+      data = {
+        base64_image: imagePreview,
+      };
+    }
+    const options = {
+      url: url,
+      method: "POST",
+      data: {
+        ...data,
+      },
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+        Authorization: ` Bearer ${token}`,
+      },
+    };
+
+    axios(options)
+      .then((response) => {
+        createNews(response.data?.data?.url);
+        console.log(response.data);
       })
       .catch((error) => {
-        console.log(error);
-        setLoading();
+        setLoading("");
+        setLoading("");
+        toast.error(error?.response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
-    return;
   };
+  //   const savedToAws = (e) => {
+  //     e.preventDefault();
+  //     setLoading("loading");
+  //     const config = {
+  //       bucketName: "fekomi-new-images",
+  //       dirName: "Feeds" /* optional */,
+  //       region: "us-east-1",
+  //       accessKeyId: `${process.env.REACT_APP_ACCESSKEY}`,
+  //       secretAccessKey: `${process.env.REACT_APP_SECRETKEY}`,
+  //       s3Url: "https://fekomi-new-images.nyc3.digitaloceanspaces.com" /* optional */,
+  //     };
+  // console.log(fileData,"fileData");
+  //     S3FileUpload.uploadFile(fileData, config)
+  //       .then((data) => {
+  //         createNews(data.location);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //         setLoading();
+  //       });
+  //     return;
+  //   };
   const getNews = async () => {
     setLoading("loading");
 
@@ -203,19 +281,68 @@ export default function CreateNews(props) {
     }
   };
 
+  const AcceptedFileTypes = ["image/png", "image/jpeg", "video/mp4"];
+  const MaxFileSize = 2 * 1024 * 1024; // 2MB in bytes
+
   const onDrop = useCallback((acceptedFiles) => {
+    // Filter files to accept only the specified file types and size
+    const videoFiles = acceptedFiles.filter(
+      (file) => file.type === "video/mp4" && file.size <= MaxFileSize
+    );
+    const imageFiles = acceptedFiles.filter(
+      (file) =>
+        AcceptedFileTypes.includes(file.type) &&
+        file.size <= MaxFileSize &&
+        file.type !== "video/mp4"
+    );
+if (imageFiles.length > 0) {
+  if (imageFiles.length > 0) {
     const reader = new FileReader();
     reader.onloadend = function () {
-      // setImage({ ...image, [e.target.name]: reader.result });
       setImagePreview(reader.result);
-      console.log(reader.result);
-      //setPreview({ ...preview, [e.target.name]: reader.result });
+      setIsVideo(false);
+      console.log("IMAGE:", reader.result);
     };
-    if (acceptedFiles[0]) {
-      reader.readAsDataURL(acceptedFiles[0]);
-      //e.target.value = null;
+    reader.readAsDataURL(imageFiles[0]);
+    setFileData(imageFiles[0]);
+  } else {
+    toast.error("Please upload files of type PNG, JPEG, or MP4 within 2MB.", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    // Handle the case where no valid files were found or files are too large
+    console.log("Please upload files of type PNG, JPEG, or MP4 within 2MB.");
+  }
+
+}
+    if (videoFiles.length > 0) {
+      if (videoFiles.length > 0) {
+        const reader = new FileReader();
+        reader.onloadend = function () {
+          setImagePreview(reader.result);
+          setIsVideo(true);
+          console.log("VIDEO:", reader.result);
+        };
+        reader.readAsDataURL(videoFiles[0]);
+        setFileData(videoFiles[0]);
+      } else {
+        toast.error("Please upload files of type PNG, JPEG, or MP4 within 2MB.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
     }
-    setFileData(acceptedFiles[0]);
+   
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });

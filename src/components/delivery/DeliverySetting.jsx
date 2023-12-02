@@ -49,7 +49,7 @@ const [editData,setEditData]=useState()
   useEffect(() => {
     getAddress();
   }, []);
-
+console.log(regionAddress?.delivery_regions,"POP");
   return (
     <div>
       <SetPriceModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
@@ -67,7 +67,7 @@ const [editData,setEditData]=useState()
             
             <div className="pl-40 flex">
             <div className="font-black text-black">N{data?.cost}</div>
-            {regionAddress?.delivery_regions?.length ? (
+            {regionAddress?.delivery_regions?.length>0 ? (
               <div
                 onClick={() => {
                   setOpenModalChange("modal-open");
