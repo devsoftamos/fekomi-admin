@@ -16,7 +16,7 @@ const [loading,setLoading] = useState()
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_ADMIN}auth/list-recently-joined?limit=3`,
+        `${process.env.REACT_APP_ADMIN}/auth/list-recently-joined?limit=3`,
         {
           headers: headers,
         }

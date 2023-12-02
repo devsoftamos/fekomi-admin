@@ -45,7 +45,7 @@ export default function Stats() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_ADMIN}auth/total-members`,
+        `${process.env.REACT_APP_ADMIN}/auth/total-members`,
         {
           headers: headers,
         }
