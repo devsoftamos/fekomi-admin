@@ -66,14 +66,7 @@ export default function CreateNews(props) {
   //   .catch(function (error) {
   //     console.log(error);
   //   });
-  // }
-  const config = {
-    oceanSpaceAccessKey: process.env.REACT_APP_ACCESSKEY,
-    oceanSpaceSecretKey: process.env.REACT_APP_SECRETKEY,
-    oceanSpaceRegion: "nyc3.digitaloceanspaces.com",
-    uploadEndpoint: "https://fekomi-new-images.nyc3.digitaloceanspaces.com",
-    bucketName: "fekomi-new-images",
-  };
+  
 
   
 
@@ -145,10 +138,7 @@ export default function CreateNews(props) {
     accessKeyId: process.env.REACT_APP_ACCESSKEY,
     secretAccessKey: process.env.REACT_APP_SECRETKEY,
   });
-  const Config = {
-    // digitalOceanSpaces: 'https://nyc3.digitaloceanspaces.com',
-    bucketName: "fekomi-new-images",
-  };
+  
 
   const savedToAws = (e) => {
     e.preventDefault();
