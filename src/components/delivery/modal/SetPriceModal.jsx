@@ -311,7 +311,7 @@ export default function SetPriceModal(props) {
                 {props.edit ? (
                   <button
                     onClick={updateProduct}
-                    className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
+                    className={`${loading} btn bg-[#2F93F6] border-0  px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
                   >
                     Update Stock
                   </button>
@@ -319,7 +319,7 @@ export default function SetPriceModal(props) {
                   <button
                     onClick={createProduct}
                     disabled={Object.keys(formData||{}) ? false : true}
-                    className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
+                    className={`${loading} btn bg-[#2F93F6] border-0 px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
                   >
                     Create Delivery
                   </button>
