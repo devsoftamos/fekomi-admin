@@ -39,8 +39,8 @@ const RoutesFile = () => {
       <Route exact path="/consultation" element={<Econsultation />} />
       <Route exact path="/store-point/:id" element={<StorePoint />} />
       <Route exact path="/store-point/:id" element={<StoreProduct />} />
-      <Route exact path="/products" element={< Products/>} />
-      <Route exact path="/settings" element={< Settings/>} />
+      <Route exact path="/products" element={<Products />} />
+      <Route exact path="/settings" element={<Settings />} />
     </Routes>
   );
 };

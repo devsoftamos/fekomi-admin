@@ -38,7 +38,7 @@ export default function TransactionTable() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_WALLET_URL}/wallet/transactions/all?page=${pageNumber}&limit=${chooseData}`,
+        `${process.env.REACT_APP_ECOMMERCE}/transactions/all?page=${pageNumber}&per_page=${chooseData}`,
         {
           headers: headers,
         }
@@ -46,7 +46,7 @@ export default function TransactionTable() {
 
       setTransactionData(response?.data?.data);
       setLoading(false);
-      setFilterTransaction()
+      setFilterTransaction();
     } catch (error) {
       setLoading(false);
 
@@ -71,7 +71,7 @@ export default function TransactionTable() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_WALLET_URL}/wallet/transaction/search?search_key=${searchValue}`,
+        `${process.env.REACT_APP_ECOMMERCE}/transactions/search?search_key=${searchValue}`,
         {
           headers: headers,
         }
@@ -99,7 +99,9 @@ export default function TransactionTable() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_WALLET_URL}/wallet/transactions/date?start_date=${firstDay
+        `${
+          process.env.REACT_APP_ECOMMERCE
+        }/transactions/date?start_date=${firstDay
           .toLocaleDateString()
           .replaceAll("/", "-")}&end_date=${lastDay
           .toLocaleDateString()
@@ -111,7 +113,6 @@ export default function TransactionTable() {
 
       setFilterTransaction(response?.data?.data);
       setLoading(false);
-        
     } catch (error) {
       setLoading(false);
 
@@ -139,6 +140,7 @@ export default function TransactionTable() {
   const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
+
   return (
     <div className="pt-7">
       <TransactionModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
@@ -176,7 +178,7 @@ export default function TransactionTable() {
                     >
                       Type
                     </th>
-                   
+
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
@@ -184,7 +186,6 @@ export default function TransactionTable() {
                       Date
                     </th>
 
-                    
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
@@ -194,7 +195,7 @@ export default function TransactionTable() {
                   </tr>
                 </thead>
                 <tbody>
-                {!transactionData?.transactions  &&
+                  {!transactionData?.data &&
                     [...new Array(6)].map((d) => (
                       <tr
                         //key={i}
@@ -224,56 +225,56 @@ export default function TransactionTable() {
                         </td>
                       </tr>
                     ))}
-                  {
-                  filterTransaction?.transactions?filterTransaction?.transactions?.map((data,i)=>(
-                    <tr
-                    //onClick={() => setModalOpen("modal-open")}
-                    class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
-                  >
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                    {data?.user[0]?.name||data?.user?.name}
-                    </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                     {data?.description}
-                    </td>
-                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      {new Date(data?.created_at).toDateString()}
-                    </td>
+                  {filterTransaction?.transactions
+                    ? filterTransaction?.transactions?.map((data, i) => (
+                        <tr
+                          //onClick={() => setModalOpen("modal-open")}
+                          class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
+                        >
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.user?.name}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.description}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {new Date(data?.created_at).toDateString()}
+                          </td>
 
-                    <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
-                    ₦{" "}{numberWithCommas(+data?.debit||0)}
-                    </td>
-                  </tr>
-                  )):
-                  transactionData?.transactions?.map((data, i) => (
-                    <tr
-                      //onClick={() => setModalOpen("modal-open")}
-                      class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
-                    >
-                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      {data?.user[0]?.name}
-                      </td>
-                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                       {data?.description}
-                      </td>
-                      
-                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                        {new Date(data?.created_at).toDateString()}
-                      </td>
- 
-                      <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
-                      ₦{" "}{numberWithCommas(+data?.debit||0)}
-                      </td>
-                    </tr>
-                  ))}
+                          <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
+                            ₦ {numberWithCommas(+data?.amount || 0)}
+                          </td>
+                        </tr>
+                      ))
+                    : transactionData?.data?.map((data, i) => (
+                        <tr
+                          //onClick={() => setModalOpen("modal-open")}
+                          class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
+                        >
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.user?.name}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.description}
+                          </td>
+
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {new Date(data?.created_at).toDateString()}
+                          </td>
+
+                          <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
+                            ₦ {numberWithCommas(+data?.amount || 0)}
+                          </td>
+                        </tr>
+                      ))}
                 </tbody>
               </table>
-              {transactionData?.length == 0 && (
+              {transactionData?.data?.length == 0 && (
                 <div className="flex justify-center items-center h-screen">
                   <div className="text-xl font-black">No Available data</div>
                 </div>
               )}
-              {filterTransaction?.length == 0 && (
+              {filterTransaction?.transactions?.length == 0 && (
                 <div className="flex justify-center items-center h-screen">
                   <div className="text-xl font-black">No Available data</div>
                 </div>

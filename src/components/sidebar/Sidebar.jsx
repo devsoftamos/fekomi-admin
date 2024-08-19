@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import axios from "axios";
@@ -7,6 +7,7 @@ import axios from "axios";
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const location = useLocation();
   const { pathname } = location;
+  const navigate = useNavigate();
 
   const trigger = useRef(null);
   const sidebar = useRef(null);
@@ -92,6 +93,16 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
     }
   }, [sidebarExpanded]);
 
+  const logout = () => {
+    console.log("yeaa awww");
+
+    localStorage.removeItem("fekomiAuthToken");
+    localStorage.removeItem("fekomi-token");
+    setTimeout(() => {
+      navigate("/");
+    }, 3000);
+  };
+
   return (
     <div>
       {/* Sidebar backdrop (mobile only) */}
@@ -136,16 +147,16 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
         {/* Links */}
         <div className="space-y-8 px-5">
           {/* Pages group */}
-         
+
           <div>
-          <div className="px-5">Quick Links</div>
+            <div className="px-5">Quick Links</div>
             <ul className="mt-3">
               {/* Dashboard */}
               <li
                 className={`px-3 py-4 rounded-lg mb-0.5 last:mb-0 ${
                   pathname.includes("dashboard") && "bg-lightblue"
                 }`}
-              > 
+              >
                 <NavLink
                   end
                   to="/dashboard"
@@ -319,7 +330,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 </NavLink>
               </li>
 
-              <li
+              {/* <li
                 className={`px-3 py-4 rounded-lg mb-0.5 last:mb-0 ${
                   pathname.includes("revenue") && "bg-lightblue"
                 }`}
@@ -352,7 +363,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                     </span>
                   </div>
                 </NavLink>
-              </li>
+              </li> */}
 
               <li
                 className={`px-3 py-4 rounded-lg mb-0.5 last:mb-0 ${
@@ -463,7 +474,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
               <div className="pt-6 px-5">
                 <div className="py-2 text-gray-400">MENU</div>
               </div>
-              <li
+              {/* <li
                 className={`px-3 py-4 rounded-lg mb-0.5 last:mb-0 ${
                   pathname.includes("news") && "bg-lightblue"
                 }`}
@@ -564,7 +575,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                     </span>
                   </div>
                 </NavLink>
-              </li>
+              </li> */}
 
               <li
                 className={`px-3 py-6 rounded-lg mb-0.5 last:mb-0 ${
@@ -595,7 +606,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                     </svg>
 
                     <span className="text-sm font-medium ml-3  lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                     Delivery Settings
+                      Delivery Settings
                     </span>
                   </div>
                 </NavLink>
@@ -874,21 +885,31 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
         </div>
 
         {/* Expand / collapse button */}
-        <div className="pt-3 hidden lg:inline-flex 2xl:hidden justify-end mt-auto">
-          <div className="px-3 py-2">
-            <button onClick={() => setSidebarExpanded(!sidebarExpanded)}>
-              <span className="sr-only">Expand / collapse sidebar</span>
-              <svg
-                className="w-6 h-6 fill-current sidebar-expanded:rotate-180"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  className="text-slate-400"
-                  d="M19.586 11l-5-5L16 4.586 23.414 12 16 19.414 14.586 18l5-5H7v-2z"
-                />
-                <path className="text-slate-600" d="M3 23H1V1h2z" />
-              </svg>
-            </button>
+
+        {/* Remove the margin-top style when you add the rest of the menu options */}
+        <div className="relative bottom-0 mt-[85%] px-5 flex justify-between items-center">
+          <div className="pt-3 hidden lg:inline-flex 2xl:hidden justify-end mt-auto">
+            <div className="px-3 py-2">
+              <button onClick={() => setSidebarExpanded(!sidebarExpanded)}>
+                <span className="sr-only">Expand / collapse sidebar</span>
+                <svg
+                  className="w-6 h-6 fill-current sidebar-expanded:rotate-180"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    className="text-slate-400"
+                    d="M19.586 11l-5-5L16 4.586 23.414 12 16 19.414 14.586 18l5-5H7v-2z"
+                  />
+                  <path className="text-slate-600" d="M3 23H1V1h2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div
+            className="py-2 px-4  bg-rose-100 text-rose-600 cursor-pointer rounded-lg font-semibold select-none"
+            onClick={() => logout()}
+          >
+            Sign Out
           </div>
         </div>
       </div>

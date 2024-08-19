@@ -24,11 +24,12 @@ export default function OrderTable() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_ECOMMERCE}/orders/all?page=${pageNumber}&limit=${chooseData}`,
+        `${process.env.REACT_APP_ECOMMERCE}/fetch-all-orders?page=${pageNumber}&limit=${chooseData}`,
         {
           headers: headers,
         }
       );
+
       setOrderData(response?.data?.data?.data);
       console.log(response?.data?.data?.data, "POPO");
     } catch (error) {
@@ -191,7 +192,7 @@ export default function OrderTable() {
                         ₦ {data?.delivery_cost}
                       </td>
                       <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                        {data?.transaction_reference}
+                        {data?.transaction?.transaction_reference}
                       </td>
                       <td
                         onClick={() => getOrderProduct(data, false)}
