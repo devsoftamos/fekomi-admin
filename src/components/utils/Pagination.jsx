@@ -3,7 +3,11 @@ import "./css/pagination.css";
 export default function Pagination(props) {
   const [showDropDown, setShowDropDown] = useState(true);
 
-  const numbers = [5, 10, 15];
+  const numbers = [10, 20, 30];
+
+  const lowerLimit = props.chooseData * props.pageNumber - 9;
+  const upperLimit = props.chooseData * props.pageNumber;
+
   return (
     <div>
       <div className="flex items-center gap-5">
@@ -39,7 +43,9 @@ export default function Pagination(props) {
           </div>
         </div>
         <div className="pl-2 text-gray-600">
-          1-{props.chooseData} 0f {props.totalPage}
+          {` ${lowerLimit}  -${
+            props.totalPage > upperLimit ? upperLimit : props.totalPage
+          } 0f ${props.totalPage}`}
         </div>
         <div
           onClick={props.prevPage}

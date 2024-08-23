@@ -887,8 +887,8 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
         {/* Expand / collapse button */}
 
         {/* Remove the margin-top style when you add the rest of the menu options */}
-        <div className="relative bottom-0 mt-[85%] px-5 flex justify-between items-center">
-          <div className="pt-3 hidden lg:inline-flex 2xl:hidden justify-end mt-auto">
+        <div className="relative px-5  mt-[80%] flex justify-between items-center">
+          {/* <div className="pt-3 hidden lg:inline-flex 2xl:hidden justify-end mt-auto">
             <div className="px-3 py-2">
               <button onClick={() => setSidebarExpanded(!sidebarExpanded)}>
                 <span className="sr-only">Expand / collapse sidebar</span>
@@ -904,9 +904,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 </svg>
               </button>
             </div>
-          </div>
+          </div> */}
           <div
-            className="py-2 px-4  bg-rose-100 text-rose-600 cursor-pointer rounded-lg font-semibold select-none"
+            className="w-full py-2 px-4 text-center bg-rose-100 text-rose-600 cursor-pointer rounded-lg font-semibold select-none hover:bg-rose-600 hover:text-white duration-300"
             onClick={() => logout()}
           >
             Sign Out
