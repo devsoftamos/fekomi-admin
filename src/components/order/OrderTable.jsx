@@ -10,7 +10,7 @@ import PrintModal from "./modal/PrintModal";
 export default function OrderTable() {
   const [orderData, setOrderData] = useState();
   const [searchValue, setSearchValue] = useState();
-  const [chooseData, setChooseData] = useState(5);
+  const [chooseData, setChooseData] = useState(10);
   const [pageNumber, setpageNumber] = useState(1);
   const [productData, setProductData] = useState();
   const [modalOpen, setModalOpen] = useState();
@@ -85,6 +85,12 @@ export default function OrderTable() {
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
                       Customer Name
+                    </th>
+                    <th
+                      scope="col"
+                      class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
+                    >
+                      Phone Number
                     </th>
                     <th
                       scope="col"
@@ -176,6 +182,12 @@ export default function OrderTable() {
                         onClick={() => getOrderProduct(data, false)}
                         class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
                       >
+                        {data?.customer_phone_number}
+                      </td>
+                      <td
+                        onClick={() => getOrderProduct(data, false)}
+                        class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
+                      >
                         {data?.customer_email}
                       </td>
 
@@ -226,6 +238,7 @@ export default function OrderTable() {
                   nextPage={nextPage}
                   prevPage={prevPage}
                   setChooseData={setChooseData}
+                  pageNumber={pageNumber}
                   chooseData={chooseData}
                   totalPage={orderData?.total}
                 />

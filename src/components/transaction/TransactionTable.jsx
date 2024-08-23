@@ -15,7 +15,7 @@ export default function TransactionTable() {
   const [modalOpen, setModalOpen] = useState();
   const [transactionData, setTransactionData] = useState();
   const [loading, setLoading] = useState();
-  const [chooseData, setChooseData] = useState(5);
+  const [chooseData, setChooseData] = useState(10);
   const [pageNumber, setpageNumber] = useState(1);
   const [filterTriggered, setFilterTriggered] = useState(false);
   const [filterTransaction, setFilterTransaction] = useState();
@@ -176,9 +176,20 @@ export default function TransactionTable() {
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
+                      Product
+                    </th>
+                    <th
+                      scope="col"
+                      class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
+                    >
                       Type
                     </th>
-
+                    <th
+                      scope="col"
+                      class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
+                    >
+                      Reference ID
+                    </th>
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
@@ -232,10 +243,16 @@ export default function TransactionTable() {
                           class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
                         >
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            {data?.user?.name}
+                            {data?.user?.name || "GUEST"}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.order?.orderitems[0].product?.name}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             {data?.description}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.transaction_reference}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             {new Date(data?.created_at).toDateString()}
@@ -252,10 +269,16 @@ export default function TransactionTable() {
                           class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
                         >
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            {data?.user?.name}
+                            {data?.user?.name || "GUEST"}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.order?.orderitems[0].product?.name}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             {data?.description}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.transaction_reference}
                           </td>
 
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">

@@ -24,6 +24,7 @@ export default function ProductTable({
   const [pageNumber, setpageNumber] = useState(1);
   const [loading, setLoading] = useState();
 
+
   const getOrderData = async () => {
     const token = localStorage.getItem("fekomi-token");
     const headers = {
@@ -91,7 +92,7 @@ export default function ProductTable({
           draggable: true,
           progress: undefined,
         });
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
         setLoading("");
@@ -172,7 +173,7 @@ export default function ProductTable({
                       </tr>
                     </thead>
                     <tbody>
-                      {!orderData?.products &&
+                      {!productData?.orderitems &&
                         [...new Array(4)].map((d) => (
                           <tr
                             //key={i}
@@ -225,10 +226,10 @@ export default function ProductTable({
                           </td>
 
                           <td class="text-sm text-green-600 font-light px-6 py-4 whitespace-nowrap">
-                            {data?.delivery_status}
+                            {data?.product?.status}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                          ₦{" "}{data?.product?.price}
+                            ₦ {data?.product?.price}
                           </td>
                           <td class="text-sm font-bold  px-4 py-4 whitespace-nowrap">
                             <Menu
