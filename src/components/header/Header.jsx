@@ -10,11 +10,14 @@ import WalkOrder from "../walkorder/WalkOrder";
 
 function Header({ sidebarOpen, setSidebarOpen }) {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
-  const [modalCatOpen, setModalCatOpen] =useState()
+  const [modalCatOpen, setModalCatOpen] = useState();
 
   return (
     <header className="sticky top-0 bg-white border-b border-slate-200 z-30">
-      <WalkOrder modalCatOpen={modalCatOpen} setModalCatOpen={setModalCatOpen}/>
+      <WalkOrder
+        modalCatOpen={modalCatOpen}
+        setModalCatOpen={setModalCatOpen}
+      />
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20 -mb-px">
           {/* Header: Left side */}
@@ -99,24 +102,24 @@ function Header({ sidebarOpen, setSidebarOpen }) {
             </button> */}
             {/* 
            
-            <Help /> */} 
-             <div onClick={()=>setModalCatOpen("modal-open")}>
+            <Help /> */}
+            <div onClick={() => setModalCatOpen("modal-open")}>
               <button className="rounded-3xl bg-[#020B32] text-sm px-3 py-2 text-white ">
-              Place a Walk-In Order
+                Place a Walk-In Order
               </button>
             </div>
-            
+
             <Link to="/orders">
-             <div className="pl-5">
-              <button className="rounded-3xl bg-deepBlue text-sm px-3 py-2 text-white ">
-                My Orders
-              </button>
-            </div>
+              <div className="pl-5">
+                <button className="rounded-3xl bg-deepBlue text-sm px-3 py-2 text-white ">
+                  My Orders
+                </button>
+              </div>
             </Link>
-           
-            <Notifications />
+
+            {/* <Notifications /> */}
             {/*  Divider */}
-            <hr className="w-px h-6 bg-slate-200 mx-3" />
+            {/* <hr className="w-px h-6 bg-slate-200 mx-3" /> */}
             {/* <UserMenu /> */}
           </div>
         </div>
