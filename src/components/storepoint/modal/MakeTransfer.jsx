@@ -23,7 +23,7 @@ export default function MakeTransfer(props) {
   const [images, setImages] = React.useState([]);
   const [formData, setFormData] = useState();
   const [productData, setProductsData] = useState();
-  const [storeData,setStoreData] = useState()
+  const [storeData, setStoreData] = useState();
   const { id } = useParams();
   const createTransfer = (e) => {
     e.preventDefault();
@@ -54,7 +54,7 @@ export default function MakeTransfer(props) {
         storeId: Number(id),
         quantity: Number(formData?.quantity),
         productId: Number(formData?.productId),
-        destinationStoreId:Number(formData?.destinationStoreId)
+        destinationStoreId: Number(formData?.destinationStoreId),
       },
     };
 
@@ -62,7 +62,7 @@ export default function MakeTransfer(props) {
       .then((response) => {
         setLoading("");
         //props.setModalCatOpen("");
-       
+
         toast.success(response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -71,9 +71,8 @@ export default function MakeTransfer(props) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        }); 
+        });
         window.location.reload();
-       
       })
       .catch((error) => {
         setLoading("");
@@ -109,7 +108,7 @@ export default function MakeTransfer(props) {
     };
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/products`,
+        `${process.env.REACT_APP_OFFLINESTORE}/admin/products`,
         {
           headers: headers,
         }
@@ -148,7 +147,7 @@ export default function MakeTransfer(props) {
     };
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/stores`,
+        `${process.env.REACT_APP_OFFLINESTORE}/admin/stores`,
         {
           headers: headers,
         }
@@ -168,7 +167,8 @@ export default function MakeTransfer(props) {
   // const getCategory = async () => {
   //   setLoading("loading");
 
-  //   const token = localStorage.getItem("fekomi-token");
+  //      const token = localStorage.getItem("fekomi-token");
+
   //   const headers = {
   //     "content-type": "application/json",
   //     Authorization: ` Bearer ${token}`,
@@ -253,9 +253,9 @@ export default function MakeTransfer(props) {
   //UPDATE PRODUCTS ENDPOINT
 
   useEffect(() => {
-   // getCategory();
+    // getCategory();
     getAllProductsData();
-    getAllStoreData()
+    getAllStoreData();
   }, []);
   const handleProduct = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -318,7 +318,7 @@ export default function MakeTransfer(props) {
                 </select>
               </div>
             </div>
-              <div className="-pt-10 py-3">
+            <div className="-pt-10 py-3">
               <div className="w-full pl-2">
                 <label className="text-black text-sm font-black px-2">
                   Destination Store
@@ -422,7 +422,7 @@ export default function MakeTransfer(props) {
                 ) : (
                   <button
                     onClick={createTransfer}
-                    disabled={Object.keys(formData||{}) ? false : true}
+                    disabled={Object.keys(formData || {}) ? false : true}
                     className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] capitalize rounded-lg py-4 cursor-pointer`}
                   >
                     Transfer Stock

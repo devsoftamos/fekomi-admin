@@ -9,7 +9,6 @@ import DragAndDrop from "./DragandDrop";
 import Dropzone, { useDropzone } from "react-dropzone";
 import S3FileUpload from "react-s3/lib/ReactS3";
 import AWS from "aws-sdk";
- 
 
 import { decode } from "base64-arraybuffer";
 import S3 from "aws-s3";
@@ -34,7 +33,10 @@ export default function CreateNews(props) {
   const [isVideo, setIsVideo] = useState();
 
   // const createNew=(data)=>{
-  //   const token = localStorage.getItem("fekomi-token");
+  //      const token = localStorage.getItem("fekomi-token");
+  if (!token) {
+    navigate("/");
+  }
   //   const covertedToken = JSON.parse(token);
   //   const tokenParsed = {
   //     firstName: covertedToken.firstname,
@@ -66,9 +68,6 @@ export default function CreateNews(props) {
   //   .catch(function (error) {
   //     console.log(error);
   //   });
-  
-
-  
 
   const createNews = (data) => {
     const token = localStorage.getItem("fekomi-token");
@@ -138,7 +137,6 @@ export default function CreateNews(props) {
     accessKeyId: process.env.REACT_APP_ACCESSKEY,
     secretAccessKey: process.env.REACT_APP_SECRETKEY,
   });
-  
 
   const savedToAws = (e) => {
     e.preventDefault();
@@ -285,31 +283,35 @@ export default function CreateNews(props) {
         file.size <= MaxFileSize &&
         file.type !== "video/mp4"
     );
-if (imageFiles.length > 0) {
-  if (imageFiles.length > 0) {
-    const reader = new FileReader();
-    reader.onloadend = function () {
-      setImagePreview(reader.result);
-      setIsVideo(false);
-      console.log("IMAGE:", reader.result);
-    };
-    reader.readAsDataURL(imageFiles[0]);
-    setFileData(imageFiles[0]);
-  } else {
-    toast.error("Please upload files of type PNG, JPEG, or MP4 within 2MB.", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-    // Handle the case where no valid files were found or files are too large
-    console.log("Please upload files of type PNG, JPEG, or MP4 within 2MB.");
-  }
-
-}
+    if (imageFiles.length > 0) {
+      if (imageFiles.length > 0) {
+        const reader = new FileReader();
+        reader.onloadend = function () {
+          setImagePreview(reader.result);
+          setIsVideo(false);
+          console.log("IMAGE:", reader.result);
+        };
+        reader.readAsDataURL(imageFiles[0]);
+        setFileData(imageFiles[0]);
+      } else {
+        toast.error(
+          "Please upload files of type PNG, JPEG, or MP4 within 2MB.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
+        );
+        // Handle the case where no valid files were found or files are too large
+        console.log(
+          "Please upload files of type PNG, JPEG, or MP4 within 2MB."
+        );
+      }
+    }
     if (videoFiles.length > 0) {
       if (videoFiles.length > 0) {
         const reader = new FileReader();
@@ -321,18 +323,20 @@ if (imageFiles.length > 0) {
         reader.readAsDataURL(videoFiles[0]);
         setFileData(videoFiles[0]);
       } else {
-        toast.error("Please upload files of type PNG, JPEG, or MP4 within 2MB.", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(
+          "Please upload files of type PNG, JPEG, or MP4 within 2MB.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
+        );
       }
     }
-   
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });

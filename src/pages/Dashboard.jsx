@@ -15,21 +15,19 @@ export default function Dashboard() {
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
-          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            <div> Dashboard</div>
-            <div className="flex items-start gap-6">
-              <div className="w-2/3">
+          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full grid gap-6 max-w-9xl mx-auto">
+            <h1 className="text-xl font-extrabold"> Dashboard</h1>
+            <div className="grid grid-cols-1 xl:grid-cols-[3fr_1fr] items-start gap-6">
+              <div className="grid gap-6">
                 <div>
                   <Stats />
                 </div>
-                <div className="py-4">
-                  <RecentJoin />
-                </div>
+
                 <div className="py-4">
                   <Transaction />
                 </div>
               </div>
-              <div className="w-1/3">
+              <div className="">
                 <div>
                   <MoneyFlow />
                 </div>

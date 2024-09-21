@@ -42,23 +42,27 @@ export default function Pagination(props) {
             </ul>
           </div>
         </div>
-        <div className="pl-2 text-gray-600">
-          {` ${lowerLimit}  -${
-            props.totalPage > upperLimit ? upperLimit : props.totalPage
-          } 0f ${props.totalPage}`}
-        </div>
-        <div
-          onClick={props.prevPage}
-          className="text-lg font-semibold cursor-pointer"
-        >
-          <img src="/left.svg" className="h-3 w-3" />
-        </div>
-        <div
-          onClick={props.nextPage}
-          className="text-lg font-semibold cursor-pointer"
-        >
-          <img src="/right.svg" className="h-3 w-3" />
-        </div>
+        {props.totalPage && (
+          <>
+            <div className="pl-2 text-gray-600">
+              {` ${lowerLimit}  - ${
+                props.totalPage > upperLimit ? upperLimit : props.totalPage
+              } 0f ${props.totalPage}`}
+            </div>
+            <div
+              onClick={props.prevPage}
+              className="text-lg font-semibold cursor-pointer"
+            >
+              <img src="/left.svg" className="h-3 w-3" />
+            </div>
+            <div
+              onClick={props.nextPage}
+              className="text-lg font-semibold cursor-pointer"
+            >
+              <img src="/right.svg" className="h-3 w-3" />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

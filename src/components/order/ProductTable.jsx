@@ -24,7 +24,6 @@ export default function ProductTable({
   const [pageNumber, setpageNumber] = useState(1);
   const [loading, setLoading] = useState();
 
-
   const getOrderData = async () => {
     const token = localStorage.getItem("fekomi-token");
     const headers = {

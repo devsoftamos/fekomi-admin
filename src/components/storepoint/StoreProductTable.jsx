@@ -15,6 +15,7 @@ export default function StoreProductTable({
   productsData,
   nextPage,
   prevPage,
+  pageNumber,
   getAllProductsData,
   filterTriggered,
   setFilterTriggered,
@@ -73,7 +74,7 @@ export default function StoreProductTable({
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/stocks/stores/${id}`,
+        `${process.env.REACT_APP_OFFLINESTORE}/admin/stocks/stores/${id}`,
         {
           headers: headers,
         }
@@ -170,7 +171,7 @@ export default function StoreProductTable({
       Authorization: `${JSON.stringify(tokenParsed)}`,
     };
     const options = {
-      url: `${process.env.REACT_APP_OFFLINESTORE}admin/stocks`,
+      url: `${process.env.REACT_APP_OFFLINESTORE}/admin/stocks`,
       method: "DELETE",
       headers: headers,
       data: {
@@ -193,8 +194,8 @@ export default function StoreProductTable({
           draggable: true,
           progress: undefined,
         });
-       // getAllProductsData();
-       getStorePoint()
+        // getAllProductsData();
+        getStorePoint();
       })
       .catch((error) => {
         setLoading("");
@@ -438,6 +439,7 @@ export default function StoreProductTable({
                 <Pagination
                   nextPage={nextPage}
                   prevPage={prevPage}
+                  pageNumber={pageNumber}
                   setChooseData={setChooseData}
                   chooseData={chooseData}
                   totalPage={storeProduct?._metadata?.totalCount}

@@ -6,14 +6,13 @@ import UsersTable from "../components/users/UsersTable";
 import CreateUserModal from "../components/users/usermodals/CreateUserModal";
 import CreateRoleModal from "../components/users/usermodals/CreateRoleModal";
 import UsersTab from "../components/users/UsersTab";
-import RoleTable from "../components/users/RoleTable";  
+import RoleTable from "../components/users/RoleTable";
 import axios from "axios";
 import ProductCategory from "../components/stock/modal/ProductCategory";
 import ProductTable from "../components/products/ProductTable";
 import StoreModal from "../components/stock/modal/StockModal";
 import CreateProduct from "../components/products/modal/CreateProduct";
 import DeliverySetting from "../components/delivery/DeliverySetting";
- 
 
 export default function Settings() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -53,14 +52,14 @@ export default function Settings() {
     };
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/products?page=${pageNumber}&limit=${chooseData}`,
+        `${process.env.REACT_APP_OFFLINESTORE}/admin/products?page=${pageNumber}&limit=${chooseData}`,
         {
           headers: headers,
         }
       );
       setFilterTriggered(false);
       setFilterProduct();
-      console.log(response?.data,"DATA");
+      console.log(response?.data, "DATA");
       setProductsData(response?.data?.data);
       setLoading(false);
     } catch (error) {
@@ -87,7 +86,7 @@ export default function Settings() {
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      
+
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
@@ -127,7 +126,7 @@ export default function Settings() {
             </div>
 
             <div>
-              <DeliverySetting/>
+              <DeliverySetting />
             </div>
           </div>
         </main>

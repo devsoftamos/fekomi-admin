@@ -6,13 +6,12 @@ import UsersTable from "../components/users/UsersTable";
 import CreateUserModal from "../components/users/usermodals/CreateUserModal";
 import CreateRoleModal from "../components/users/usermodals/CreateRoleModal";
 import UsersTab from "../components/users/UsersTab";
-import RoleTable from "../components/users/RoleTable";  
+import RoleTable from "../components/users/RoleTable";
 import axios from "axios";
 import ProductCategory from "../components/stock/modal/ProductCategory";
 import ProductTable from "../components/products/ProductTable";
 import StoreModal from "../components/stock/modal/StockModal";
 import CreateProduct from "../components/products/modal/CreateProduct";
- 
 
 export default function Products() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -21,7 +20,7 @@ export default function Products() {
   const [openRoleModal, setOpenRoleModal] = useState();
   const [productsData, setProductsData] = useState();
   const [active, setActiveTab] = useState(0);
-  const [chooseData, setChooseData] = useState(5);
+  const [chooseData, setChooseData] = useState(10);
   const [pageNumber, setpageNumber] = useState(1);
   const [filterTriggered, setFilterTriggered] = useState(false);
   const [filterProduct, setFilterProduct] = useState();
@@ -52,14 +51,14 @@ export default function Products() {
     };
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/products?page=${pageNumber}&limit=${chooseData}`,
+        `${process.env.REACT_APP_OFFLINESTORE}/admin/products?page=${pageNumber}&limit=${chooseData}`,
         {
           headers: headers,
         }
       );
       setFilterTriggered(false);
       setFilterProduct();
-      console.log(response?.data,"DATA");
+      console.log(response?.data, "DATA");
       setProductsData(response?.data?.data);
       setLoading(false);
     } catch (error) {
@@ -86,7 +85,7 @@ export default function Products() {
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      
+
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
@@ -115,12 +114,10 @@ export default function Products() {
                       }}
                       className="px-2 py-3 capitalize font-medium text-[#2F93F6] border border-[#2F93F6] rounded"
                     >
-                     Add Products
+                      Add Products
                     </button>
                   </div>
-                  <div className="pl-2">
-                    
-                  </div>
+                  <div className="pl-2"></div>
                 </div>
               </div>
             </div>

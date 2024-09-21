@@ -107,7 +107,7 @@ export default function RemoveQuantity(props) {
     };
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/products`,
+        `${process.env.REACT_APP_OFFLINESTORE}/admin/products`,
         {
           headers: headers,
         }
@@ -261,9 +261,7 @@ export default function RemoveQuantity(props) {
                   className="py-4 bg-white px-2 w-full outline-0 focus:bg-white focus:border-0"
                 >
                   {props.editData ? (
-                    <option selected>
-                      {props.editData?.product?.name}
-                    </option>
+                    <option selected>{props.editData?.product?.name}</option>
                   ) : (
                     <option disabled selected>
                       Select Product
@@ -295,10 +293,11 @@ export default function RemoveQuantity(props) {
               </div>
             </div>
             <div className="flex items-center py-5">
-                <div className="font-black text-lg text-black">Quantity to Remove</div>
-                
-                    <hr className="border border-gray-500 w-1/2 pl-4 "/>
-               
+              <div className="font-black text-lg text-black">
+                Quantity to Remove
+              </div>
+
+              <hr className="border border-gray-500 w-1/2 pl-4 " />
             </div>
 
             <div className="pb-6">
@@ -312,7 +311,7 @@ export default function RemoveQuantity(props) {
                   placeholder="Enter Product Name"
                   className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                   onChange={handleProduct}
-                 
+
                   // required
                 />
               </div>
@@ -335,24 +334,22 @@ export default function RemoveQuantity(props) {
               <div>
                 <label
                   onClick={() => {
-                    props.setModalOpen("")
-                    window.location.reload()
-                }}
+                    props.setModalOpen("");
+                    window.location.reload();
+                  }}
                   className="border border-[#3b4046] px-5 text-black rounded-lg py-4"
                 >
                   Cancel
                 </label>
               </div>
               <div className="pl-2">
-                
-                  <button
-                    onClick={createProduct}
-                    disabled={Object.keys(formData||{}) ? false : true}
-                    className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
-                  >
-                    Remove 
-                  </button>
-                 
+                <button
+                  onClick={createProduct}
+                  disabled={Object.keys(formData || {}) ? false : true}
+                  className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
+                >
+                  Remove
+                </button>
               </div>
             </div>
           </form>

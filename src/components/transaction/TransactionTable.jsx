@@ -38,22 +38,24 @@ export default function TransactionTable() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_ECOMMERCE}/transactions/all?page=${pageNumber}&per_page=${chooseData}`,
+        `${process.env.REACT_APP_ECOMMERCE}/transactions/all?page=${pageNumber}&limit=${chooseData}`,
         {
           headers: headers,
         }
       );
 
       setTransactionData(response?.data?.data);
-      setLoading(false);
+
       setFilterTransaction();
     } catch (error) {
-      setLoading(false);
+      console.log(error);
 
       //setMessage(error?.response?.data?.message);
       //   if (error?.response?.data?.message == "Unauthenticated.") {
       //     navigate("/");
       //   }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -205,7 +207,7 @@ export default function TransactionTable() {
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="max-h-[40vh] overflow-y-auto">
                   {!transactionData?.data &&
                     [...new Array(6)].map((d) => (
                       <tr
@@ -306,6 +308,7 @@ export default function TransactionTable() {
                 <Pagination
                   nextPage={nextPage}
                   prevPage={prevPage}
+                  pageNumber={pageNumber}
                   setChooseData={setChooseData}
                   chooseData={chooseData}
                   totalPage={transactionData?.total}

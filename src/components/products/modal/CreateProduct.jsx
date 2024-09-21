@@ -28,14 +28,14 @@ export default function CreateProduct(props) {
   const createProduct = (e) => {
     e.preventDefault();
     setLoading("loading");
-     
+
     const payload = {
       ...formData,
-      image: images[0]?.data_url, 
-      categoryId:Number(formData?.categoryId)
+      image: images[0]?.data_url,
+      categoryId: Number(formData?.categoryId),
     };
     let data = { ...payload };
-   
+
     const token = localStorage.getItem("fekomi-token");
     const covertedToken = JSON.parse(token);
     const tokenParsed = {
@@ -55,7 +55,7 @@ export default function CreateProduct(props) {
       Authorization: `${JSON.stringify(tokenParsed)}`,
     };
     const options = {
-      url: `${process.env.REACT_APP_OFFLINESTORE}admin/products`,
+      url: `${process.env.REACT_APP_OFFLINESTORE}/admin/products`,
       method: "POST",
       headers: headers,
       data,
@@ -267,15 +267,14 @@ export default function CreateProduct(props) {
                     </option>
                   )}
                   {catData?.product_categories?.map((data, i) => (
-                    <option value={Number(data?.id) } key={i}>
+                    <option value={Number(data?.id)} key={i}>
                       {data?.name}
                     </option>
                   ))}
                 </select>
               </div>
             </div>
- 
-             
+
             <div className="py-3 w-full">
               <ImageProduct
                 images={images}
@@ -283,7 +282,7 @@ export default function CreateProduct(props) {
                 editData={props.editData}
               />
             </div>
-            
+
             {/* <div className="flex py-7">
               <div>
                 <input
@@ -301,9 +300,9 @@ export default function CreateProduct(props) {
               <div>
                 <label
                   onClick={() => {
-                    props.setModalOpen("")
-                    window.location.reload()
-                }}
+                    props.setModalOpen("");
+                    window.location.reload();
+                  }}
                   className="border border-[#3b4046] px-5 text-black rounded-lg py-4"
                 >
                   Cancel

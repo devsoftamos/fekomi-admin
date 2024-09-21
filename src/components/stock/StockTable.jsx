@@ -13,6 +13,7 @@ export default function StockTable({
   productsData,
   nextPage,
   prevPage,
+  pageNumber,
   getAllProductsData,
   filterTriggered,
   setFilterTriggered,
@@ -45,6 +46,19 @@ export default function StockTable({
   const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
+
+  function padDate(dateString) {
+    // Split the date string into day, month, and year
+    const [day, month, year] = dateString.split("-");
+
+    // Pad day and month with leading zeros only if they are single digits
+    const paddedDay = day.length === 1 ? day.padStart(2, "0") : day;
+    const paddedMonth = month.length === 1 ? month.padStart(2, "0") : month;
+
+    // Return the formatted date string
+    return `${paddedMonth}-${paddedDay}-${year}`;
+  }
+
   const getFilterProductsData = async () => {
     setLoading(true);
     const token = localStorage.getItem("fekomi-token");
@@ -52,14 +66,19 @@ export default function StockTable({
       "content-type": "application/json",
       Authorization: ` Bearer ${token}`,
     };
+    const startDate = padDate(
+      firstDay.toLocaleDateString().replaceAll("/", "-")
+    );
+
+    console.log({ startDate });
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_ECOMMERCE}/products?start_date=${firstDay
-          .toLocaleDateString()
-          .replaceAll("/", "-")}&end_date=${lastDay
-          .toLocaleDateString()
-          .replaceAll("/", "-")}&limit=30`,
+        `${process.env.REACT_APP_ECOMMERCE}/products?start_date=${padDate(
+          firstDay.toLocaleDateString().replaceAll("/", "-")
+        )}&end_date=${padDate(
+          lastDay.toLocaleDateString().replaceAll("/", "-")
+        )}&limit=30`,
         {
           headers: headers,
         }
@@ -78,7 +97,6 @@ export default function StockTable({
   };
 
   const getProductsSearch = async () => {
-    
     setLoading(true);
     const token = localStorage.getItem("fekomi-token");
     const headers = {
@@ -184,9 +202,9 @@ export default function StockTable({
         getAllProductsData={getAllProductsData}
       />
       <div class="flex flex-col">
-        <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="overflow-auto sm:-mx-6 lg:-mx-8">
           <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
-            <div class="overflow-hidden bg-white">
+            <div class=" bg-white">
               <div className="py-3 px-4">
                 <TableHeaders
                   showFilter={true}
@@ -223,7 +241,13 @@ export default function StockTable({
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                      No Available
+                      Type
+                    </th>
+                    <th
+                      scope="col"
+                      class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
+                    >
+                      Quantity
                     </th>
                     <th
                       scope="col"
@@ -310,7 +334,12 @@ export default function StockTable({
                             {data?.name}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            {data?.productcategory?data?.productcategory[0]?.name:"-"}
+                            {data?.productcategory
+                              ? data?.productcategory[0]?.name
+                              : "-"}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.type}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             {data?.quantity}
@@ -323,7 +352,7 @@ export default function StockTable({
                             {data?.sku_number}
                           </td>
                           <td class="text-sm text-gray-900 font-light  px-6 py-4 whitespace-nowrap">
-                          ₦{" "}{numberWithCommas(data?.price || 0)}
+                            ₦ {numberWithCommas(data?.price || 0)}
                           </td>
                           <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
                             <div
@@ -361,7 +390,12 @@ export default function StockTable({
                             {data?.name}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                          {data?.productcategory?data?.productcategory[0]?.name:"-"}
+                            {data?.productcategory
+                              ? data?.productcategory[0]?.name
+                              : "-"}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.type}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             {data?.quantity}
@@ -374,7 +408,7 @@ export default function StockTable({
                             {data?.sku_number}
                           </td>
                           <td class="text-sm text-gray-900 font-light  px-6 py-4 whitespace-nowrap">
-                          ₦{" "}{numberWithCommas(data?.price || 0)}
+                            ₦ {numberWithCommas(data?.price || 0)}
                           </td>
                           <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
                             <div
@@ -413,6 +447,7 @@ export default function StockTable({
                 <Pagination
                   nextPage={nextPage}
                   prevPage={prevPage}
+                  pageNumber={pageNumber}
                   setChooseData={setChooseData}
                   chooseData={chooseData}
                   totalPage={productsData?.data?.total}

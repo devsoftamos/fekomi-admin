@@ -26,9 +26,9 @@ export default function ConsultationFee(props) {
   const [selectedTime, setSelectedTime] = useState();
   const [openReSchedule, setOpenReSchedule] = useState();
   const [clickedData, setClickedData] = useState();
-  const [openCost,setOpenCost] = useState()
-  const [costData,setCostData]=useState()
- 
+  const [openCost, setOpenCost] = useState();
+  const [costData, setCostData] = useState();
+
   const getSchedule = async () => {
     setLoading("loading");
 
@@ -67,9 +67,9 @@ export default function ConsultationFee(props) {
       "content-type": "application/json",
       Authorization: ` Bearer ${token}`,
     };
-    const payLoad={
-        type:data.type,
-    }
+    const payLoad = {
+      type: data.type,
+    };
     const options = {
       url: `${process.env.REACT_APP_CONSULTATION}/schedule/${data.id}`,
       method: "PATCH",
@@ -78,14 +78,14 @@ export default function ConsultationFee(props) {
         "Content-Type": "application/json;charset=UTF-8",
         Authorization: ` Bearer ${token}`,
       },
-      data: { },
+      data: {},
     };
 
     axios(options)
       .then((response) => {
         setLoading("");
         props.setOpenSchedule("");
-       // props.setReload(false);
+        // props.setReload(false);
         toast.success(response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -95,8 +95,8 @@ export default function ConsultationFee(props) {
           draggable: true,
           progress: undefined,
         });
-        getSchedule()
-       // props.getAllProductsData();
+        getSchedule();
+        // props.getAllProductsData();
       })
       .catch((error) => {
         setLoading("");
@@ -168,20 +168,21 @@ export default function ConsultationFee(props) {
             <div className="bg-white shadow rounded-md py-7 px-4">
               {myScheduleData?.map((data, i) => (
                 <div key={i} className="flex items-center pt-5 justify-between">
-                  <div  >
+                  <div>
                     <div className="flex justify-between items-center">
                       <div>{data.type}</div>
-                      <div className="pl-16 text-black">N{numberWithCommas(data.cost||0)}</div>
-                      
+                      <div className="pl-16 text-black">
+                        N{numberWithCommas(data.cost || 0)}
+                      </div>
                     </div>
                   </div>
                   <div className="pl-2">
                     <div className="inline-flex">
                       <div
                         onClick={() => {
-                            props.setOpenSchedule("")
-                           setOpenCost("modal-open")
-                           setCostData(data)
+                          props.setOpenSchedule("");
+                          setOpenCost("modal-open");
+                          setCostData(data);
                         }}
                       >
                         <div className="bg-[#FFEFDF] cursor-pointer rounded text-[#E4750D] px-2 py-2">

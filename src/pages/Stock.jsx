@@ -19,7 +19,7 @@ export default function Stock() {
   const [openRoleModal, setOpenRoleModal] = useState();
   const [productsData, setProductsData] = useState();
   const [active, setActiveTab] = useState(0);
-  const [chooseData, setChooseData] = useState(5);
+  const [chooseData, setChooseData] = useState(10);
   const [pageNumber, setpageNumber] = useState(1);
   const [filterTriggered, setFilterTriggered] = useState(false);
   const [filterProduct, setFilterProduct] = useState();
@@ -27,6 +27,7 @@ export default function Stock() {
   const [total, setTotal] = useState();
   const [reload, setReload] = useState(false);
   const [modalType, setModalType] = useState(false);
+
   const getAllProductsData = async () => {
     setLoading(true);
     setReload(true);
@@ -88,14 +89,16 @@ export default function Stock() {
 
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <div className="flex justify-between">
-              <div className="font-black text-black text-lg">Stock Inventory</div>
+              <div className="font-black text-black text-lg">
+                Stock Inventory
+              </div>
               <div>
                 <div className="flex items-center">
                   <div className="pl-2">
                     <button
                       onClick={() => {
                         setModalOpen("modal-open");
-                        setModalType(true);
+                        setModalType("HOTSALE");
                       }}
                       className="px-2 py-3 capitalize font-medium text-[#2F93F6] border border-[#2F93F6] rounded"
                     >
@@ -110,13 +113,11 @@ export default function Stock() {
                         className="bg-[#2F93F6] px-8 text-[#fff] rounded-lg py-4 cursor-pointer"
                       >
                         <div className="inline-flex items-center">
-                        <span>NEW </span>
-                        <span className="pl-1">
-                          <img src="/sharp.svg" />
-                        </span>
-
+                          <span>NEW </span>
+                          <span className="pl-1">
+                            <img src="/sharp.svg" />
+                          </span>
                         </div>
-                       
                       </label>
                       <ul
                         tabIndex={0}
@@ -124,7 +125,7 @@ export default function Stock() {
                       >
                         <li
                           onClick={() => {
-                            setModalType(false);
+                            setModalType("REGULAR");
                             setModalOpen("modal-open");
                           }}
                         >
@@ -145,6 +146,7 @@ export default function Stock() {
                 productsData={productsData}
                 nextPage={nextPage}
                 prevPage={prevPage}
+                pageNumber={pageNumber}
                 getAllProductsData={getAllProductsData}
                 filterTriggered={filterTriggered}
                 setFilterProduct={setFilterProduct}

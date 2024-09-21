@@ -15,8 +15,6 @@ export default function InterestModal({ modalOpen, setModalOpen, datingData }) {
   const [interestValue, setInterestValue] = useState();
   const [editValue, setEditValue] = useState();
 
-
-
   const getInterest = async () => {
     const token = localStorage.getItem("fekomi-token");
     const covertedToken = JSON.parse(token);
@@ -37,7 +35,6 @@ export default function InterestModal({ modalOpen, setModalOpen, datingData }) {
       Authorization: `${JSON.stringify(tokenParsed)}`,
     };
     setLoading(true);
-     
 
     try {
       const response = await axios.get(

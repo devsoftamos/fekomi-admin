@@ -35,9 +35,10 @@ export default function TransferProductTable({
   const [searchValue, setSearchValue] = useState();
   const [editData, setEditData] = useState();
   const [modalType, setModalType] = useState(false);
+  const [pageNumber, setpageNumber] = useState(1);
   const [deleteData, setDeleteData] = useState();
   const [storeProduct, setStoreProduct] = useState();
-  const [transferProduct,setTransferProduct] = useState()
+  const [transferProduct, setTransferProduct] = useState();
   const { id } = useParams();
   var currentDate = new Date(currentYear, monthIndex);
   var firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -74,7 +75,7 @@ export default function TransferProductTable({
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/stocks/transfers/stores/${id}`,
+        `${process.env.REACT_APP_OFFLINESTORE}/admin/stocks/transfers/stores/${id}`,
         {
           headers: headers,
         }
@@ -114,11 +115,11 @@ export default function TransferProductTable({
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/stocks/transfers/stores/${id}`,
+        `${process.env.REACT_APP_OFFLINESTORE}/admin/stocks/transfers/stores/${id}`,
         {
           headers: headers,
         }
-      ); 
+      );
       console.log(response?.data?.data);
       setTransferProduct(response?.data?.data);
       setLoading(false);
@@ -211,7 +212,7 @@ export default function TransferProductTable({
       Authorization: `${JSON.stringify(tokenParsed)}`,
     };
     const options = {
-      url: `${process.env.REACT_APP_OFFLINESTORE}admin/stocks`,
+      url: `${process.env.REACT_APP_OFFLINESTORE}/admin/stocks`,
       method: "DELETE",
       headers: headers,
       data: {
@@ -234,8 +235,8 @@ export default function TransferProductTable({
           draggable: true,
           progress: undefined,
         });
-       // getAllProductsData();
-       getStorePoint()
+        // getAllProductsData();
+        getStorePoint();
       })
       .catch((error) => {
         setLoading("");
@@ -257,7 +258,7 @@ export default function TransferProductTable({
   }, [monthIndex]);
   useEffect(() => {
     getStorePoint();
-    getTransferProduct()
+    getTransferProduct();
   }, [id]);
   return (
     <div className="pt-7">
@@ -303,7 +304,6 @@ export default function TransferProductTable({
               <table class="min-w-full " id="pagetodownload">
                 <thead class="bg-white border-b   border-gray-300">
                   <tr>
-                    
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
@@ -320,15 +320,14 @@ export default function TransferProductTable({
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                     Destination Store
+                      Destination Store
                     </th>
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                     Date & Time
+                      Date & Time
                     </th>
- 
                   </tr>
                 </thead>
                 <tbody>
@@ -411,7 +410,6 @@ export default function TransferProductTable({
                           //onClick={() => navigate("/userdetails")}
                           class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
                         >
-                          
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             {data?.product?.name}
                           </td>
@@ -419,12 +417,12 @@ export default function TransferProductTable({
                             {data?.volume}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                          {data?.destinationStore?.name}
+                            {data?.destinationStore?.name}
                           </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            {new Date(data?.createdAt).toLocaleDateString()}, {new Date(data?.createdAt).toLocaleTimeString()}
+                            {new Date(data?.createdAt).toLocaleDateString()},{" "}
+                            {new Date(data?.createdAt).toLocaleTimeString()}
                           </td>
- 
                         </tr>
                       ))}
                 </tbody>
@@ -443,6 +441,7 @@ export default function TransferProductTable({
                 <Pagination
                   nextPage={nextPage}
                   prevPage={prevPage}
+                  pageNumber={pageNumber}
                   setChooseData={setChooseData}
                   chooseData={chooseData}
                   totalPage={storeProduct?._metadata?.totalCount}

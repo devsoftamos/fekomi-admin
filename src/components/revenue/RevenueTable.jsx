@@ -1,13 +1,13 @@
 import axios from "axios";
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { COLUMNS } from "../../column";
 export default function RevenueTable() {
-  const [revenueData,setRevenueData] = useState()
-  const [loading,setLoading] = useState()
+  const [revenueData, setRevenueData] = useState();
+  const [loading, setLoading] = useState();
   const [chooseData, setChooseData] = useState(5);
   const [pageNumber, setpageNumber] = useState(1);
-  const [totalRevnue,setTotalRevenue] = useState()
-  const [totalMonthly,setTotalMonthly] = useState()
+  const [totalRevnue, setTotalRevenue] = useState();
+  const [totalMonthly, setTotalMonthly] = useState();
   const getRevenue = async () => {
     setLoading(true);
     const token = localStorage.getItem("fekomi-token");
@@ -28,7 +28,6 @@ export default function RevenueTable() {
 
       setRevenueData(response?.data?.data?.data);
       setLoading(false);
-     
     } catch (error) {
       setLoading(false);
 
@@ -59,7 +58,6 @@ export default function RevenueTable() {
 
       setTotalRevenue(response?.data?.data?.total_revenue);
       setLoading(false);
-     
     } catch (error) {
       setLoading(false);
 
@@ -90,7 +88,6 @@ export default function RevenueTable() {
 
       setTotalMonthly(response?.data?.data?.total_revenue);
       setLoading(false);
-     
     } catch (error) {
       setLoading(false);
 
@@ -100,16 +97,16 @@ export default function RevenueTable() {
       //   }
     }
   };
-  useEffect(()=>{
-    getRevenue()
-  },[])
-  useEffect(()=>{
-    getTotalRevenue()
-    getTotalMonthly()
-  },[])
-  const handleWalletChange=(e)=>{
-console.log(e.target.value)
-  }
+  useEffect(() => {
+    getRevenue();
+  }, []);
+  useEffect(() => {
+    getTotalRevenue();
+    getTotalMonthly();
+  }, []);
+  const handleWalletChange = (e) => {
+    console.log(e.target.value);
+  };
   const bag2 = "/card-wallet.svg";
   const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -124,7 +121,10 @@ console.log(e.target.value)
           >
             <div>
               <div className="flex justify-end  px-2 py-6 text-right">
-                <select onChange={handleWalletChange} className="py-4 text-white outline-none bg-transparent px-2 w-[95px] border border-white rounded-3xl">
+                <select
+                  onChange={handleWalletChange}
+                  className="py-4 text-white outline-none bg-transparent px-2 w-[95px] border border-white rounded-3xl"
+                >
                   <option value="NGN" disabled selected>
                     NGN
                   </option>
@@ -135,7 +135,7 @@ console.log(e.target.value)
               <div className="px-4">
                 <div className="text-white">Total Revenue</div>
                 <div className="py-2 text-white font-black text-lg">
-                 {numberWithCommas(totalRevnue||0)}
+                  {numberWithCommas(totalRevnue || 0)}
                 </div>
               </div>
             </div>
@@ -217,7 +217,7 @@ console.log(e.target.value)
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                     Credit (NGN)
+                      Credit (NGN)
                     </th>
                     <th
                       scope="col"
@@ -229,43 +229,43 @@ console.log(e.target.value)
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
-                    Balance (NGN)
+                      Balance (NGN)
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                 {revenueData?.revenues?.map((data,i)=>(
-                  <tr
-                    //onClick={() => navigate("/userdetails")}
-                    class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
-                  >
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                     {data?.user[0]?.name}
-                    </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                     {data?.user[0]?.email}
-                    </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                     {new Date(data?.created_at).toDateString()}
-                    </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                     {data?.debit}
-                    </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                     {data?.credit}
-                    </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
-                        <div className="bg-[#EBFFF3] font-bold  text-[#61BB84] text-center py-2 px-1 rounded-lg">
-                          success
-                        </div>
+                  {revenueData?.revenues?.map((data, i) => (
+                    <tr
+                      //onClick={() => navigate("/userdetails")}
+                      class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
+                    >
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        {data?.user[0]?.name}
                       </td>
-                    </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                     {data?.balance}
-                    </td>
-                  </tr>
-                 )) }
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        {data?.user[0]?.email}
+                      </td>
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        {new Date(data?.created_at).toDateString()}
+                      </td>
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        {data?.debit}
+                      </td>
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        {data?.credit}
+                      </td>
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                          <div className="bg-[#EBFFF3] font-bold  text-[#61BB84] text-center py-2 px-1 rounded-lg">
+                            success
+                          </div>
+                        </td>
+                      </td>
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        {data?.balance}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

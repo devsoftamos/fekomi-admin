@@ -1,9 +1,61 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 export default function CreateUserModal({ modalOpen, setModalOpen }) {
   const { register, handleSubmit } = useForm();
   const [loading, setLoading] = useState();
+  const [roles, setRoles] = useState([]);
+
+  const getRoles = () => {
+    const token = localStorage.getItem("fekomiAuthToken");
+
+    const headers = {
+      "content-type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+
+    const options = {
+      url: `${process.env.REACT_APP_ADMIN_URL}/auth/list_all_roles`,
+      method: "GET",
+      headers: headers,
+    };
+
+    axios(options)
+      .then((response) => {
+        setLoading(false);
+        setRoles(response.data.data);
+        console.log({ roles: response.data.data });
+
+        // toast.success(response?.data?.message, {
+        //   position: "top-right",
+        //   autoClose: 5000,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        //   progress: undefined,
+        // });
+      })
+      .catch((error) => {
+        setLoading(false);
+        toast.error(error?.response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  };
+
+  useEffect(() => {
+    getRoles();
+  }, []);
+
   return (
     <div>
       {/* Put this part before </body> tag */}
@@ -78,9 +130,12 @@ export default function CreateUserModal({ modalOpen, setModalOpen }) {
                 class="block appearance-none w-full bg-white border border-[#E8E9EA]  py-4 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white "
                 id="grid-state"
               >
-                <option>New Mexico</option>
-                <option>Missouri</option>
-                <option>Texas</option>
+                {roles?.length &&
+                  roles.map((role) => (
+                    <option value={role?.id} key={role?.id}>
+                      {role?.name}
+                    </option>
+                  ))}
               </select>
               <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg

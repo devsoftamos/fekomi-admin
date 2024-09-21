@@ -20,9 +20,11 @@ const UserActivityTracker = () => {
 
     const intervalId = setInterval(() => {
       activityInterval++;
+
       if (activityInterval > TIMEOUT / 1000) {
         localStorage.removeItem("fekomiAuthToken");
         localStorage.removeItem("fekomi-token");
+        navigate("/");
         activityInterval = 0;
       }
     }, 1000);

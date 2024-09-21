@@ -9,7 +9,6 @@ export default function NewsDraft() {
   const [formData, setFormData] = useState();
   const [newsData, setNewsData] = useState();
 
-  
   const updateProduct = (e) => {
     e.preventDefault();
     setLoading("loading");
@@ -118,12 +117,11 @@ export default function NewsDraft() {
       />
       <div className="flex flex-wrap  gap-4 items-stretch h-full">
         {newsData?.data?.map((data, i) => (
-         
-            <div key={i} className="pt-2">
-              <div className="card w-96 bg-base-100 shadow-xl bg-contain">
-                {isImage(data?.mediaUrl) ? (
-                  <>
-                   <img className="h-48" src={data?.mediaUrl}/>
+          <div key={i} className="pt-2">
+            <div className="card w-96 bg-base-100 shadow-xl bg-contain">
+              {isImage(data?.mediaUrl) ? (
+                <>
+                  <img className="h-48" src={data?.mediaUrl} />
                   {/* <figure
                     style={{
                       backgroundImage: `url(${data?.mediaUrl})`,
@@ -131,29 +129,32 @@ export default function NewsDraft() {
                     }}
                     className="bg-cover w-full pb-56 h-full"
                   ></figure> */}
-                  </>
-                 
-                ) : (
-                  <ReactPlayer  controls="true" width={384} height={192} url={data?.mediaUrl} />
-                  // <video
-                  //   className="  w-full -pb-56 -h-full"
-                  //   src={data?.mediaUrl}
-                  // ></video>
-                )}
-                 <Link to={`/newsdraft/${data?._id}`}> 
+                </>
+              ) : (
+                <ReactPlayer
+                  controls="true"
+                  width={384}
+                  height={192}
+                  url={data?.mediaUrl}
+                />
+                // <video
+                //   className="  w-full -pb-56 -h-full"
+                //   src={data?.mediaUrl}
+                // ></video>
+              )}
+              <Link to={`/newsdraft/${data?._id}`}>
                 <div className="card-body">
                   <p>{data?.title}</p>
                   <div className="text-sm text-gray-400">
                     {new Date(data?.createdAt).toDateString()}
                   </div>
                 </div>
-                </Link>
-                {/* <div className="w-full flex justify-center pt-5 h-16 bg-[#FFEFDF]">
+              </Link>
+              {/* <div className="w-full flex justify-center pt-5 h-16 bg-[#FFEFDF]">
                   <div className="text-[#E4750D]">Unpublished</div>
                 </div> */}
-              </div>
             </div>
-         
+          </div>
         ))}
         {/* <Link to="/newsdraft">
           <div className="pl-2 pt-2">

@@ -25,8 +25,6 @@ export default function ChangeModalPrice(props) {
   const [productData, setProductsData] = useState();
   const { id } = useParams();
 
-  
-
   const createProduct = (e) => {
     e.preventDefault();
     setLoading("loading");
@@ -53,13 +51,13 @@ export default function ChangeModalPrice(props) {
       method: "PATCH",
       headers: headers,
       data: {
-       ...formData
+        ...formData,
       },
     };
 
     axios(options)
       .then((response) => {
-        setLoading(""); 
+        setLoading("");
         window.location.reload();
         toast.success(response?.data?.message, {
           position: "top-right",
@@ -69,8 +67,7 @@ export default function ChangeModalPrice(props) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        }); 
-       
+        });
       })
       .catch((error) => {
         setLoading("");
@@ -87,10 +84,9 @@ export default function ChangeModalPrice(props) {
   };
   //UPDATE PRODUCTS ENDPOINT
 
-  
   const handleProduct = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  }; 
+  };
   return (
     <div>
       {/* Put this part before </body> tag */}
@@ -122,22 +118,22 @@ export default function ChangeModalPrice(props) {
           //onSubmit={handleSubmit(props.edit ? updateProduct : createProduct)}
           >
             <div className="pt-10 py-3">
-            <div className="pb-6">
-              <div className="w-full">
-                <label className="text-black text-sm font-black px-2">
-                  Region
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Enter Region"
-                  className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
-                  onChange={handleProduct}
-                  defaultValue={props.editData?.name}
-                  // required
-                />
+              <div className="pb-6">
+                <div className="w-full">
+                  <label className="text-black text-sm font-black px-2">
+                    Region
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Enter Region"
+                    className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
+                    onChange={handleProduct}
+                    defaultValue={props.editData?.name}
+                    // required
+                  />
+                </div>
               </div>
-            </div>
             </div>
             <div className="pb-6">
               <div className="w-full">
@@ -179,15 +175,13 @@ export default function ChangeModalPrice(props) {
                 </label>
               </div>
               <div className="pl-2">
-                 
-                  <button
-                    onClick={createProduct}
-                    disabled={Object.keys(formData||{}) ? false : true}
-                    className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
-                  >
-                    Update 
-                  </button>
-                
+                <button
+                  onClick={createProduct}
+                  disabled={Object.keys(formData || {}) ? false : true}
+                  className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
+                >
+                  Update
+                </button>
               </div>
             </div>
           </form>

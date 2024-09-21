@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { NavLink, useLocation, useParams } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import CreateStorePointModal from "./modal/CreateStorePoint";
 
@@ -9,16 +9,17 @@ function StorePointSideBar({ sidebarOpen, setSidebarOpen }) {
   const { id } = useParams();
   const trigger = useRef(null);
   const sidebar = useRef(null);
+  const navigate = useNavigate();
 
   const storedSidebarExpanded = localStorage.getItem("sidebar-expanded");
   // const [sidebarExpanded, setSidebarExpanded] = useState(
   //   storedSidebarExpanded === null ? false : storedSidebarExpanded === "true"
   // );
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
-  const [loading,setLoading] = useState()
-  const [modalOpen, setModalOpen] = useState()
-  const [selectIndex, setSelectIndex] = useState()
-const [storeList,setStoreList] = useState([])
+  const [loading, setLoading] = useState();
+  const [modalOpen, setModalOpen] = useState();
+  const [selectIndex, setSelectIndex] = useState();
+  const [storeList, setStoreList] = useState([]);
   // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }) => {
@@ -46,7 +47,7 @@ const [storeList,setStoreList] = useState([])
   });
 
   useEffect(() => {
-    getStorePoint()
+    getStorePoint();
     localStorage.setItem("sidebar-expanded", sidebarExpanded);
     if (sidebarExpanded) {
       document.querySelector("body").classList.add("sidebar-expanded");
@@ -57,6 +58,9 @@ const [storeList,setStoreList] = useState([])
 
   const getStorePoint = async () => {
     const token = localStorage.getItem("fekomi-token");
+    if (!token) {
+      navigate("/");
+    }
     const covertedToken = JSON.parse(token);
     const tokenParsed = {
       firstName: covertedToken.firstname,
@@ -75,17 +79,16 @@ const [storeList,setStoreList] = useState([])
       Authorization: `${JSON.stringify(tokenParsed)}`,
     };
     setLoading(true);
-     
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/stores`,
+        `${process.env.REACT_APP_OFFLINESTORE}/admin/stores`,
         {
           headers: headers,
         }
       );
-      console.log(response?.data?.data);
-      setStoreList(response?.data?.data)
+      console.log({ stores: response?.data?.data });
+      setStoreList(response?.data?.data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -97,13 +100,16 @@ const [storeList,setStoreList] = useState([])
     }
   };
 
-  const SelectPoint=(index)=>{
-    setSelectIndex(index)
-  }
+  const SelectPoint = (index) => {
+    setSelectIndex(index);
+  };
 
   return (
     <div className="pt-[70px]">
-        <CreateStorePointModal modalOpen={modalOpen} setModalOpen={setModalOpen}/>
+      <CreateStorePointModal
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+      />
       {/* Sidebar backdrop (mobile only) */}
       <div
         className={`fixed inset-0 bg-white bg-opacity-30 z-40 lg:hidden lg:z-auto transition-opacity duration-200 ${
@@ -139,63 +145,65 @@ const [storeList,setStoreList] = useState([])
               <path d="M10.7 18.7l1.4-1.4L7.8 13H20v-2H7.8l4.3-4.3-1.4-1.4L4 12z" />
             </svg>
           </button> */}
-           
         </div>
 
         {/* Links */}
         <div className="space-y-8">
           {/* Pages group */}
           <div>
-          <div className="font-bold text-black px-4 border-b border-gray-300 py-2">All Store Points</div>
+            <div className="font-bold text-black px-4 border-b border-gray-300 py-2">
+              All Store Points
+            </div>
             <ul className="mt-3">
               {/* Dashboard */}
-             {storeList?.map((data,i)=>(
+              {storeList?.map((data, i) => (
                 <li
-                className={`px-3 py-4 rounded-lg mb-0.5 last:mb-0 ${
-                  pathname.includes(data?.id) && "bg-lightblue"
-                }`}
-                //onClick={()=>SelectPoint(i)}
-              >
-                <NavLink
-                  end
-                  to={`/store-point/${data?.id}`}
-                  className={`block text-black hover:text-black truncate transition duration-150 ${
-                    pathname.includes(data?.id) && "text-deepBlue"
+                  className={`px-3 py-4 rounded-lg mb-0.5 last:mb-0 ${
+                    pathname.includes(data?.id) && "bg-lightblue"
                   }`}
+                  //onClick={()=>SelectPoint(i)}
                 >
-                  <div className="flex items-center">
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 14 15"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M12.5938 4.64273L8.20629 0.796357C7.80409 0.436615 7.28341 0.237732 6.74379 0.237732C6.20418 0.237732 5.6835 0.436615 5.28129 0.796357L0.893795 4.64273C0.661527 4.85046 0.476178 5.10529 0.35009 5.39025C0.224002 5.67521 0.160068 5.98376 0.162545 6.29536V12.6865C0.162545 13.2683 0.393672 13.8263 0.805079 14.2377C1.21649 14.6491 1.77448 14.8802 2.35629 14.8802H11.1313C11.7131 14.8802 12.2711 14.6491 12.6825 14.2377C13.0939 13.8263 13.325 13.2683 13.325 12.6865V6.28804C13.3265 5.97767 13.262 5.67053 13.136 5.38691C13.0099 5.10329 12.8251 4.84964 12.5938 4.64273ZM8.20629 13.4177H5.28129V9.76148C5.28129 9.56754 5.35834 9.38155 5.49547 9.24441C5.63261 9.10727 5.8186 9.03023 6.01254 9.03023H7.47504C7.66898 9.03023 7.85498 9.10727 7.99212 9.24441C8.12925 9.38155 8.20629 9.56754 8.20629 9.76148V13.4177ZM11.8625 12.6865C11.8625 12.8804 11.7855 13.0664 11.6484 13.2036C11.5112 13.3407 11.3252 13.4177 11.1313 13.4177H9.66879V9.76148C9.66879 9.17966 9.43767 8.62167 9.02626 8.21027C8.61485 7.79886 8.05686 7.56773 7.47504 7.56773H6.01254C5.43073 7.56773 4.87274 7.79886 4.46133 8.21027C4.04992 8.62167 3.81879 9.17966 3.81879 9.76148V13.4177H2.35629C2.16236 13.4177 1.97636 13.3407 1.83922 13.2036C1.70209 13.0664 1.62504 12.8804 1.62504 12.6865V6.28804C1.62518 6.18422 1.64742 6.08161 1.69028 5.98705C1.73315 5.89248 1.79567 5.80813 1.87367 5.73961L6.26117 1.90054C6.39461 1.78331 6.56617 1.71866 6.74379 1.71866C6.92142 1.71866 7.09297 1.78331 7.22642 1.90054L11.6139 5.73961C11.6919 5.80813 11.7544 5.89248 11.7973 5.98705C11.8402 6.08161 11.8624 6.18422 11.8625 6.28804V12.6865Z"
-                        fill={
-                          pathname.includes(data?.id) ? "#2F93F6" : "#A4B4CB"
-                        }
-                      />
-                    </svg>
+                  <NavLink
+                    end
+                    to={`/store-point/${data?.id}`}
+                    className={`block text-black hover:text-black truncate transition duration-150 ${
+                      pathname.includes(data?.id) && "text-deepBlue"
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 14 15"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12.5938 4.64273L8.20629 0.796357C7.80409 0.436615 7.28341 0.237732 6.74379 0.237732C6.20418 0.237732 5.6835 0.436615 5.28129 0.796357L0.893795 4.64273C0.661527 4.85046 0.476178 5.10529 0.35009 5.39025C0.224002 5.67521 0.160068 5.98376 0.162545 6.29536V12.6865C0.162545 13.2683 0.393672 13.8263 0.805079 14.2377C1.21649 14.6491 1.77448 14.8802 2.35629 14.8802H11.1313C11.7131 14.8802 12.2711 14.6491 12.6825 14.2377C13.0939 13.8263 13.325 13.2683 13.325 12.6865V6.28804C13.3265 5.97767 13.262 5.67053 13.136 5.38691C13.0099 5.10329 12.8251 4.84964 12.5938 4.64273ZM8.20629 13.4177H5.28129V9.76148C5.28129 9.56754 5.35834 9.38155 5.49547 9.24441C5.63261 9.10727 5.8186 9.03023 6.01254 9.03023H7.47504C7.66898 9.03023 7.85498 9.10727 7.99212 9.24441C8.12925 9.38155 8.20629 9.56754 8.20629 9.76148V13.4177ZM11.8625 12.6865C11.8625 12.8804 11.7855 13.0664 11.6484 13.2036C11.5112 13.3407 11.3252 13.4177 11.1313 13.4177H9.66879V9.76148C9.66879 9.17966 9.43767 8.62167 9.02626 8.21027C8.61485 7.79886 8.05686 7.56773 7.47504 7.56773H6.01254C5.43073 7.56773 4.87274 7.79886 4.46133 8.21027C4.04992 8.62167 3.81879 9.17966 3.81879 9.76148V13.4177H2.35629C2.16236 13.4177 1.97636 13.3407 1.83922 13.2036C1.70209 13.0664 1.62504 12.8804 1.62504 12.6865V6.28804C1.62518 6.18422 1.64742 6.08161 1.69028 5.98705C1.73315 5.89248 1.79567 5.80813 1.87367 5.73961L6.26117 1.90054C6.39461 1.78331 6.56617 1.71866 6.74379 1.71866C6.92142 1.71866 7.09297 1.78331 7.22642 1.90054L11.6139 5.73961C11.6919 5.80813 11.7544 5.89248 11.7973 5.98705C11.8402 6.08161 11.8624 6.18422 11.8625 6.28804V12.6865Z"
+                          fill={
+                            pathname.includes(data?.id) ? "#2F93F6" : "#A4B4CB"
+                          }
+                        />
+                      </svg>
 
-                    <span className={`${pathname.includes(data?.id)?"text-deepBlue":""} "text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200"`}>
-                      {data?.name}
-                    </span>
-                  </div>
-                </NavLink>
-              </li>
-             )) }
+                      <span
+                        className={`${
+                          pathname.includes(data?.id) ? "text-deepBlue" : ""
+                        } "text-sm font-medium ml-3 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200"`}
+                      >
+                        {data?.name}
+                      </span>
+                    </div>
+                  </NavLink>
+                </li>
+              ))}
               <li
-              onClick={()=>setModalOpen("modal-open")}
+                onClick={() => setModalOpen("modal-open")}
                 className={`px-3 py-4 rounded-lg mb-0.5 last:mb-0 cursor-pointer`}
               >
-                <div
-                 
-                  className= "text-deepBlue font-black" 
-                >
+                <div className="text-deepBlue font-black">
                   <div className="flex items-center">
-                    <img src="/add.svg"/>
+                    <img src="/add.svg" />
 
                     <span className="text-sm font-black ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                       Add New Store
@@ -203,10 +211,7 @@ const [storeList,setStoreList] = useState([])
                   </div>
                 </div>
               </li>
-             
-              
 
-              
               {/* <li
                 className={`px-3 py-4 rounded-sm mb-0.5 last:mb-0 ${
                   pathname.includes("customers") && "bg-slate-900"

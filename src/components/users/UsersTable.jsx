@@ -11,6 +11,7 @@ export default function UsersTable() {
   const [chooseData, setChooseData] = useState(5);
   const [pageNumber, setpageNumber] = useState(1);
   const [loading, setLoading] = useState();
+
   const getUserData = async () => {
     const token = localStorage.getItem("fekomiAuthToken");
     const headers = {
@@ -20,13 +21,13 @@ export default function UsersTable() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_ADMIN_URL}/auth/list-all-admins?page=${pageNumber}&limit=${chooseData}`,
+        `${process.env.REACT_APP_ADMIN_URL}/auth/list_all_admin?page=${pageNumber}&limit=${chooseData}`,
         {
           headers: headers,
         }
       );
+
       setUserData(response?.data?.data);
-      console.log(response?.data, "POPO");
     } catch (error) {
       //setMessage(error?.response?.data?.message);
       //   if (error?.response?.data?.message == "Unauthenticated.") {
@@ -104,7 +105,7 @@ export default function UsersTable() {
       <div class="flex flex-col">
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
-            <div class="overflow-hidden bg-white">
+            <div class="py-6 overflow-hidden bg-white">
               <div className="py-3 px-4">
                 <TableHeaders showFilter={true} />
               </div>
@@ -158,7 +159,7 @@ export default function UsersTable() {
                   </tr>
                 </thead>
                 <tbody>
-                  {userData?.data?.map((data, i) => (
+                  {userData?.map((data, i) => (
                     <tr
                       key={i}
                       //onClick={() => navigate("/userdetails")}
@@ -171,7 +172,7 @@ export default function UsersTable() {
                         />
                       </td>
                       <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                        {data?.name}
+                        {`${data?.firstname} ${data?.lastname}`}
                       </td>
                       <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                         {data?.email}
@@ -206,7 +207,7 @@ export default function UsersTable() {
                   ))}
                 </tbody>
               </table>
-              <div className="flex justify-end items-center pb-24 px-6">
+              {/* <div className="flex justify-end items-center pb-24 px-6">
                 <Pagination
                   nextPage={nextPage}
                   prevPage={prevPage}
@@ -214,7 +215,7 @@ export default function UsersTable() {
                   chooseData={chooseData}
                   totalPage={userData?.total}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

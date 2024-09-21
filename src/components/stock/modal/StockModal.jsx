@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ImageUploader from "../../draganddrop/ImageUploader";
 import { compareAsc, format } from "date-fns";
+
 export default function StoreModal(props) {
   const {
     register,
@@ -17,16 +18,22 @@ export default function StoreModal(props) {
       name: "editData?.name",
     },
   });
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
   const [catData, setCatData] = useState();
   const [images, setImages] = React.useState([]);
   const [formData, setFormData] = useState();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
 
+  console.log(props);
+
   const createProduct = (e) => {
+    if (formData.quantity < 1) {
+      return;
+    }
+
     e.preventDefault();
-    setLoading("loading");
+    setLoading(true);
     let formattedEnd = new Date(formData?.end_date)
       .toLocaleDateString("en-GB")
       .replaceAll("/", "-");
@@ -34,7 +41,6 @@ export default function StoreModal(props) {
       .toLocaleDateString("en-GB")
       .replaceAll("/", "-");
 
-    console.log(props.modalType, "OPOP");
     const payload = {
       ...formData,
       main_product_image: images[0]?.data_url,
@@ -71,7 +77,7 @@ export default function StoreModal(props) {
 
     axios(options)
       .then((response) => {
-        setLoading("");
+        setLoading(false);
         props.setModalOpen("");
         toast.success(response?.data?.message, {
           position: "top-right",
@@ -87,7 +93,7 @@ export default function StoreModal(props) {
         props.setReload(false);
       })
       .catch((error) => {
-        setLoading("");
+        setLoading(false);
         toast.error(error?.response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -100,7 +106,7 @@ export default function StoreModal(props) {
       });
   };
   const getCategory = async () => {
-    setLoading("loading");
+    setLoading(true);
 
     const token = localStorage.getItem("fekomi-token");
     const headers = {
@@ -120,18 +126,22 @@ export default function StoreModal(props) {
     axios(options)
       .then((response) => {
         setCatData(response?.data?.data);
-        setLoading("");
+        setLoading(false);
         props.setModalOpen("");
       })
       .catch((error) => {
-        setLoading("");
+        setLoading(false);
       });
   };
 
   //UPDATE PRODUCTS ENDPOINT
   const updateProduct = (e) => {
+    if (formData.quantity < 1) {
+      return;
+    }
+
     e.preventDefault();
-    setLoading("loading");
+    setLoading(true);
 
     const token = localStorage.getItem("fekomi-token");
     const headers = {
@@ -317,9 +327,11 @@ export default function StoreModal(props) {
                 </label>
                 <div className="">
                   <input
-                    type="text"
+                    type="number"
+                    min="1"
                     placeholder="Enter Quantity"
                     name="quantity"
+                    pattern=""
                     className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                     onChange={handleProduct}
                     defaultValue={props.editData?.quantity}
@@ -367,7 +379,7 @@ export default function StoreModal(props) {
 
                 <div className="w-full">
                   <input
-                    type="text"
+                    type="url"
                     placeholder="Enter product Url"
                     name="product_url"
                     className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
@@ -413,6 +425,7 @@ export default function StoreModal(props) {
                       type="date"
                       placeholder="Enter Quantity"
                       name="start_date"
+                      min={new Date().toISOString().split("T")[0]}
                       className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                       onChange={handleProduct}
                       //defaultValue="02/20/2002"
@@ -426,6 +439,7 @@ export default function StoreModal(props) {
                       type="date"
                       placeholder="Enter Quantity"
                       name="end_date"
+                      min={new Date().toISOString().split("T")[0]}
                       className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                       onChange={handleProduct}
                       //defaultValue={props.editData?.quantity}
@@ -468,10 +482,12 @@ export default function StoreModal(props) {
                 ) : (
                   <button
                     onClick={createProduct}
-                    disabled={images?.length <= 2 ? true : false}
+                    disabled={images?.length <= 2}
                     className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
                   >
-                    Create Stock
+                    {`Create ${
+                      props.modalType == "HOTSALE" ? "HotSale" : "Stock"
+                    }`}
                   </button>
                 )}
               </div>

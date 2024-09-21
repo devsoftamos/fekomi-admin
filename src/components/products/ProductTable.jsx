@@ -4,7 +4,7 @@ import { COLUMNS } from "../../column";
 import TableHeaders from "../utils/TableHeaders";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import Pagination from "../utils/Pagination"; 
+import Pagination from "../utils/Pagination";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CSVLink, CSVDownload } from "react-csv";
@@ -30,6 +30,7 @@ export default function ProductTable({
   const [currentYear, setCurrentYear] = useState(yearNumber);
   const [modalOpen, setModalOpen] = useState();
   const [loading, setLoading] = useState();
+  const [pageNumber, setpageNumber] = useState(1);
   const [searchValue, setSearchValue] = useState();
   const [editData, setEditData] = useState();
   const [modalType, setModalType] = useState(false);
@@ -79,7 +80,6 @@ export default function ProductTable({
   };
 
   const getProductsSearch = async () => {
-    
     setLoading(true);
     const token = localStorage.getItem("fekomi-token");
     const headers = {
@@ -128,7 +128,7 @@ export default function ProductTable({
       Authorization: `${JSON.stringify(tokenParsed)}`,
     };
     const options = {
-      url: `${process.env.REACT_APP_OFFLINESTORE}admin/products/${data?.id}`,
+      url: `${process.env.REACT_APP_OFFLINESTORE}/admin/products/${data?.id}`,
       method: "DELETE",
       headers: headers,
       data: {},
@@ -168,6 +168,10 @@ export default function ProductTable({
       getFilterProductsData();
     }
   }, [monthIndex]);
+
+  useEffect(() => {
+    console.log({ productsData });
+  }, [productsData]);
 
   return (
     <div className="pt-7">
@@ -235,7 +239,7 @@ export default function ProductTable({
                     >
                       Date/Time
                     </th>
-                    
+
                     <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
@@ -267,8 +271,6 @@ export default function ProductTable({
                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                           <Skeleton height={15} />
                         </td>
-
-                       
                       </tr>
                     ))}
                   {filterProduct
@@ -290,7 +292,7 @@ export default function ProductTable({
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             {data?.productcategory[0]?.name}
                           </td>
-                          
+
                           {/* <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
                             <div
                               onClick={() => {
@@ -314,27 +316,28 @@ export default function ProductTable({
                       ))
                     : productsData?.records?.map((data, i) => (
                         <tr
-                        key={i}
-                        //onClick={() => navigate("/userdetails")}
-                        class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
-                      >
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          <img
-                            className="rounded-full h-14 w-14"
-                            src={data?.imageUrl}
-                          />
-                        </td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                          {data?.name}
-                        </td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                        {data?.category?.name}
-                        </td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                          {new Date(data?.createdAt).toLocaleDateString()}, {new Date(data?.createdAt).toLocaleTimeString()}
+                          key={i}
+                          //onClick={() => navigate("/userdetails")}
+                          class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
+                        >
+                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <img
+                              className="rounded-full h-14 w-14"
+                              src={data?.imageUrl}
+                            />
                           </td>
-                        
-                        {/* <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.name}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {data?.category?.name}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {new Date(data?.createdAt).toLocaleDateString()},{" "}
+                            {new Date(data?.createdAt).toLocaleTimeString()}
+                          </td>
+
+                          {/* <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
                           <div
                             onClick={() => {
                               setEditData(data);
@@ -345,15 +348,15 @@ export default function ProductTable({
                             Edit
                           </div>
                         </td> */}
-                        <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
-                          <div
-                            onClick={() => deleteProduct(data)}
-                            className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg"
-                          >
-                            Delete
-                          </div>
-                        </td>
-                      </tr>
+                          <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                            <div
+                              onClick={() => deleteProduct(data)}
+                              className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg"
+                            >
+                              Delete
+                            </div>
+                          </td>
+                        </tr>
                       ))}
                 </tbody>
               </table>
@@ -371,9 +374,10 @@ export default function ProductTable({
                 <Pagination
                   nextPage={nextPage}
                   prevPage={prevPage}
+                  pageNumber={pageNumber}
                   setChooseData={setChooseData}
                   chooseData={chooseData}
-                  totalPage={productsData?.data?.total}
+                  totalPage={productsData?._metadata?.totalCount}
                 />
               </div>
             </div>

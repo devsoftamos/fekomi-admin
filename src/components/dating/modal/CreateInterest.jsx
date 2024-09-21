@@ -41,7 +41,7 @@ export default function CreateInterestModal({
     const options = {
       url: `${process.env.REACT_APP_DATING}/admin/interests`,
       method: "POST",
-      headers:headers,
+      headers: headers,
       data: {
         name: interestValue.name,
       },

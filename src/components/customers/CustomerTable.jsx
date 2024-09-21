@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export default function CustomerTable() {
   const [userData, setUserData] = useState();
-  const [chooseData, setChooseData] = useState(5);
+  const [chooseData, setChooseData] = useState(10);
   const [pageNumber, setpageNumber] = useState(1);
   const [searchValue, setSearchValue] = useState();
   const [loading, setLoading] = useState();
@@ -30,7 +30,7 @@ export default function CustomerTable() {
         }
       );
       setUserData(response?.data?.data);
-      setFilteredUser()
+      setFilteredUser();
     } catch (error) {
       //setMessage(error?.response?.data?.message);
       //   if (error?.response?.data?.message == "Unauthenticated.") {
@@ -65,7 +65,7 @@ export default function CustomerTable() {
       );
 
       setFilteredUser(response?.data?.data);
-      
+
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -168,6 +168,7 @@ export default function CustomerTable() {
   useEffect(() => {
     getUserData();
   }, [pageNumber, chooseData]);
+
   return (
     <div className="pt-7">
       <ToastContainer
@@ -407,6 +408,7 @@ export default function CustomerTable() {
                 <Pagination
                   nextPage={nextPage}
                   prevPage={prevPage}
+                  pageNumber={pageNumber}
                   setChooseData={setChooseData}
                   chooseData={chooseData}
                   totalPage={userData?.total}

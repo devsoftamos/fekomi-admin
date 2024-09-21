@@ -26,7 +26,7 @@ export default function StorePoint() {
   const [openRoleModal, setOpenRoleModal] = useState();
   const [productsData, setProductsData] = useState();
   const [active, setActiveTab] = useState(0);
-  const [chooseData, setChooseData] = useState(5);
+  const [chooseData, setChooseData] = useState(10);
   const [pageNumber, setpageNumber] = useState(1);
   const [filterTriggered, setFilterTriggered] = useState(false);
   const [filterProduct, setFilterProduct] = useState();
@@ -97,7 +97,7 @@ export default function StorePoint() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/stores`,
+        `${process.env.REACT_APP_OFFLINESTORE}/admin/stores`,
         {
           headers: headers,
         }
@@ -150,7 +150,9 @@ export default function StorePoint() {
 
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <div className="flex justify-between">
-              <div className="font-black text-lg text-black">Factory Products</div>
+              <div className="font-black text-lg text-black">
+                Factory Products
+              </div>
               <div>
                 <div className="flex items-center">
                   <div className="pl-2">
@@ -165,15 +167,14 @@ export default function StorePoint() {
                     </button>
                   </div>
                   <div className="pl-2">
-                  <div className="pl-2">
-                    <button
-                     onClick={() => setModalCatOpen("modal-open")}
-                      className="px-2 py-3  font-medium text-white  bg-[#2F93F6] rounded"
-                    >
-                    Make a transfer
-                    </button>
-                  </div>
-                    
+                    <div className="pl-2">
+                      <button
+                        onClick={() => setModalCatOpen("modal-open")}
+                        className="px-2 py-3  font-medium text-white  bg-[#2F93F6] rounded"
+                      >
+                        Make a transfer
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -181,26 +182,31 @@ export default function StorePoint() {
             <div>
               <StorePointTabs active={active} setActiveTab={setActiveTab} />
             </div>
-           {active==0&& <div>
-              <StoreProductTable
-                productsData={productsData}
-                nextPage={nextPage}
-                prevPage={prevPage}
-                getAllProductsData={getAllProductsData}
-                filterTriggered={filterTriggered}
-                setFilterProduct={setFilterProduct}
-                filterProduct={filterProduct}
-                setFilterTriggered={setFilterTriggered}
-                setModalOpen={setModalOpen}
-                chooseData={chooseData}
-                setChooseData={setChooseData}
-                reload={reload}
-                setReload={setReload}
-              />
-            </div>}
-            {active==1&&<div>
-              <TransferProductTable/>
-              </div>}
+            {active == 0 && (
+              <div>
+                <StoreProductTable
+                  productsData={productsData}
+                  nextPage={nextPage}
+                  prevPage={prevPage}
+                  pageNumber={pageNumber}
+                  getAllProductsData={getAllProductsData}
+                  filterTriggered={filterTriggered}
+                  setFilterProduct={setFilterProduct}
+                  filterProduct={filterProduct}
+                  setFilterTriggered={setFilterTriggered}
+                  setModalOpen={setModalOpen}
+                  chooseData={chooseData}
+                  setChooseData={setChooseData}
+                  reload={reload}
+                  setReload={setReload}
+                />
+              </div>
+            )}
+            {active == 1 && (
+              <div>
+                <TransferProductTable />
+              </div>
+            )}
           </div>
         </main>
       </div>
