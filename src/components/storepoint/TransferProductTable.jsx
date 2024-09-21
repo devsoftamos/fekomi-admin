@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { CSVLink, CSVDownload } from "react-csv";
 import { useParams } from "react-router-dom";
 import RemoveQuantity from "./modal/RemoveQuantity";
+
 export default function TransferProductTable({
   productsData,
   nextPage,
@@ -80,7 +81,7 @@ export default function TransferProductTable({
           headers: headers,
         }
       );
-      console.log(response?.data?.data, "UOP");
+      console.log(response?.data?.data, "Transfer");
       setStoreProduct(response?.data?.data);
       setLoading(false);
     } catch (error) {

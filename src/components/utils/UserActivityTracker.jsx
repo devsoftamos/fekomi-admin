@@ -18,6 +18,12 @@ const UserActivityTracker = () => {
     let activityInterval = 0;
     const TIMEOUT = 1000 * 60 * 15;
 
+    const authToken = localStorage.getItem("fekomiAuthToken");
+    const token = localStorage.getItem("fekomi-token");
+    if (!token || !authToken) {
+      navigate("/");
+    }
+
     const intervalId = setInterval(() => {
       activityInterval++;
 

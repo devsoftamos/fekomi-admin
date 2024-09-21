@@ -204,7 +204,21 @@ export default function StorePoint() {
             )}
             {active == 1 && (
               <div>
-                <TransferProductTable />
+                <TransferProductTable
+                  nextPage={nextPage}
+                  prevPage={prevPage}
+                  pageNumber={pageNumber}
+                  getAllProductsData={getAllProductsData}
+                  filterTriggered={filterTriggered}
+                  setFilterProduct={setFilterProduct}
+                  filterProduct={filterProduct}
+                  setFilterTriggered={setFilterTriggered}
+                  setModalOpen={setModalOpen}
+                  chooseData={chooseData}
+                  setChooseData={setChooseData}
+                  reload={reload}
+                  setReload={setReload}
+                />
               </div>
             )}
           </div>
