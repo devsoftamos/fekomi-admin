@@ -25,7 +25,7 @@ export default function MySchedule(props) {
   const [selectedTime, setSelectedTime] = useState();
   const [openReSchedule, setOpenReSchedule] = useState();
   const [clickedData, setClickedData] = useState();
- 
+
   const getSchedule = async () => {
     setLoading("loading");
 
@@ -72,14 +72,14 @@ export default function MySchedule(props) {
         "Content-Type": "application/json;charset=UTF-8",
         Authorization: ` Bearer ${token}`,
       },
-      data: { },
+      data: {},
     };
 
     axios(options)
       .then((response) => {
         setLoading("");
         props.setOpenSchedule("");
-       // props.setReload(false);
+        // props.setReload(false);
         toast.success(response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -89,8 +89,8 @@ export default function MySchedule(props) {
           draggable: true,
           progress: undefined,
         });
-        getSchedule()
-       // props.getAllProductsData();
+        getSchedule();
+        // props.getAllProductsData();
       })
       .catch((error) => {
         setLoading("");
@@ -184,7 +184,10 @@ export default function MySchedule(props) {
                           Reschedule
                         </div>
                       </div>
-                      <div onClick={()=>deleteSchedule(data)} className="pl-2 cursor-pointer">
+                      <div
+                        onClick={() => deleteSchedule(data)}
+                        className="pl-2 cursor-pointer"
+                      >
                         <div className="bg-[#FFDFE5] text-[#F9395B] px-2 py-2 ">
                           Delete
                         </div>

@@ -9,7 +9,10 @@ export default function Reschedule(props) {
   const [loading, setLoading] = useState();
   const [catData, setCatData] = useState();
   const [images, setImages] = React.useState([]);
-  const [formData, setFormData] = useState({title:props.clickedData?.title,appointment_type:props.clickedData?.appointment_type});
+  const [formData, setFormData] = useState({
+    title: props.clickedData?.title,
+    appointment_type: props.clickedData?.appointment_type,
+  });
   const [selectedData, setSelectedData] = useState([]);
   const [selectedTime, setSelectedTime] = useState([]);
 
@@ -17,21 +20,19 @@ export default function Reschedule(props) {
 
   useEffect(() => {
     if (props.clickedData) {
-      const arrayDays= props.clickedData?.days?.map((data)=>{
+      const arrayDays = props.clickedData?.days?.map((data) => {
         return {
-          check:true,
-          day:data?.day,
-          start_time:data?.start_time,
-          end_time:data?.end_time
-  
-        }
-      })
+          check: true,
+          day: data?.day,
+          start_time: data?.start_time,
+          end_time: data?.end_time,
+        };
+      });
       //console.log(arrayDays,"Arra");
       setConsultDays([...arrayDays]);
     }
-   
   }, [props.clickedData]);
- 
+
   const updateSchedules = (e) => {
     e.preventDefault();
     setLoading("loading");
@@ -50,7 +51,7 @@ export default function Reschedule(props) {
     const options = {
       url: `${process.env.REACT_APP_CONSULTATION}/schedule/${props.clickedData?.id}`,
       method: "PATCH",
-     
+
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json;charset=UTF-8",
@@ -90,11 +91,9 @@ export default function Reschedule(props) {
         });
       });
   };
-  
 
- 
   useEffect(() => {
-   // getCategory();
+    // getCategory();
     const locale = "en"; // or whatever you want...
     const hours = [];
 
@@ -273,14 +272,12 @@ export default function Reschedule(props) {
                 </label>
               </div>
               <div className="pl-2">
-                 
-                  <button
-                    onClick={updateSchedules}
-                    className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
-                  >
-                    Reschedule
-                  </button>
-               
+                <button
+                  onClick={updateSchedules}
+                  className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
+                >
+                  Reschedule
+                </button>
               </div>
             </div>
           </form>

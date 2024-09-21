@@ -5,18 +5,34 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router-dom";
 
+// customerName,
+//   customerEmail,
+//   customerAddress,
+//   customerPhone,
+//   productId,
+//   quantity,
+//   totalPrice,
+//   modeOfPayment;
+
 export default function WalkOrder(props) {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm({
+    mode: "all",
     defaultValues: {
       price: props.editData?.price,
-      name: "editData?.name",
+      name: props.editData?.name,
     },
   });
-  const [loading, setLoading] = useState();
+
+  const name = watch("customerName");
+  const address = watch("customerAddress");
+  const phone = watch("customerPhone");
+
+  const [loading, setLoading] = useState(false);
   const [catData, setCatData] = useState();
   const [images, setImages] = React.useState([]);
   const [formData, setFormData] = useState();
@@ -24,11 +40,13 @@ export default function WalkOrder(props) {
   const [storeData, setStoreData] = useState();
   const [productPrice, setProductPrice] = useState();
   const { id } = useParams();
+
   const createOrder = (e) => {
     e.preventDefault();
-    setLoading("loading");
+    setLoading(true);
     const token = localStorage.getItem("fekomi-token");
     const covertedToken = JSON.parse(token);
+
     const tokenParsed = {
       firstName: covertedToken.firstname,
       lastName: covertedToken.lastname,
@@ -45,28 +63,33 @@ export default function WalkOrder(props) {
       "content-type": "application/json",
       Authorization: `${JSON.stringify(tokenParsed)}`,
     };
+
+    const payload = {
+      customerAddress: address,
+      customerName: name,
+      customerPhone: phone,
+      modeOfPayment: formData?.modeOfPayment,
+      quantity: Number(+formData?.quantity),
+      productId: Number(productPrice?.id),
+      totalPrice:
+        productPrice?.price * formData?.quantity || productPrice?.price,
+    };
+
+    console.log({ payload });
+
     const options = {
-      url: `${process.env.REACT_APP_OFFLINESTORE}admin/orders`,
+      url: `${process.env.REACT_APP_OFFLINESTORE}/admin/orders`,
       method: "POST",
       headers: headers,
 
-      data: {
-        customerAddress: formData.customerAddress,
-        customerName: formData.customerName,
-        customerPhone: formData.customerPhone,
-        modeOfPayment: formData?.modeOfPayment,
-        quantity: Number(+formData?.quantity),
-        productId: Number(productPrice?.id),
-        totalPrice:
-          +productPrice?.price * +formData?.quantity || +productPrice?.price,
-      },
+      data: payload,
     };
 
     axios(options)
       .then((response) => {
-        setLoading("");
-        props.setModalCatOpen("");
-        window.location.reload();
+        setLoading(false);
+        props.setModalCatOpen(false);
+
         toast.success(response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -78,7 +101,7 @@ export default function WalkOrder(props) {
         });
       })
       .catch((error) => {
-        setLoading("");
+        setLoading(false);
         toast.error(error?.response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -94,7 +117,8 @@ export default function WalkOrder(props) {
   // const getCategory = async () => {
   //   setLoading("loading");
 
-  //   const token = localStorage.getItem("fekomi-token");
+  //      const token = localStorage.getItem("fekomi-token");
+
   //   const headers = {
   //     "content-type": "application/json",
   //     Authorization: ` Bearer ${token}`,
@@ -136,7 +160,7 @@ export default function WalkOrder(props) {
           headers: headers,
         }
       );
-      console.log(response?.data?.data, "PRODUCT");
+
       setProductsData(response?.data?.data?.data);
       setLoading(false);
     } catch (error) {
@@ -160,11 +184,9 @@ export default function WalkOrder(props) {
   const handleProductChange = (e) => {
     const parsedValue = JSON.parse(e.target.value);
     setProductPrice(parsedValue);
-    console.log(parsedValue, "POU");
+    setFormData({ ...formData, quantity: 1 });
   };
-  const numberWithCommas = (x) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
+
   return (
     <div>
       {/* Put this part before </body> tag */}
@@ -195,42 +217,73 @@ export default function WalkOrder(props) {
           <form
           //onSubmit={handleSubmit(props.edit ? updateProduct : createProduct)}
           >
-            <div className="pt-10 py-3">
-              <div className="w-full pl-2">
+            <div className=" py-3 grid gap-3">
+              <div className="w-full">
                 <label className="text-black text-sm font-black px-2">
                   Name of Customer
                 </label>
                 <input
                   type="text"
                   name="customerName"
+                  pattern="[A-Za-z ]"
                   placeholder="Enter Name of Customer"
                   className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                   onChange={handleProduct}
                   defaultValue={props.editData?.name}
+                  {...register("customerName", {
+                    required: "Enter the customer name",
+                  })}
                   // required
                 />
               </div>
+              {errors?.customerName && (
+                <span className="text-red-500 italic text-sm">
+                  {errors?.customerName?.message}
+                </span>
+              )}
             </div>
 
-            <div className="pt-10 py-3">
-              <div className="w-full pl-2">
+            <div className=" py-3 grid gap-3">
+              <div className="w-full">
                 <label className="text-black text-sm font-black px-2">
                   Customer’s Phone Number
                 </label>
                 <input
                   type="text"
                   name="customerPhone"
+                  pattern="[1-9]\d*"
+                  min="0"
+                  maxLength="11"
                   placeholder="Enter Customer Phone Number"
                   className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                   onChange={handleProduct}
                   defaultValue={props.editData?.name}
-                  // required
+                  {...register("customerPhone", {
+                    required: "Enter customer phone number",
+                    pattern: {
+                      value: /[1-9]\d*$/,
+                      message: "Only digits allowed for phone number",
+                    },
+                    maxLength: {
+                      value: 11,
+                      message: "Phone number cannot exceed 11 digits",
+                    },
+                    minLength: {
+                      value: 10,
+                      message: "Phone number cannot be less than 10 characters",
+                    },
+                  })}
                 />
               </div>
+              {errors?.customerPhone && (
+                <span className="text-red-500 italic text-sm">
+                  {errors?.customerPhone?.message}
+                </span>
+              )}
             </div>
 
-            <div className="pt-10 py-3">
-              <div className="w-full pl-2">
+            <div className=" py-3 grid gap-3">
+              <div className="w-full">
                 <label className="text-black text-sm font-black px-2">
                   Customer’s Address
                 </label>
@@ -241,13 +294,20 @@ export default function WalkOrder(props) {
                   className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                   onChange={handleProduct}
                   defaultValue={props.editData?.name}
-                  // required
+                  {...register("customerAddress", {
+                    required: "Enter customer Address",
+                  })}
                 />
               </div>
+              {errors?.customerAddress && (
+                <span className="text-red-500 italic text-sm">
+                  {errors?.customerAddress?.message}
+                </span>
+              )}
             </div>
 
-            <div className="-pt-10 py-3">
-              <div className="w-full pl-2">
+            <div className="0 py- grid gap-33">
+              <div className="w-full">
                 <label className="text-black text-sm font-black px-2">
                   Product
                 </label>
@@ -255,6 +315,7 @@ export default function WalkOrder(props) {
                   onChange={handleProductChange}
                   name="productId"
                   className="py-4 bg-white px-2 w-full outline-0 focus:bg-white focus:border-0"
+                  // {...register("producId", { required: "Select a product" })}
                 >
                   <option disabled selected>
                     Select Product
@@ -267,26 +328,47 @@ export default function WalkOrder(props) {
                   ))}
                 </select>
               </div>
+              {errors?.productId && (
+                <span className="text-red-500 italic text-sm">
+                  {errors?.productId?.message}
+                </span>
+              )}
             </div>
 
-            <div className="pt-10 py-3">
-              <div className="w-full pl-2">
+            <div className=" py-3 grid gap-3">
+              <div className="w-full">
                 <label className="text-black text-sm font-black px-2">
-                  Quantity{" "}
+                  Quantity
                   {productPrice && (
-                    <span className="font-light text-xs">Available quantity({productPrice?.quantity})</span>
+                    <span className="font-light text-xs">
+                      Available quantity({productPrice?.quantity})
+                    </span>
                   )}
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   name="quantity"
                   placeholder="Enter quantity"
+                  min="1"
                   className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                   onChange={handleProduct}
-                  defaultValue={props.editData?.name}
-                  // required
+                  defaultValue={formData?.quantity}
+                  value={formData?.quantity}
+                  // {...register("quantity", {
+                  //   required: "Enter quantity for product",
+                  //   min: { value: 1, message: "Invalid quantity" },
+                  //   max: {
+                  //     value: productPrice?.quantity,
+                  //     message: "Quantity exceeds available stock",
+                  //   },
+                  // })}
                 />
               </div>
+              {errors?.quantity && (
+                <span className="text-red-500 italic text-sm">
+                  {errors?.quantity?.message}
+                </span>
+              )}
             </div>
 
             <div className="py-3">
@@ -295,17 +377,19 @@ export default function WalkOrder(props) {
                   Total Price:
                 </label>
                 <div className="font-black text-black text-xl">
-                  N
-                  {numberWithCommas(
-                    +productPrice?.price * +formData?.quantity ||
-                      +productPrice?.price ||
-                      0
-                  )}
+                  {productPrice?.price
+                    ? parseFloat(
+                        productPrice?.price * formData?.quantity || 0
+                      ).toLocaleString("en-NG", {
+                        style: "currency",
+                        currency: "NGN",
+                      })
+                    : 0}
                 </div>
               </div>
             </div>
-            <div className="pt-10 py-3">
-              <div className="w-full pl-2">
+            <div className=" py-3 grid gap-3">
+              <div className="w-full">
                 <label className="text-black text-sm font-black px-2">
                   Mode Of Payment
                 </label>
@@ -315,13 +399,17 @@ export default function WalkOrder(props) {
                   className="py-4 bg-white px-2 w-full outline-0 focus:bg-white focus:border-0"
                 >
                   <option selected disabled>
-                    {" "}
                     Select Mode Of Payment
                   </option>
                   <option value="TRANSFER">Transfer</option>
                   <option value="CASH">Cash</option>
                 </select>
               </div>
+              {errors?.modeOfPayment && (
+                <span className="text-red-500 italic text-sm">
+                  {errors?.modeOfPayment?.message}
+                </span>
+              )}
             </div>
 
             {/* <div className="flex py-7">
@@ -350,7 +438,12 @@ export default function WalkOrder(props) {
                 <button
                   onClick={createOrder}
                   disabled={
-                    Object.keys(formData || {}).length <= 4 ? true : false
+                    Object.keys(errors).length ||
+                    !(
+                      formData?.quantity &&
+                      formData?.modeOfPayment &&
+                      productPrice?.id
+                    )
                   }
                   className={`${loading} btn bg-[#2F93F6] border-0 px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
                 >

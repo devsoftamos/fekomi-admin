@@ -86,16 +86,16 @@ export default function DeliverySetting() {
           </div>
         </div>
       ))}
-      {(
+      {
         <div
           onClick={() => {
             setModalOpen("modal-open");
           }}
           className="cursor-pointer pt-4 font-bold  text-deepBlue"
         >
-         Set Delivery Price
+          Set Delivery Price
         </div>
-      )}
+      }
       <div className="border-b border-gray-300 w-80"></div>
     </div>
   );

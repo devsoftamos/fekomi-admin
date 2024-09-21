@@ -15,6 +15,7 @@ export default function OrderTable() {
   const [productData, setProductData] = useState();
   const [modalOpen, setModalOpen] = useState();
   const [printModalOpen, setPrintModalOpen] = useState();
+
   const getOrderData = async () => {
     const token = localStorage.getItem("fekomi-token");
     const headers = {
@@ -130,7 +131,7 @@ export default function OrderTable() {
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="h-[20vh] overflow-y-auto">
                   {!orderData?.products &&
                     [...new Array(4)].map((d, i) => (
                       <tr

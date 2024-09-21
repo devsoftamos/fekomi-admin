@@ -22,50 +22,50 @@ export default function Consultation(props) {
   const [formData, setFormData] = useState();
   const [selectedData, setSelectedData] = useState([]);
   const [selectedTime, setSelectedTime] = useState([]);
-  const [consultDays, setConsultDays]=useState([
+  const [consultDays, setConsultDays] = useState([
     {
-      "check": false,
-      "day": "sunday",
-      "start_time": "08:00 AM",
-      "end_time": "09:00 AM"
-  },
-  {
-      "check": false,
-      "day": "monday",
-      "start_time": "08:00 AM",
-      "end_time": "09:00 AM"
-  },
-  {
-      "check": false,
-      "day": "tuesday",
-      "start_time": "08:00 AM",
-      "end_time": "09:00 AM"
-  },
-  {
-      "check": false,
-      "day": "wednesday",
-      "start_time": "08:00 AM",
-      "end_time": "09:00 AM"
-  },
-  {
-      "check": false,
-      "day": "thursday",
-      "start_time": "08:00 AM",
-      "end_time": "09:00 AM"
-  },
-  {
-      "check": false,
-      "day":"friday",
-      "start_time":"09:00 AM",
-      "end_time":"10:00 AM"
-  },
-  {
-    "check": false,
-    "day":"Saturday",
-    "start_time":"09:00 AM",
-    "end_time":"10:00 AM"
-}
-  ])
+      check: false,
+      day: "sunday",
+      start_time: "08:00 AM",
+      end_time: "09:00 AM",
+    },
+    {
+      check: false,
+      day: "monday",
+      start_time: "08:00 AM",
+      end_time: "09:00 AM",
+    },
+    {
+      check: false,
+      day: "tuesday",
+      start_time: "08:00 AM",
+      end_time: "09:00 AM",
+    },
+    {
+      check: false,
+      day: "wednesday",
+      start_time: "08:00 AM",
+      end_time: "09:00 AM",
+    },
+    {
+      check: false,
+      day: "thursday",
+      start_time: "08:00 AM",
+      end_time: "09:00 AM",
+    },
+    {
+      check: false,
+      day: "friday",
+      start_time: "09:00 AM",
+      end_time: "10:00 AM",
+    },
+    {
+      check: false,
+      day: "Saturday",
+      start_time: "09:00 AM",
+      end_time: "10:00 AM",
+    },
+  ]);
 
   const createSchedules = (e) => {
     e.preventDefault();
@@ -75,28 +75,24 @@ export default function Consultation(props) {
       "content-type": "application/json",
       Authorization: ` Bearer ${token}`,
     };
-    const days= consultDays.filter(item=>item.check==true)
-     
+    const days = consultDays.filter((item) => item.check == true);
 
     const Payload = {
       ...formData,
       days,
-       
     };
-     
+
     const options = {
       url: `${process.env.REACT_APP_CONSULTATION}/schedule`,
       method: "POST",
       data: {
-        ...Payload
-       
-     },
+        ...Payload,
+      },
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json;charset=UTF-8",
         Authorization: ` Bearer ${token}`,
       },
-      
     };
 
     axios(options)
@@ -104,7 +100,7 @@ export default function Consultation(props) {
         setLoading("");
         console.log(response);
         props.setModalOpen("");
-      //  props.setReload(false);
+        //  props.setReload(false);
         toast.success(response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -113,8 +109,8 @@ export default function Consultation(props) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        }); 
-        window.location.reload()
+        });
+        window.location.reload();
       })
       .catch((error) => {
         setLoading("");
@@ -129,10 +125,8 @@ export default function Consultation(props) {
         });
       });
   };
-  
 
   useEffect(() => {
-    
     const locale = "en"; // or whatever you want...
     const hours = [];
 
@@ -148,35 +142,33 @@ export default function Consultation(props) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const changeStartTime = (e,i) => {
-   
-   const days=consultDays
-   const day=days[i]
-   day.start_time=e.target.value
-   days[i]=day
-  
-   setConsultDays([...days])
-   console.log(day);
-  };
-  const changeEndTime = (e,i) => {
-   
-    const days=consultDays
-    const day=days[i]
-    day.end_time=e.target.value
-    days[i]=day 
-    setConsultDays([...days])
+  const changeStartTime = (e, i) => {
+    const days = consultDays;
+    const day = days[i];
+    day.start_time = e.target.value;
+    days[i] = day;
+
+    setConsultDays([...days]);
     console.log(day);
-   };
-  const checkDay=(i)=>{
-    const days=consultDays
-    const day=days[i]
-    day.check=!day.check
-    days[i]=day
-    console.log(days,"Days");
-    setConsultDays([...days])
-   
+  };
+  const changeEndTime = (e, i) => {
+    const days = consultDays;
+    const day = days[i];
+    day.end_time = e.target.value;
+    days[i] = day;
+    setConsultDays([...days]);
+    console.log(day);
+  };
+  const checkDay = (i) => {
+    const days = consultDays;
+    const day = days[i];
+    day.check = !day.check;
+    days[i] = day;
+    console.log(days, "Days");
+    setConsultDays([...days]);
+
     //console.log();
-  }
+  };
 
   return (
     <div>
@@ -246,62 +238,59 @@ export default function Consultation(props) {
                 <div>Day</div>
                 <div>Time</div>
               </div>
-            { consultDays?.map((data,i)=>(
-               <div className="flex justify-between pt-10 pb-2 px-14">
-                <div>
- 
-                 <div className="flex justify-evenly">
-                    <div>
-                      {" "}
-                      <input
-                        type="checkbox"
-                        //name="day"
-                        className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
-                        onChange={()=>checkDay(i)}
-                       // value="sunday"
-                        checked={data.check}
-                        // required
-                      />
-                    </div>
-                    <div className="pl-2">{data?.day}</div>
-                  </div>
-
-                </div>
-                <div>
-                  <div className="flex items-center gap-3">
-                    <div className="">
-                      <select
-                        name="start_time"
-                        onChange={(e)=>changeStartTime(e,i)}
-                        className="py- bg-white border text-sm border-gray-400 rounded-2xl h-[30px] px-1 w-[96px]  focus:bg-white outline-0  "
-                      >
-                        <option disabled selected>
-                          {selectedTime[0]}
-                        </option>
-                        {selectedTime?.map((data, i) => (
-                          <option value={data}>{data}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="">
-                      <select
-                        name="end_time"
-                        onChange={(e)=>changeEndTime(e,i)}
-                        className="py- bg-white border text-sm border-gray-400 rounded-2xl px-1  h-[30px] w-[96px]  focus:bg-white outline-0  "
-                      >
-                        <option disabled selected>
-                          {selectedTime[0]}
-                        </option>
-                        {selectedTime?.map((data, i) => (
-                          <option value={data}>{data}</option>
-                        ))}
-                      </select>
+              {consultDays?.map((data, i) => (
+                <div className="flex justify-between pt-10 pb-2 px-14">
+                  <div>
+                    <div className="flex justify-evenly">
+                      <div>
+                        {" "}
+                        <input
+                          type="checkbox"
+                          //name="day"
+                          className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
+                          onChange={() => checkDay(i)}
+                          // value="sunday"
+                          checked={data.check}
+                          // required
+                        />
+                      </div>
+                      <div className="pl-2">{data?.day}</div>
                     </div>
                   </div>
+                  <div>
+                    <div className="flex items-center gap-3">
+                      <div className="">
+                        <select
+                          name="start_time"
+                          onChange={(e) => changeStartTime(e, i)}
+                          className="py- bg-white border text-sm border-gray-400 rounded-2xl h-[30px] px-1 w-[96px]  focus:bg-white outline-0  "
+                        >
+                          <option disabled selected>
+                            {selectedTime[0]}
+                          </option>
+                          {selectedTime?.map((data, i) => (
+                            <option value={data}>{data}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="">
+                        <select
+                          name="end_time"
+                          onChange={(e) => changeEndTime(e, i)}
+                          className="py- bg-white border text-sm border-gray-400 rounded-2xl px-1  h-[30px] w-[96px]  focus:bg-white outline-0  "
+                        >
+                          <option disabled selected>
+                            {selectedTime[0]}
+                          </option>
+                          {selectedTime?.map((data, i) => (
+                            <option value={data}>{data}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
-              
+              ))}
             </div>
             <div className="flex justify-between py-4">
               <div>
@@ -313,14 +302,12 @@ export default function Consultation(props) {
                 </label>
               </div>
               <div className="pl-2">
-                 
-                  <button
-                    onClick={createSchedules}
-                    className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
-                  >
-                    Create Schedule
-                  </button>
-                
+                <button
+                  onClick={createSchedules}
+                  className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
+                >
+                  Create Schedule
+                </button>
               </div>
             </div>
           </form>

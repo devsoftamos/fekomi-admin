@@ -18,11 +18,9 @@ export default function ChangeCost(props) {
       name: "editData?.name",
     },
   });
-  const [loading, setLoading] = useState(); 
-  const [formData, setFormData] = useState(); 
-  const [costForm, setCostForm] = useState()
- 
-   
+  const [loading, setLoading] = useState();
+  const [formData, setFormData] = useState();
+  const [costForm, setCostForm] = useState();
 
   const updateCost = () => {
     //e.preventDefault();
@@ -32,22 +30,22 @@ export default function ChangeCost(props) {
       "content-type": "application/json",
       Authorization: ` Bearer ${token}`,
     };
-    const payLoad={
-        type:props.data.type,
-        ...costForm
-    }
+    const payLoad = {
+      type: props.data.type,
+      ...costForm,
+    };
     const options = {
       url: `${process.env.REACT_APP_CONSULTATION}/settings/cost`,
       method: "PATCH",
       headers: headers,
-      data: { ...payLoad},
+      data: { ...payLoad },
     };
 
     axios(options)
       .then((response) => {
         setLoading("");
         props.setOpenSchedule("");
-       // props.setReload(false);
+        // props.setReload(false);
         toast.success(response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -57,7 +55,7 @@ export default function ChangeCost(props) {
           draggable: true,
           progress: undefined,
         });
-        window.location.reload()
+        window.location.reload();
       })
       .catch((error) => {
         setLoading("");
@@ -72,11 +70,11 @@ export default function ChangeCost(props) {
         });
       });
   };
-   
-  const handleCostChange=(e)=>{
+
+  const handleCostChange = (e) => {
     console.log(e.target.value);
-    setCostForm({[e.target.name]:e.target.value})
-  }
+    setCostForm({ [e.target.name]: e.target.value });
+  };
   return (
     <div>
       {/* Put this part before </body> tag */}
@@ -91,7 +89,7 @@ export default function ChangeCost(props) {
         draggable
         pauseOnHover
       />
-       
+
       <input type="checkbox" id="store-modal" className="modal-toggle" />
       <div className={`modal ${props.openCost}`}>
         <div className="modal-box bg-[#FAFAFA]  max-w-[820px]">
@@ -106,9 +104,9 @@ export default function ChangeCost(props) {
           </div>
           <div className="pt-5">
             <div className="bg-white shadow rounded-md py-7 px-4">
-            <div className="w-full py-4 pl-3">
+              <div className="w-full py-4 pl-3">
                 <label className="text-black text-sm font-black px-2 pb-1">
-                 Consultation Type
+                  Consultation Type
                 </label>
 
                 <div className="w-full">
@@ -125,7 +123,7 @@ export default function ChangeCost(props) {
               </div>
               <div className="w-full py-4 pl-3">
                 <label className="text-black text-sm font-black px-2 pb-1">
-                 Consultation Cost
+                  Consultation Cost
                 </label>
 
                 <div className="w-full">
@@ -135,21 +133,19 @@ export default function ChangeCost(props) {
                     name="cost"
                     className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
                     onChange={handleCostChange}
-                    
+
                     // required
                   />
                 </div>
               </div>
               <div className="flex justify-center items-center">
-                 <button
-                    onClick={updateCost}
-                    className={`${loading} btn bg-[#2F93F6] px-4 border-0 text-[#fff] rounded-lg py-4 cursor-pointer`}
-                  >
-                    Update Fee
-                  </button>
+                <button
+                  onClick={updateCost}
+                  className={`${loading} btn bg-[#2F93F6] px-4 border-0 text-[#fff] rounded-lg py-4 cursor-pointer`}
+                >
+                  Update Fee
+                </button>
               </div>
-             
-                
             </div>
           </div>
         </div>

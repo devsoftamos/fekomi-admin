@@ -1,12 +1,9 @@
 import axios from "axios";
-import React,{useState,useEffect} from "react";
-
-
-
+import React, { useState, useEffect } from "react";
 
 export default function TopProducts() {
-  const [loading,setLoading] = useState()
-  const [productStat,setProductStat] = useState()
+  const [loading, setLoading] = useState();
+  const [productStat, setProductStat] = useState();
   const getProductStats = async () => {
     setLoading(true);
     const token = localStorage.getItem("fekomi-token");
@@ -22,10 +19,9 @@ export default function TopProducts() {
           headers: headers,
         }
       );
- console.log(response.data.data?.data);
- setProductStat(response.data.data?.data)
+      console.log(response.data.data?.data);
+      setProductStat(response.data.data?.data);
       setLoading(false);
-       
     } catch (error) {
       setLoading(false);
 
@@ -36,38 +32,36 @@ export default function TopProducts() {
     }
   };
   useEffect(() => {
-    getProductStats()
-     
-  }, [])
+    getProductStats();
+  }, []);
   return (
-    <div>
-      <div className="bg-white rounded-lg h-auto px-2">
-        <div className="font-semibold text-lg  pt-3">
-          Top 3 Products Purchased
-        </div>
-        <div className="font-light text-sm">
+    <div className="p-5 grid gap-4 bg-white rounded-lg h-auto shadow-md">
+      <div className="">
+        <h2 className="font-semibold text-lg">Top 3 Products Purchased</h2>
+        <span className="font-light text-sm">
           Top selling products in the market
-        </div>
-        <div className="pt-5 pb-3">
-        { productStat?.top_selling_products?.map((data,i)=>(
+        </span>
+      </div>
+      <div className="">
+        {productStat?.top_selling_products?.map((data, i) => (
           <div key={i}>
-            <div className="flex justify-between pt-3">
+            <div className="flex justify-between">
               <div className="font-medium">{data?.name}</div>
-              <div className="text-[#FFB200] pr-3">{data?.number_sold}</div>
+              <div className="text-[#FFB200]">{data?.number_sold}</div>
             </div>
             <div>
               <progress
                 className="progress progress-warning w-full"
-                value={+data?.number_sold/100 * +productStat?.total_products}
+                value={
+                  (+data?.number_sold / 100) * +productStat?.total_products
+                }
                 max="100"
               ></progress>
             </div>
           </div>
-        ))
- }
+        ))}
 
-          
-          {/* <div>
+        {/* <div>
             <div className="flex justify-between pt-3">
               <div className="font-medium">Fekomi Herbal Tea</div>
               <div className="text-[#FFB200] pr-3">65,376</div>
@@ -106,7 +100,6 @@ export default function TopProducts() {
               ></progress>
             </div>
           </div> */}
-        </div>
       </div>
     </div>
   );

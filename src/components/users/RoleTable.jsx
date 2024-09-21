@@ -1,10 +1,10 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { COLUMNS } from "../../column";
 import TableHeaders from "../utils/TableHeaders";
 import UsersTab from "./UsersTab";
 import axios from "axios";
 export default function RoleTable() {
-  const [rolesData,setRolesData] =useState()
+  const [rolesData, setRolesData] = useState();
 
   const getRolesData = async () => {
     const token = localStorage.getItem("fekomiAuthToken");
@@ -21,7 +21,6 @@ export default function RoleTable() {
         }
       );
       setRolesData(response?.data?.data);
-      console.log(response?.data, "POPO");
     } catch (error) {
       //setMessage(error?.response?.data?.message);
       //   if (error?.response?.data?.message == "Unauthenticated.") {
@@ -31,7 +30,7 @@ export default function RoleTable() {
   };
 
   useEffect(() => {
-    getRolesData()
+    getRolesData();
   }, []);
   return (
     <div className="pt-7">
@@ -62,30 +61,35 @@ export default function RoleTable() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
-                    //onClick={() => navigate("/userdetails")}
-                    class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
-                  >
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      Super Admin
-                    </td>
+                  {rolesData?.length
+                    ? rolesData.map((role) => (
+                        <tr
+                          //onClick={() => navigate("/userdetails")}
+                          class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
+                          key={role.id}
+                        >
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {role.name}
+                          </td>
 
-                    <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
-                      <div className="bg-[#EBFFF3] text-[#61BB84] text-center py-2 px-1 rounded-lg">
-                        Edit
-                      </div>
-                    </td>
+                          <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
+                            <div className="bg-[#EBFFF3] text-[#61BB84] text-center py-2 px-1 rounded-lg">
+                              Edit
+                            </div>
+                          </td>
 
-                    <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
-                      <div className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg">
-                        Delete
-                      </div>
-                    </td>
-                    <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap"></td>
-                    <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap"></td>
-                    <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap"></td>
-                    <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap"></td>
-                  </tr>
+                          <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                            <div className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg">
+                              Delete
+                            </div>
+                          </td>
+                          <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap"></td>
+                          <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap"></td>
+                          <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap"></td>
+                          <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap"></td>
+                        </tr>
+                      ))
+                    : ""}
                 </tbody>
               </table>
             </div>

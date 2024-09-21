@@ -23,7 +23,7 @@ export default function WalkInOrder() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/orders?page=${pageNumber}&limit=${chooseData}`,
+        `${process.env.REACT_APP_OFFLINESTORE}/admin/orders?page=${pageNumber}&limit=${chooseData}`,
         {
           headers: headers,
         }
@@ -63,7 +63,6 @@ export default function WalkInOrder() {
         printData={productData}
         setModalOpen={setModalOpen}
         order={false}
-         
       />
       <div class="flex flex-col">
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -73,7 +72,7 @@ export default function WalkInOrder() {
               <table class="min-w-full">
                 <thead class="bg-white border-b   border-gray-300">
                   <tr>
-                  <th
+                    <th
                       scope="col"
                       class="text-sm font-medium text-[#174A84] px-6 py-4 text-left"
                     >
@@ -194,7 +193,7 @@ export default function WalkInOrder() {
                       <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                         <div
                           onClick={() => {
-                            getOrderProduct(data)
+                            getOrderProduct(data);
                             setModalOpen("modal-open");
                           }}
                           className="bg-[#cecfe0] cursor-pointer font-bold  text-black text-center py-2 px-1 rounded-lg"

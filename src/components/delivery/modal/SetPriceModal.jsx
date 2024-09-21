@@ -25,9 +25,6 @@ export default function SetPriceModal(props) {
   const [productData, setProductsData] = useState();
   const { id } = useParams();
 
-
-
-
   const createProduct = (e) => {
     e.preventDefault();
     setLoading("loading");
@@ -54,7 +51,7 @@ export default function SetPriceModal(props) {
       method: "POST",
       headers: headers,
       data: {
-       ...formData
+        ...formData,
       },
     };
 
@@ -71,8 +68,7 @@ export default function SetPriceModal(props) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        }); 
-       
+        });
       })
       .catch((error) => {
         setLoading("");
@@ -108,7 +104,7 @@ export default function SetPriceModal(props) {
     };
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/products`,
+        `${process.env.REACT_APP_OFFLINESTORE}/admin/products`,
         {
           headers: headers,
         }
@@ -251,22 +247,22 @@ export default function SetPriceModal(props) {
           //onSubmit={handleSubmit(props.edit ? updateProduct : createProduct)}
           >
             <div className="pt-10 py-3">
-            <div className="pb-6">
-              <div className="w-full">
-                <label className="text-black text-sm font-black px-2">
-                  Region
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Enter Region"
-                  className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
-                  onChange={handleProduct}
-                  defaultValue={props.editData?.name}
-                  // required
-                />
+              <div className="pb-6">
+                <div className="w-full">
+                  <label className="text-black text-sm font-black px-2">
+                    Region
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Enter Region"
+                    className="border border-[#E8E9EA] outline-none px-3 py-4 text-sm w-full rounded bg-white focus:bg-white"
+                    onChange={handleProduct}
+                    defaultValue={props.editData?.name}
+                    // required
+                  />
+                </div>
               </div>
-            </div>
             </div>
             <div className="pb-6">
               <div className="w-full">
@@ -318,7 +314,7 @@ export default function SetPriceModal(props) {
                 ) : (
                   <button
                     onClick={createProduct}
-                    disabled={Object.keys(formData||{}) ? false : true}
+                    disabled={Object.keys(formData || {}) ? false : true}
                     className={`${loading} btn bg-[#2F93F6] border-0 px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
                   >
                     Create Delivery

@@ -41,7 +41,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/stores`,
+        `${process.env.REACT_APP_OFFLINESTORE}/admin/stores`,
         {
           headers: headers,
         }

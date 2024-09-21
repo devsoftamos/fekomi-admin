@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form"; 
+import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export default function CreateStorePointModal({
-    modalOpen,
+  modalOpen,
   setModalOpen,
   datingData,
 }) {
@@ -13,8 +13,7 @@ export default function CreateStorePointModal({
   const [singleData, setsingleData] = useState();
   const [interestValue, setInterestValue] = useState();
 
-const [formData, setFormData] =useState()
-
+  const [formData, setFormData] = useState();
 
   const createStorePoint = async () => {
     console.log(datingData, "UID");
@@ -41,11 +40,11 @@ const [formData, setFormData] =useState()
       Authorization: `${JSON.stringify(tokenParsed)}`,
     };
     const options = {
-      url: `${process.env.REACT_APP_OFFLINESTORE}admin/stores`,
+      url: `${process.env.REACT_APP_OFFLINESTORE}/admin/stores`,
       method: "POST",
-      headers:headers,
+      headers: headers,
       data: {
-        ...formData
+        ...formData,
       },
     };
 
@@ -63,7 +62,7 @@ const [formData, setFormData] =useState()
           draggable: true,
           progress: undefined,
         });
-        window.location.reload()
+        window.location.reload();
         console.log(response);
       })
       .catch((error) => {
@@ -79,8 +78,6 @@ const [formData, setFormData] =useState()
         });
       });
   };
-
-  
 
   const handleChange = (e) => {
     if (e.target.name === "isFactory" && e.target.checked) {
@@ -126,55 +123,53 @@ const [formData, setFormData] =useState()
 
           <div className="px-14 pt-5">
             <div className="bg-white  shadow-md max-w-5xl h-[300px] pt-7">
-              <div className="px-4 py-4"> 
+              <div className="px-4 py-4">
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Enter the name of the store"
+                    name="name"
+                    className="outline-none border rounded border-[#E8E9EA]  font-black  px-3 py-3 text-lg w-full  bg-white focus:bg-white"
+                    required
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="inline-flex items-center py-2 w-full">
                   <div>
+                    {" "}
                     <input
-                      type="text"
-                      placeholder="Enter the name of the store"
-                      name="name"
-                      className="outline-none border rounded border-[#E8E9EA]  font-black  px-3 py-3 text-lg w-full  bg-white focus:bg-white"
-                      required
+                      type="checkbox"
+                      name="isFactory"
+                      placeholder="Enter news title"
+                      className="border border-[#E8E9EA] outline-none  text-sm w-full rounded bg-white focus:bg-white"
                       onChange={handleChange}
                     />
                   </div>
-                  
-                  <div className="inline-flex items-center py-2 w-full">
-              <div>
-                {" "}
-                <input
-                  type="checkbox"
-                  name="isFactory"
-                  placeholder="Enter news title"
-                  className="border border-[#E8E9EA] outline-none  text-sm w-full rounded bg-white focus:bg-white"
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label className="text-black text-sm font-black px-2">
-                 Is this store a Factory?
-                </label>
-              </div>
-            </div>
+                  <div>
+                    <label className="text-black text-sm font-black px-2">
+                      Is this store a Factory?
+                    </label>
+                  </div>
+                </div>
                 <div className="flex justify-between items-center py-4 pt-10">
-              <div>
-                <label
-                  onClick={() => setModalOpen("")}
-                  className="border border-[#3b4046] px-5 text-black rounded-lg py-4"
-                >
-                  Cancel
-                </label>
-              </div>
-              <div className="pl-2">
-                
-                  <button 
-                  onClick={createStorePoint}
-                    className={`${loading} btn bg-[#2F93F6] capitalize border-0 px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
-                  >
-                    Create Store Point
-                  </button>
-                 
-              </div>
-            </div>
+                  <div>
+                    <label
+                      onClick={() => setModalOpen("")}
+                      className="border border-[#3b4046] px-5 text-black rounded-lg py-4"
+                    >
+                      Cancel
+                    </label>
+                  </div>
+                  <div className="pl-2">
+                    <button
+                      onClick={createStorePoint}
+                      className={`${loading} btn bg-[#2F93F6] capitalize border-0 px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
+                    >
+                      Create Store Point
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

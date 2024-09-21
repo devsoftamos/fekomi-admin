@@ -1,11 +1,11 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { COLUMNS } from "../../column";
 import TableHeaders from "../utils/TableHeaders";
 import axios from "axios";
 
 export default function ConsultationTable() {
-  const [loading,setLoading] =useState()
-  const [appointmentsData, setAppointmentData] =useState()
+  const [loading, setLoading] = useState();
+  const [appointmentsData, setAppointmentData] = useState();
   const getConsultation = async () => {
     setLoading("loading");
 
@@ -27,15 +27,14 @@ export default function ConsultationTable() {
     axios(options)
       .then((response) => {
         setAppointmentData(response.data?.data?.response);
-        
       })
       .catch((error) => {
         setLoading("");
       });
   };
-  useEffect(()=>{
-getConsultation()
-  },[])
+  useEffect(() => {
+    getConsultation();
+  }, []);
   return (
     <div className="pt-7">
       <div class="flex flex-col">
@@ -91,44 +90,43 @@ getConsultation()
                   </tr>
                 </thead>
                 <tbody>
-                 {appointmentsData?.appointments?.map((data,i)=>(
-                  <tr
-                  key={i}
-                    //onClick={() => navigate("/userdetails")}
-                    class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
-                  >
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      {data?.user[0]?.name}
-                      <div className="text-xs">{data?.user[0]?.email}</div>
-                    </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                     {data?.date}
-                    </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      {data?.start_time} - {data?.end_time}
-                    </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      {data?.type}
-                    </td>
+                  {appointmentsData?.appointments?.map((data, i) => (
+                    <tr
+                      key={i}
+                      //onClick={() => navigate("/userdetails")}
+                      class="bg-white border-gray-300 border-b cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100"
+                    >
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        {data?.user[0]?.name}
+                        <div className="text-xs">{data?.user[0]?.email}</div>
+                      </td>
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        {data?.date}
+                      </td>
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        {data?.start_time} - {data?.end_time}
+                      </td>
+                      <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        {data?.type}
+                      </td>
 
-                    <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
-                      <div className="bg-[#EBFFF3] text-[#61BB84] text-center py-2 px-1 rounded-lg">
-                       {data?.status}
-                      </div>
-                    </td>
-                    <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
-                      <div className="bg-[#FFEFDF] font-bold  text-[#E4750D] text-center py-2 px-1 rounded-lg">
-                        Reschedule
-                      </div>
-                    </td>
-                    <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
-                      <div className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg">
-                        Cancel
-                      </div>
-                    </td>
-                  </tr>
-                 ))
-                  }
+                      <td class="text-sm text-gray-900 font-bold  px-6 py-4 whitespace-nowrap">
+                        <div className="bg-[#EBFFF3] text-[#61BB84] text-center py-2 px-1 rounded-lg">
+                          {data?.status}
+                        </div>
+                      </td>
+                      <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                        <div className="bg-[#FFEFDF] font-bold  text-[#E4750D] text-center py-2 px-1 rounded-lg">
+                          Reschedule
+                        </div>
+                      </td>
+                      <td class="text-sm font-bold  px-6 py-4 whitespace-nowrap">
+                        <div className="bg-[#FFDFE5] font-bold  text-[#F9395B] text-center py-2 px-1 rounded-lg">
+                          Cancel
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

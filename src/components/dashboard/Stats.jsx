@@ -1,12 +1,15 @@
 import axios from "axios";
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
+import { Link } from "react-router-dom";
 
 export default function Stats() {
-  const [loading,setLoading] = useState()
-  const [productStat,setProductStat] = useState()
-  const [revenueStats,setRevenueStats] = useState()
-  const [transactionStats,setTransactionStats] = useState()
-  const [totalCustomer,setTotalCustomer] = useState()
+  const [loading, setLoading] = useState();
+  const [productStat, setProductStat] = useState();
+  const [revenueStats, setRevenueStats] = useState();
+  const [transactionStats, setTransactionStats] = useState();
+
+  const [totalCustomer, setTotalCustomer] = useState();
   const getProductStats = async () => {
     setLoading(true);
     const token = localStorage.getItem("fekomi-token");
@@ -22,17 +25,11 @@ export default function Stats() {
           headers: headers,
         }
       );
- console.log(response.data.data?.data);
- setProductStat(response.data.data?.data)
+      setProductStat(response.data.data?.data);
       setLoading(false);
-       
     } catch (error) {
+    } finally {
       setLoading(false);
-
-      //setMessage(error?.response?.data?.message);
-      //   if (error?.response?.data?.message == "Unauthenticated.") {
-      //     navigate("/");
-      //   }
     }
   };
   const getCustomerStats = async () => {
@@ -45,22 +42,16 @@ export default function Stats() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_ADMIN}/auth/total-members`,
+        `${process.env.REACT_APP_ADMIN_URL}/auth/total-members`,
         {
           headers: headers,
         }
       );
- console.log(response.data,"Total");
-  setTotalCustomer(response?.data?.data)
-      setLoading(false);
-       
+      console.log(response.data, "Total");
+      setTotalCustomer(response?.data?.data);
     } catch (error) {
+    } finally {
       setLoading(false);
-
-      //setMessage(error?.response?.data?.message);
-      //   if (error?.response?.data?.message == "Unauthenticated.") {
-      //     navigate("/");
-      //   }
     }
   };
   const getRevenueStats = async () => {
@@ -73,15 +64,14 @@ export default function Stats() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_WALLET_URL}/wallet/revenue/total?currency=NGN`,
+        `${process.env.REACT_APP_ECOMMERCE}/transactions/revenue/total?service=ECOMMERCE`,
         {
           headers: headers,
         }
       );
-  
- setRevenueStats(response.data.data.total_revenue)
+
+      setRevenueStats(response.data.data.total_revenue);
       setLoading(false);
-       
     } catch (error) {
       setLoading(false);
 
@@ -101,14 +91,13 @@ export default function Stats() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_WALLET_URL}/wallet/transactions/total`,
+        `${process.env.REACT_APP_ECOMMERCE}/transactions/all`,
         {
           headers: headers,
         }
-      ); 
- setTransactionStats(response.data.data?.total_number_of_transaction)
+      );
+      setTransactionStats(response.data.data);
       setLoading(false);
-       
     } catch (error) {
       setLoading(false);
 
@@ -118,76 +107,76 @@ export default function Stats() {
       //   }
     }
   };
+
   useEffect(() => {
-    getProductStats()
-    getRevenueStats()
-    getTransactionsStats()
-    getCustomerStats()
-     
-  }, [])
+    getProductStats();
+    getRevenueStats();
+    getTransactionsStats();
+    getCustomerStats();
+  }, []);
   const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-  const numberReplace = (data)=>{
-    
-if(data.length >=4){
-  
-return data.split(",")[0]+"K"
-}else{
-  return data
-}
-  }
+  const numberReplace = (data) => {
+    if (data.length >= 4) {
+      return data.split(",")[0] + "K";
+    } else {
+      return data;
+    }
+  };
   return (
-    <div>
-      <div className="bg-white rounded-lg h-[160px]">
-        <div className="font-semibold text-lg pl-28 py-6">Statistics</div>
-        <div className="flex justify-evenly">
-          <div>
-            <div className="inline-flex">
-              <div>
-                <img src="/customer-icon.svg" />
-              </div>
-              <div className="font-medium pl-2">
-               {numberReplace(numberWithCommas(totalCustomer||0)) }
-                <div className="font-normal pt-1">Customers</div>
-              </div>
-            </div>
+    // <div className="grid gap-8 bg-transparent">
+    <div className="p-8 grid gap-4 bg-white rounded-lg shadow-md">
+      <h2 className="font-semibold text-lg text-center">Statistics</h2>
+      <div className="flex justify-evenly">
+        <div className="flex gap-2 items-center">
+          <img src="/customer-icon.svg" alt="" />
+
+          <div className="grid">
+            <span className="font-extrabold text-xl">{totalCustomer || 0}</span>
+            <span className="">Customers</span>
           </div>
-          <div>
-            <div className="inline-flex">
-              <div>
-                <img src="/revenue-icon.svg" />
-              </div>
-              <div className="font-medium pl-2">
-                {numberReplace(numberWithCommas(revenueStats||0).split(".")[0])}
-                <div className="font-normal pt-1">Revenue</div>
-              </div>
-            </div>
+        </div>
+
+        <div className="flex gap-2 items-center ">
+          <img src="/revenue-icon.svg" alt="" />
+
+          <div className="grid">
+            <span className="font-extrabold text-xl">
+              {revenueStats
+                ? parseFloat(revenueStats).toLocaleString("en-NG", {
+                    style: "currency",
+                    currency: "NGN",
+                  })
+                : 0}
+            </span>
+            <span className="">Revenue</span>
           </div>
-          <div>
-            <div className="inline-flex">
-              <div>
-                <img src="/transaction-icon.svg" />
-              </div>
-              <div className="font-medium pl-2">
-                {numberReplace(numberWithCommas(transactionStats||0))}
-                <div className="font-normal">Transaction</div>
-              </div>
-            </div>
+        </div>
+
+        <div className="flex gap-2 items-center">
+          <img src="/transaction-icon.svg" alt="" />
+
+          <div className="grid">
+            <span className="font-extrabold text-xl">
+              {transactionStats?.total || 0}
+            </span>
+            <span className="">Transactions</span>
           </div>
-          <div>
-            <div className="inline-flex">
-              <div>
-                <img src="/customer-icon.svg" />
-              </div>
-              <div className="font-medium pl-2">
-                {productStat?.total_products}
-                <div className="font-normal">Products</div>
-              </div>
-            </div>
+        </div>
+
+        <div className="flex gap-2 items-center">
+          <img src="/customer-icon.svg" alt="" />
+
+          <div className="grid">
+            <span className="font-extrabold text-xl">
+              {productStat?.total_products}
+            </span>
+            <span className="">Products</span>
           </div>
         </div>
       </div>
     </div>
+    // </div>
   );
 }

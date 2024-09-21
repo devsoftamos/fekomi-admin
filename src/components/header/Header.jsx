@@ -40,7 +40,7 @@ function Header({ sidebarOpen, setSidebarOpen }) {
                 <rect x="4" y="17" width="16" height="2" />
               </svg>
             </button>
-            <div className="">
+            {/* <div className="">
               <div class="relative text-gray-600 focus-within:text-gray-400">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-2">
                   <button
@@ -68,7 +68,7 @@ function Header({ sidebarOpen, setSidebarOpen }) {
                   autocomplete="off"
                 />
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Header: Right side */}

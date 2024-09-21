@@ -92,7 +92,6 @@ export default function NewsDraftPage() {
   };
 
   const savedToAws = () => {
-    
     setLoading("loading");
     const config = {
       bucketName: "fekomi-static-files",
@@ -469,14 +468,15 @@ export default function NewsDraftPage() {
                   </div>
 
                   <div className="flex justify-between py-10">
-                    <div onClick={()=>{
-                      if (imagePreview) {
-                        savedToAws()
-                      }else{
-                        updateNews(newsData.media_url)
-                      }
-                        
-                    }}>
+                    <div
+                      onClick={() => {
+                        if (imagePreview) {
+                          savedToAws();
+                        } else {
+                          updateNews(newsData.media_url);
+                        }
+                      }}
+                    >
                       <label className="bg-[#2F93F6] cursor-pointer text-white px-5 rounded-lg py-4">
                         Save Changes
                       </label>

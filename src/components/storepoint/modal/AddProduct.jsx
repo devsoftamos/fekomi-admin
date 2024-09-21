@@ -18,7 +18,7 @@ export default function AddProduct(props) {
       name: "editData?.name",
     },
   });
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
   const [catData, setCatData] = useState();
   const [images, setImages] = React.useState([]);
   const [formData, setFormData] = useState();
@@ -26,7 +26,7 @@ export default function AddProduct(props) {
   const { id } = useParams();
   const createProduct = (e) => {
     e.preventDefault();
-    setLoading("loading");
+    setLoading(true);
     const token = localStorage.getItem("fekomi-token");
     const covertedToken = JSON.parse(token);
     const tokenParsed = {
@@ -46,7 +46,7 @@ export default function AddProduct(props) {
       Authorization: `${JSON.stringify(tokenParsed)}`,
     };
     const options = {
-      url: `${process.env.REACT_APP_OFFLINESTORE}admin/stocks`,
+      url: `${process.env.REACT_APP_OFFLINESTORE}/admin/stocks`,
       method: "POST",
       headers: headers,
       data: {
@@ -58,7 +58,7 @@ export default function AddProduct(props) {
 
     axios(options)
       .then((response) => {
-        setLoading("");
+        setLoading(false);
         props.setModalOpen("");
         window.location.reload();
         toast.success(response?.data?.message, {
@@ -69,11 +69,10 @@ export default function AddProduct(props) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        }); 
-       
+        });
       })
       .catch((error) => {
-        setLoading("");
+        setLoading(false);
         toast.error(error?.response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -106,7 +105,7 @@ export default function AddProduct(props) {
     };
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_OFFLINESTORE}admin/products`,
+        `${process.env.REACT_APP_OFFLINESTORE}/admin/products`,
         {
           headers: headers,
         }
@@ -124,7 +123,7 @@ export default function AddProduct(props) {
     }
   };
   const getCategory = async () => {
-    setLoading("loading");
+    setLoading(true);
 
     const token = localStorage.getItem("fekomi-token");
     const headers = {
@@ -144,18 +143,18 @@ export default function AddProduct(props) {
     axios(options)
       .then((response) => {
         setCatData(response?.data?.data);
-        setLoading("");
+        setLoading(false);
         props.setModalOpen("");
       })
       .catch((error) => {
-        setLoading("");
+        setLoading(false);
       });
   };
 
   //UPDATE PRODUCTS ENDPOINT
   const updateProduct = (e) => {
     e.preventDefault();
-    setLoading("loading");
+    setLoading(true);
 
     const token = localStorage.getItem("fekomi-token");
     const headers = {
@@ -181,7 +180,7 @@ export default function AddProduct(props) {
 
     axios(options)
       .then((response) => {
-        setLoading("");
+        setLoading(false);
         props.setModalOpen("");
         props.setReload(false);
         toast.success(response?.data?.message, {
@@ -196,7 +195,7 @@ export default function AddProduct(props) {
         props.getAllProductsData();
       })
       .catch((error) => {
-        setLoading("");
+        setLoading(false);
         toast.error(error?.response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -325,7 +324,7 @@ export default function AddProduct(props) {
                 ) : (
                   <button
                     onClick={createProduct}
-                    disabled={Object.keys(formData||{}) ? false : true}
+                    disabled={Object.keys(formData || {}) ? false : true}
                     className={`${loading} btn bg-[#2F93F6] px-4 text-[#fff] rounded-lg py-4 cursor-pointer`}
                   >
                     Create Stock
