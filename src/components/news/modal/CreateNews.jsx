@@ -34,9 +34,6 @@ export default function CreateNews(props) {
 
   // const createNew=(data)=>{
   //      const token = localStorage.getItem("fekomi-token");
-  if (!token) {
-    navigate("/");
-  }
   //   const covertedToken = JSON.parse(token);
   //   const tokenParsed = {
   //     firstName: covertedToken.firstname,
